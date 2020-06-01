@@ -45,7 +45,6 @@ class _SearchScreen extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
       drawer: Theme(

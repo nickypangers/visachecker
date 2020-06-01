@@ -9,6 +9,7 @@ import 'services/SearchList.dart';
 import 'services/CountryList.dart';
 import 'services/CountryData.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MaterialApp(
       theme: ThemeData(fontFamily: 'Montserrat'),
@@ -44,20 +45,25 @@ class _HomeScreen extends State<HomeScreen> {
   String cCode, cName;
 
   @override
-  void initState() {
-    super.initState();
-    cCode = widget.countryCode;
+  initState() {
     cName = widget.countryName;
-    if (cCode == null) {
-      print(cCode);
-      cName = 'Hong Kong';
+    if (cName == null) {
+      cName = "Hong Kong";
     }
+    super.initState();
+//    if (cName == null) {
+//      initPassportCountry();
+//    }
+//    setPassportCountry(cName);
+//    runPassportCountry(cName);
+    print("Name: $cName");
     cCode = cList[cName];
-    print(cCode);
+    print("Code: $cCode");
   }
 
   openBrowserTab(String url) async {
-    await FlutterWebBrowser.openWebPage(url: url, androidToolbarColor: Colors.white);
+    await FlutterWebBrowser.openWebPage(
+        url: url, androidToolbarColor: Colors.white);
   }
 
   @override
@@ -175,10 +181,10 @@ class _HomeScreen extends State<HomeScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
+      body: Column(
+        children: <Widget>[
+          Container(
+            child: Padding(
               padding: const EdgeInsets.only(
                   left: 12, right: 12, top: 30, bottom: 0),
               child: Row(
@@ -209,216 +215,247 @@ class _HomeScreen extends State<HomeScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 10,
-                right: 25,
-                left: 25,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(20.0),
-                        topRight: const Radius.circular(20.0),
-                        bottomLeft: const Radius.circular(20.0),
-                        bottomRight: const Radius.circular(20.0),
+          ),
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    right: 25,
+                    left: 25,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(20.0),
+                            topRight: const Radius.circular(20.0),
+                            bottomLeft: const Radius.circular(20.0),
+                            bottomRight: const Radius.circular(20.0),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: 255,
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.grey[700]),
+                                    cursorColor: Colors.grey[700],
+                                    controller: _controller,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      hintText: 'Enter destination',
+                                      hintStyle:
+                                      TextStyle(color: Colors.grey[700]),
+                                    ),
+                                    onTap: () {
+                                      showSearch(
+                                          context: context,
+                                          delegate: DataSearch(
+                                              controller: _controller));
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.search),
+                                  onPressed: () {
+                                    print(_controller.text);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SearchScreen(
+                                                countryName: cName,
+                                                countryCode: cCode,
+                                                passCode: cName,
+                                                desCode: _controller.text)));
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      top: 5,
+                      left: 5,
+                      right: 5,
+                      bottom: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Color(0xFF1443A1),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              width: 313,
-                              child: TextField(
-                                style: TextStyle(color: Colors.grey[700]),
-                                cursorColor: Colors.grey[700],
-                                controller: _controller,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  hintText: 'Enter destination',
-                                  hintStyle: TextStyle(color: Colors.grey[700]),
-                                ),
-                                onTap: () {
-                                  showSearch(
-                                      context: context,
-                                      delegate:
-                                          DataSearch(controller: _controller));
-                                },
+                        Container(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "Your Passport Stats",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.0,
+                                color: Colors.white,
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                print(_controller.text);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchScreen(
-                                            countryName: cName,
-                                            countryCode: cCode,
-                                            passCode: cName,
-                                            desCode: _controller.text)));
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                print("Tap Visa Free");
                               },
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "Visa Free",
+                                    style: TextStyle(
+                                      color: Colors.green[300],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${countryData[cCode]["visa_free"]}",
+                                    style: TextStyle(
+                                      color: Colors.green[300],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                print("Tap Visa-on-Arrival");
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "Visa On Arrival",
+                                    style: TextStyle(
+                                      color: Colors.orange[300],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${countryData[cCode]["visa_on_arrival"]}",
+                                    style: TextStyle(
+                                      color: Colors.orange[300],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                print("Tap Visa Required");
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "Visa Required",
+                                    style: TextStyle(
+                                      color: Colors.red[400],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${countryData[cCode]["visa_required"]}",
+                                    style: TextStyle(
+                                      color: Colors.red[400],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             )
                           ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: 5,
-                  left: 5,
-                  right: 5,
-                  bottom: 10,
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Color(0xFF1443A1),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: Text(
-                          "Your Passport Stats",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0,
-                            color: Colors.white,
-                          ),
-                        ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.network(
+                        'https://www.passportindex.org/countries/${cCode.toLowerCase()}.png',
+                        width: 300,
+                        height: 425,
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            print("Tap Visa Free");
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Visa Free",
-                                style: TextStyle(
-                                  color: Colors.green[300],
-                                  fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: EdgeInsets.only(top: 7),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            FlatButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(color: Colors.black, width: 2),
                                 ),
-                              ),
-                              Text(
-                                "${countryData[cCode]["visa_free"]}", // TODO - Dynamic
-                                style: TextStyle(
-                                  color: Colors.green[300],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                                color: Colors.white,
+                                child: Text("Visit Official Site"),
+                                onPressed: () {
+                                  print("link pressed.");
+                                  openBrowserTab(countryData[cCode]['url']);
+                                })
+                          ],
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            print("Tap Visa-on-Arrival");
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Visa On Arrival",
-                                style: TextStyle(
-                                  color: Colors.orange[300],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "${countryData[cCode]["visa_on_arrival"]}",
-                                style: TextStyle(
-                                  color: Colors.orange[300],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("Tap Visa Required");
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Visa Required",
-                                style: TextStyle(
-                                  color: Colors.red[400],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "${countryData[cCode]["visa_required"]}",
-                                style: TextStyle(
-                                  color: Colors.red[400],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.network(
-                    'https://www.passportindex.org/countries/${cCode.toLowerCase()}.png',
-                    width: 300,
-                    height: 425,
+                      )
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              side: BorderSide(color: Colors.black, width: 2),
-                            ),
-                            color: Colors.white,
-                            child: Text("Visit Official Site"),
-                            onPressed: () {
-                              // TODO - add link
-                              print("link pressed.");
-                              openBrowserTab(countryData[cCode]['url']);
-                            })
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+
+//setPassportCountry(String cName) async {
+//  SharedPreferences prefs = await SharedPreferences.getInstance();
+//  prefs.setString('pCountry', cName);
+//}
+//
+//initPassportCountry() async {
+//  SharedPreferences prefs = await SharedPreferences.getInstance();
+//  String pCountry = prefs.getString('pCountry');
+//  if (pCountry == null) {
+//    setPassportCountry("Hong Kong");
+//  } else {
+//    setPassportCountry(pCountry);
+//  }
+//}
+//
+//runPassportCountry(String cName) async {
+//  SharedPreferences prefs = await SharedPreferences.getInstance();
+//  String pCountry = prefs.getString('pCountry');
+//  cName = pCountry;
+//}
