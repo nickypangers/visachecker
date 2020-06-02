@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
 import 'main.dart';
@@ -6,15 +7,12 @@ import 'settings.dart';
 import 'services/VisaData.dart';
 
 class SearchScreen extends StatefulWidget {
-  final String countryName;
-  final String countryCode;
   final String passCode;
   final String desCode;
 
   const SearchScreen(
       {Key key,
-      @required this.countryName,
-      this.countryCode,
+      @required
       this.passCode,
       this.desCode})
       : super(key: key);
@@ -32,14 +30,18 @@ class _SearchScreen extends State<SearchScreen> {
   TextEditingController _passportController = new TextEditingController();
   TextEditingController _desController = new TextEditingController();
 
+  Future<void> _getDestinationCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String desCountry = prefs.getString('desCountry');
+    if (desCountry != null) {
+      _passportController.text = prefs.getString('countryName');
+      _desController.text = desCountry;
+    }
+  }
+
   @override
   void initState() {
-    cName = widget.countryName;
-    cCode = widget.countryCode;
-    if (widget.desCode != null) {
-      _passportController.text = widget.passCode;
-      _desController.text = widget.desCode;
-    }
+    _getDestinationCountry();
     super.initState();
   }
 
@@ -86,10 +88,7 @@ class _SearchScreen extends State<SearchScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              HomeScreen(
-                                countryName: cName,
-                                countryCode: cCode,
-                              )));
+                              HomeScreen()));
                 },
               ),
               ListTile(
@@ -132,8 +131,7 @@ class _SearchScreen extends State<SearchScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              SettingsScreen(
-                                  countryName: cName, countryCode: cCode)));
+                              SettingsScreen()));
                 },
               ),
               ListTile(

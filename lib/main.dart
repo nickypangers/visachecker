@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'services/Key.dart';
 import 'services/SearchList.dart';
-import 'services/CountryList.dart';
 import 'services/CountryData.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,11 +22,6 @@ void main() => runApp(MaterialApp(
     ));
 
 class HomeScreen extends StatefulWidget {
-  final String countryName;
-  final String countryCode;
-
-  const HomeScreen({Key key, @required this.countryName, this.countryCode})
-      : super(key: key);
 
   @override
   _HomeScreen createState() => _HomeScreen();
@@ -38,6 +32,8 @@ class _HomeScreen extends State<HomeScreen> {
   int visa_on_arrival = 0;
   int visa_required = 0;
 
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _controller = new TextEditingController();
@@ -46,20 +42,38 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   initState() {
-    cName = widget.countryName;
-    if (cName == null) {
-      cName = "Hong Kong";
-    }
     super.initState();
-//    if (cName == null) {
-//      initPassportCountry();
-//    }
-//    setPassportCountry(cName);
-//    runPassportCountry(cName);
+    getPassport();
     print("Name: $cName");
-    cCode = cList[cName];
     print("Code: $cCode");
   }
+
+  getPassport() async {
+    await _passportCountry();
+  }
+
+  _passportCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("pref: $prefs");
+    String countryName = prefs.getString('countryName');
+    String countryCode = prefs.getString('countryCode');
+    setState(() {
+      if (countryName == null || countryCode == null) {
+        prefs.setString('countryName', 'Hong Kong');
+        cName = prefs.getString('countryName');
+        print("prefs name: $cName");
+        cCode = cList[cName];
+        prefs.setString('countryCode', cCode);
+        print("prefs code: $cCode");
+      } else {
+        cName = countryName;
+        cCode = cList[cName];
+        print("prefs name: $cName");
+        print("prefs code: $cCode");
+      }
+    });
+  }
+
 
   openBrowserTab(String url) async {
     await FlutterWebBrowser.openWebPage(
@@ -68,7 +82,6 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String test = widget.countryCode;
     return Scaffold(
       key: _scaffoldKey,
       drawer: Theme(
@@ -123,8 +136,7 @@ class _HomeScreen extends State<HomeScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              SearchScreen(
-                                  countryName: cName, countryCode: cCode)));
+                              SearchScreen()));
                 },
               ),
               ListTile(
@@ -154,10 +166,7 @@ class _HomeScreen extends State<HomeScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              SettingsScreen(
-                                countryName: cName,
-                                countryCode: cCode,
-                              )));
+                              SettingsScreen()));
                 },
               ),
               ListTile(
@@ -278,8 +287,6 @@ class _HomeScreen extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => SearchScreen(
-                                                countryName: cName,
-                                                countryCode: cCode,
                                                 passCode: cName,
                                                 desCode: _controller.text)));
                                   },
@@ -438,24 +445,3 @@ class _HomeScreen extends State<HomeScreen> {
     );
   }
 }
-
-//setPassportCountry(String cName) async {
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//  prefs.setString('pCountry', cName);
-//}
-//
-//initPassportCountry() async {
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//  String pCountry = prefs.getString('pCountry');
-//  if (pCountry == null) {
-//    setPassportCountry("Hong Kong");
-//  } else {
-//    setPassportCountry(pCountry);
-//  }
-//}
-//
-//runPassportCountry(String cName) async {
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//  String pCountry = prefs.getString('pCountry');
-//  cName = pCountry;
-//}

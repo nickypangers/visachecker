@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'search.dart';
 import 'main.dart';
 import 'selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {
-
-  final String countryName;
-  final String countryCode;
-
-  const SettingsScreen({Key key, @required this.countryName,this.countryCode}) : super(key:key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -17,6 +13,19 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  String passportCountry;
+
+  Future<void> _getPassportCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      passportCountry = prefs.getString('countryName');
+    });
+  }
+
+  @override void initState() {
+    super.initState();
+    _getPassportCountry();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              HomeScreen(countryName: widget.countryName,countryCode: widget.countryCode)));
+                              HomeScreen()));
                 },
               ),
               ListTile(
@@ -79,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       context,
                       PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              SearchScreen(countryName: widget.countryName,countryCode: widget.countryCode)));
+                              SearchScreen()));
                 },
               ),
               ListTile(
@@ -189,7 +198,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontWeight: FontWeight.normal,
                           fontSize: 17,
                         )),
-                    subtitle: Text('${widget.countryName}'),
+                    subtitle: Text('$passportCountry'),
                     trailing: Icon(Icons.navigate_next),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCountryScreen()));
