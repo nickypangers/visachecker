@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'drawer.dart';
 import 'search.dart';
 import 'settings.dart';
 import 'package:http/http.dart' as http;
@@ -31,8 +32,6 @@ class _HomeScreen extends State<HomeScreen> {
   int visa_free = 0;
   int visa_on_arrival = 0;
   int visa_required = 0;
-
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -89,106 +88,7 @@ class _HomeScreen extends State<HomeScreen> {
         data: Theme.of(context).copyWith(
           canvasColor: Colors.grey[100],
         ),
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              Container(
-                height: 90,
-                child: DrawerHeader(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Visa Checker",
-                      style: TextStyle(
-                        fontSize: 17,
-                        //fontFamily: 'Montserrat',
-                      ),
-                    ),
-                  ],
-                )),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Home",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Explore",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              SearchScreen()));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.location_on, color: Colors.black),
-                title: Text(
-                  "Map",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.people, color: Colors.black),
-                title: Text(
-                  "Friends",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.black),
-                title: Text(
-                  "Settings",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              SettingsScreen()));
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.info_outline,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "About this App",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationVersion: '0.0.1',
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        child: drawer(context),
       ),
       backgroundColor: Colors.white,
       body: Column(
