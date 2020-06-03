@@ -43,13 +43,9 @@ class _HomeScreen extends State<HomeScreen> {
   @override
   initState() {
     super.initState();
-    getPassport();
+    _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
-  }
-
-  getPassport() async {
-    await _passportCountry();
   }
 
   _passportCountry() async {
@@ -72,6 +68,11 @@ class _HomeScreen extends State<HomeScreen> {
         print("prefs code: $cCode");
       }
     });
+  }
+
+  _setDesCountry(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('desCountry', value);
   }
 
 
@@ -283,12 +284,11 @@ class _HomeScreen extends State<HomeScreen> {
                                   icon: Icon(Icons.search),
                                   onPressed: () {
                                     print(_controller.text);
+                                    _setDesCountry(_controller.text);
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => SearchScreen(
-                                                passCode: cName,
-                                                desCode: _controller.text)));
+                                            builder: (context) => SearchScreen()));
                                   },
                                 )
                               ],

@@ -7,22 +7,12 @@ import 'settings.dart';
 import 'services/VisaData.dart';
 
 class SearchScreen extends StatefulWidget {
-  final String passCode;
-  final String desCode;
-
-  const SearchScreen(
-      {Key key,
-      @required
-      this.passCode,
-      this.desCode})
-      : super(key: key);
 
   @override
   _SearchScreen createState() => _SearchScreen();
 }
 
 class _SearchScreen extends State<SearchScreen> {
-  static String cName, cCode;
   static String result = "";
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -34,8 +24,10 @@ class _SearchScreen extends State<SearchScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String desCountry = prefs.getString('desCountry');
     if (desCountry != null) {
-      _passportController.text = prefs.getString('countryName');
-      _desController.text = desCountry;
+      setState((){
+        _passportController.text = prefs.getString('countryName');
+        _desController.text = desCountry;
+      });
     }
   }
 
