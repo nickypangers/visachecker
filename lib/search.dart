@@ -1,30 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
-import 'main.dart';
-import 'settings.dart';
+import 'drawer.dart';
 import 'services/VisaData.dart';
 
 class SearchScreen extends StatefulWidget {
-  final String countryName;
-  final String countryCode;
-  final String passCode;
-  final String desCode;
-
-  const SearchScreen(
-      {Key key,
-      @required this.countryName,
-      this.countryCode,
-      this.passCode,
-      this.desCode})
-      : super(key: key);
 
   @override
   _SearchScreen createState() => _SearchScreen();
 }
 
 class _SearchScreen extends State<SearchScreen> {
-  static String cName, cCode;
   static String result = "";
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -32,14 +19,21 @@ class _SearchScreen extends State<SearchScreen> {
   TextEditingController _passportController = new TextEditingController();
   TextEditingController _desController = new TextEditingController();
 
+  Future<void> _getDestinationCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String desCountry = prefs.getString('desCountry');
+    if (desCountry != null) {
+      setState((){
+        _passportController.text = prefs.getString('countryName');
+        _desController.text = desCountry;
+        prefs.remove('desCountry');
+      });
+    }
+  }
+
   @override
   void initState() {
-    cName = widget.countryName;
-    cCode = widget.countryCode;
-    if (widget.desCode != null) {
-      _passportController.text = widget.passCode;
-      _desController.text = widget.desCode;
-    }
+    _getDestinationCountry();
     super.initState();
   }
 
@@ -51,110 +45,7 @@ class _SearchScreen extends State<SearchScreen> {
         data: Theme.of(context).copyWith(
           canvasColor: Colors.grey[100],
         ),
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              Container(
-                height: 90,
-                child: DrawerHeader(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Visa Checker",
-                      style: TextStyle(
-                        fontSize: 17,
-                        //fontFamily: 'Montserrat',
-                      ),
-                    ),
-                  ],
-                )),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Home",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              HomeScreen(
-                                countryName: cName,
-                                countryCode: cCode,
-                              )));
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Search",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.location_on, color: Colors.black),
-                title: Text(
-                  "Map",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.people, color: Colors.black),
-                title: Text(
-                  "Friends",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.black),
-                title: Text(
-                  "Settings",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              SettingsScreen(
-                                  countryName: cName, countryCode: cCode)));
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.info_outline,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "About this App",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationVersion: '0.0.1',
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        child: drawer(context),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -241,6 +132,9 @@ class _SearchScreen extends State<SearchScreen> {
                         onPressed: () {
                           _passportController.text = "";
                           _desController.text = "";
+                          setState(() {
+                            result = "";
+                          });
                         },
                       ),
                       FlatButton(
@@ -269,8 +163,7 @@ class _SearchScreen extends State<SearchScreen> {
                               result = result + " days";
                             }
                             print(result);
-                          }
-                          ;
+                          };
                         },
                       ),
                     ],
