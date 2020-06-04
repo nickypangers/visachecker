@@ -163,7 +163,7 @@ class _SearchScreen extends State<SearchScreen> {
                               result = result + " days";
                             }
                             print(result);
-                          };
+                          }
                         },
                       ),
                     ],

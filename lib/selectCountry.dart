@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
-import 'main.dart';
 import 'services/Key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

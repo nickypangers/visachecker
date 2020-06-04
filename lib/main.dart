@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'search.dart';
 import 'settings.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'services/Key.dart';
 import 'services/SearchList.dart';
 import 'services/CountryData.dart';
@@ -337,7 +335,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               color: Colors.black, width: 2),
                                         ),
                                         color: Colors.white,
-                                        child: Text("Visit Official Site"),
+                                        child: Text("Learn More"),
                                         onPressed: () {
                                           print("link pressed.");
                                           openBrowserTab(
@@ -356,12 +354,14 @@ class _HomeScreen extends State<HomeScreen> {
               );
             } else {
               return Center(
-                child: Wrap(
-                  children: [
-                    Text("Loading..."),
-                  ],
-                )
-              );
+                  child: Wrap(
+                children: [
+                  Text(
+                    "Loading...",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
+              ));
             }
           },
         ));

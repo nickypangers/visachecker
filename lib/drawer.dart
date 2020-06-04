@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'friends.dart';
 import 'main.dart';
 import 'search.dart';
 import 'settings.dart';
@@ -73,7 +74,13 @@ Widget drawer (BuildContext context) {
             "Friends",
             style: TextStyle(color: Colors.black),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                FriendsScreen()));
+          },
         ),
         ListTile(
           leading: Icon(Icons.settings, color: Colors.black),
