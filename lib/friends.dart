@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'services/friendObject.dart';
 import 'drawer.dart';
 import 'services/SearchList.dart';
 
@@ -11,17 +11,11 @@ class FriendsScreen extends StatefulWidget {
 class _FriendsScreenState extends State<FriendsScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  TextEditingController _nameController, _locController = new TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _locController = TextEditingController();
 
- List<String> friendList = [];
- List<String> friendLoc = [];
+  List<Friend> friends = [];
 
-  _addFriend(String name, String country) {
-    setState(() {
-      friendList.add(name);
-      friendLoc.add(country);      
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,23 +90,24 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                       ),
                                     ],
                                   ),
-                                  actions: [
-                                    FlatButton(
-                                      child: Text("Add"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        _addFriend(_nameController.text, _locController.text);
-                                        print("Name: $friendList, Loc: $friendLoc");
-                                        _nameController.clear();
-                                        _locController.clear();
-                                      },
-                                    ),
+                                  actions: <Widget>[
                                     FlatButton(
                                       child: Text("Back"),
                                       onPressed: () {
-                                        Navigator.of(context).pop();
                                         _nameController.clear();
                                         _locController.clear();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text("Add"),
+                                      onPressed: () {
+                                        setState(() {
+                                          friends.add(Friend(name: _nameController.text, country: _locController.text),);
+                                        });
+                                        _nameController.clear();
+                                        _locController.clear();
+                                        Navigator.of(context).pop();
                                       },
                                     ),
                                   ],
@@ -130,11 +125,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: friendList.length,
+              itemCount: friends.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(friendList[index]),
-                  subtitle: Text(friendLoc[index]),
+                  title: Text(friends[index].name),
+                  subtitle: Text(friends[index].country),
+                  onTap: () {},
                 );
               },
             ),
