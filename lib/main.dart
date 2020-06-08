@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:visachecker/services/dataClass.dart';
 import 'drawer.dart';
 import 'search.dart';
 import 'settings.dart';
@@ -8,6 +11,7 @@ import 'services/SearchList.dart';
 import 'services/CountryData.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MaterialApp(
       theme: ThemeData(fontFamily: 'Montserrat'),
@@ -26,9 +30,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
-  int visa_free = 0;
-  int visa_on_arrival = 0;
-  int visa_required = 0;
+  String visa_free = "";
+  String visa_on_arrival = "";
+  String visa_required = "";
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -44,6 +48,14 @@ class _HomeScreen extends State<HomeScreen> {
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
+    fetchCountry().then((value) {
+      Country data = value;
+      setState(() {
+        visa_free = data.VF;
+        visa_on_arrival = data.VOA;
+        visa_required = data.VR;
+      });
+    });
   }
 
   _passportCountry() async {
@@ -66,6 +78,17 @@ class _HomeScreen extends State<HomeScreen> {
         print("prefs code: $cCode");
       }
     });
+  }
+
+  Future<Country> fetchCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String countryCode = prefs.getString('countryCode');
+    var url = "https://passportvisa-api.herokuapp.com/api/$countryCode";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var country = Country(parsedJson);
+    return country;
   }
 
   _setDesCountry(String value) async {
@@ -251,7 +274,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_free"]}",
+                                            "$visa_free",
                                             style: TextStyle(
                                               color: Colors.green[300],
                                               fontWeight: FontWeight.bold,
@@ -274,7 +297,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_on_arrival"]}",
+                                            "$visa_on_arrival",
                                             style: TextStyle(
                                               color: Colors.orange[300],
                                               fontWeight: FontWeight.bold,
@@ -297,7 +320,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_required"]}",
+                                            "$visa_required",
                                             style: TextStyle(
                                               color: Colors.red[400],
                                               fontWeight: FontWeight.bold,

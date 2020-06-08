@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/services/dataClass.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
 import 'drawer.dart';
-import 'services/VisaData.dart';
+import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
 
@@ -13,6 +16,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreen extends State<SearchScreen> {
   static String result = "";
+  static String description;
+  static Color resultColor;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -33,8 +38,21 @@ class _SearchScreen extends State<SearchScreen> {
 
   @override
   void initState() {
+    setState(() {
+      result = "";
+      description = "";
+      resultColor = Colors.white;
+    });
     _getDestinationCountry();
     super.initState();
+  }
+
+  Future<String> fetchVisa() async {
+    var url = "https://passportvisa-api.herokuapp.com/api/${cList[_passportController.text]}/${cList[_desController.text]}";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    var visa = Visa(parsedJson);
+    return visa.code;
   }
 
   @override
@@ -47,7 +65,8 @@ class _SearchScreen extends State<SearchScreen> {
         ),
         child: drawer(context),
       ),
-      backgroundColor: Colors.white,
+//      backgroundColor: resultColor,
+    backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -134,6 +153,8 @@ class _SearchScreen extends State<SearchScreen> {
                           _desController.text = "";
                           setState(() {
                             result = "";
+                            description = "";
+                            resultColor = Colors.white;
                           });
                         },
                       ),
@@ -141,6 +162,7 @@ class _SearchScreen extends State<SearchScreen> {
                         child: Icon(Icons.search),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
+                          description = "";
                           if (_passportController.text == _desController.text ||
                               _passportController.text.length == null ||
                               _desController.text.length == null) {
@@ -149,19 +171,27 @@ class _SearchScreen extends State<SearchScreen> {
                             });
                             return;
                           } else {
-                            setState(() {
-                              print("passport: ${_passportController.text}");
-                              print("destination: ${_desController.text}");
-                              result = vData[cList[_passportController.text]]
-                                  [cList[_desController.text]];
+                            print("passport: ${_passportController.text}");
+                            print("destination: ${_desController.text}");
+                            fetchVisa().then((value) {
+                              setState(() {
+                                result = value;
+                                if (result == "VR") {
+                                  resultColor = Colors.red[400];
+                                  result = "Visa Required";
+                                } else if (result == "VOA" || result == "ETA") {
+                                  resultColor = Colors.blue[400];
+                                  result = "Visa on arrival";
+                                } else if (result == "VF") {
+                                  resultColor = Colors.green[400];
+                                  result = "Visa Free";
+                                  description = "Number of days is not applicable or known, eg freedom of movement";
+                                } else {
+                                  resultColor = Colors.green[400];
+                                  result = "Visa Free - $result days";
+                                }
+                              });
                             });
-                            if (result == "VR") {
-                              result = "Visa Required";
-                            } else if (result == "VOA" || result == "ETA") {
-                              result = "Visa on arrival";
-                            } else {
-                              result = result + " days";
-                            }
                             print(result);
                           }
                         },
@@ -173,15 +203,20 @@ class _SearchScreen extends State<SearchScreen> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                top: 10,
+                top: 100,
+                  left: 12,
+                  right: 12,
               ),
               child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    Text(result),
-                  ],
+                decoration: BoxDecoration(
+                  color: resultColor,
                 ),
+                padding: EdgeInsets.all(50),
+                alignment: Alignment.center,
+                child: Center(
+                    child: Text(result, textAlign: TextAlign.center, style: TextStyle(fontSize: 30, color: Colors.white)
+                        ),
+                )
               ),
             )
           ],
