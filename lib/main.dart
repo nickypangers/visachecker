@@ -48,14 +48,6 @@ class _HomeScreen extends State<HomeScreen> {
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
-    fetchCountry().then((value) {
-      Country data = value;
-      setState(() {
-        visa_free = data.VF;
-        visa_on_arrival = data.VOA;
-        visa_required = data.VR;
-      });
-    });
   }
 
   _passportCountry() async {
@@ -63,6 +55,11 @@ class _HomeScreen extends State<HomeScreen> {
     print("pref: $prefs");
     String countryName = prefs.getString('countryName');
     String countryCode = prefs.getString('countryCode');
+    var url = "https://passportvisa-api.herokuapp.com/api/$countryCode";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var country = Country(parsedJson);
     setState(() {
       if (countryName == null || countryCode == null) {
         prefs.setString('countryName', 'Hong Kong');
@@ -71,12 +68,21 @@ class _HomeScreen extends State<HomeScreen> {
         cCode = cList[cName];
         prefs.setString('countryCode', cCode);
         print("prefs code: $cCode");
+//        visa_free = country.VF;
+//        visa_on_arrival = country.VOA;
+//        visa_required = country.VR;
       } else {
         cName = countryName;
         cCode = cList[cName];
         print("prefs name: $cName");
         print("prefs code: $cCode");
+//        visa_free = country.VF;
+//        visa_on_arrival = country.VOA;
+//        visa_required = country.VR;
       }
+      visa_free = country.VF;
+      visa_on_arrival = country.VOA;
+      visa_required = country.VR;
     });
   }
 
