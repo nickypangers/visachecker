@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
-import 'main.dart';
 import 'services/Key.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectCountryScreen extends StatefulWidget {
   @override
@@ -62,7 +62,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                     return ListTile(
                       title: Text("$key"),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen(countryName: key, countryCode: cList['$key'],)));
+                        setPassPortCountry(key);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
                       },
                     );
                   },
@@ -74,4 +75,10 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
       ),
     );
   }
+}
+
+Future<void> setPassPortCountry(String country) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('countryName', country);
+  prefs.setString('countryCode', cList[country]);
 }
