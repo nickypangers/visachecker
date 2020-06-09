@@ -1,163 +1,72 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/services/dataClass.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
-import 'main.dart';
-import 'settings.dart';
-import 'services/VisaData.dart';
+import 'drawer.dart';
+import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
-  final String countryName;
-  final String countryCode;
-  final String passCode;
-  final String desCode;
-
-  const SearchScreen(
-      {Key key,
-      @required this.countryName,
-      this.countryCode,
-      this.passCode,
-      this.desCode})
-      : super(key: key);
 
   @override
   _SearchScreen createState() => _SearchScreen();
 }
 
 class _SearchScreen extends State<SearchScreen> {
-  static String cName, cCode;
   static String result = "";
+  static String description;
+  static Color resultColor;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _passportController = new TextEditingController();
   TextEditingController _desController = new TextEditingController();
 
+  Future<void> _getDestinationCountry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String desCountry = prefs.getString('desCountry');
+    if (desCountry != null) {
+      setState((){
+        _passportController.text = prefs.getString('countryName');
+        _desController.text = desCountry;
+        prefs.remove('desCountry');
+      });
+    }
+  }
+
   @override
   void initState() {
-    cName = widget.countryName;
-    cCode = widget.countryCode;
-    if (widget.desCode != null) {
-      _passportController.text = widget.passCode;
-      _desController.text = widget.desCode;
-    }
+    setState(() {
+      result = "";
+      description = "";
+      resultColor = Colors.white;
+    });
+    _getDestinationCountry();
     super.initState();
+  }
+
+  Future<String> fetchVisa() async {
+    var url = "https://passportvisa-api.herokuapp.com/api/${cList[_passportController.text]}/${cList[_desController.text]}";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    var visa = Visa(parsedJson);
+    return visa.code;
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
       drawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.grey[100],
         ),
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              Container(
-                height: 90,
-                child: DrawerHeader(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Visa Checker",
-                      style: TextStyle(
-                        fontSize: 17,
-                        //fontFamily: 'Montserrat',
-                      ),
-                    ),
-                  ],
-                )),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Home",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              HomeScreen(
-                                countryName: cName,
-                                countryCode: cCode,
-                              )));
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Search",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.location_on, color: Colors.black),
-                title: Text(
-                  "Map",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.people, color: Colors.black),
-                title: Text(
-                  "Friends",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.black),
-                title: Text(
-                  "Settings",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              SettingsScreen(
-                                  countryName: cName, countryCode: cCode)));
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.info_outline,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "About this App",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationVersion: '0.0.1',
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        child: drawer(context),
       ),
-      backgroundColor: Colors.white,
+//      backgroundColor: resultColor,
+    backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -242,12 +151,18 @@ class _SearchScreen extends State<SearchScreen> {
                         onPressed: () {
                           _passportController.text = "";
                           _desController.text = "";
+                          setState(() {
+                            result = "";
+                            description = "";
+                            resultColor = Colors.white;
+                          });
                         },
                       ),
                       FlatButton(
                         child: Icon(Icons.search),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
+                          description = "";
                           if (_passportController.text == _desController.text ||
                               _passportController.text.length == null ||
                               _desController.text.length == null) {
@@ -256,22 +171,29 @@ class _SearchScreen extends State<SearchScreen> {
                             });
                             return;
                           } else {
-                            setState(() {
-                              print("passport: ${_passportController.text}");
-                              print("destination: ${_desController.text}");
-                              result = vData[cList[_passportController.text]]
-                                  [cList[_desController.text]];
+                            print("passport: ${_passportController.text}");
+                            print("destination: ${_desController.text}");
+                            fetchVisa().then((value) {
+                              setState(() {
+                                result = value;
+                                if (result == "VR") {
+                                  resultColor = Colors.red[400];
+                                  result = "Visa Required";
+                                } else if (result == "VOA" || result == "ETA") {
+                                  resultColor = Colors.blue[400];
+                                  result = "Visa on arrival";
+                                } else if (result == "VF") {
+                                  resultColor = Colors.green[400];
+                                  result = "Visa Free";
+                                  description = "Number of days is not applicable or known, eg freedom of movement";
+                                } else {
+                                  resultColor = Colors.green[400];
+                                  result = "Visa Free - $result days";
+                                }
+                              });
                             });
-                            if (result == "VR") {
-                              result = "Visa Required";
-                            } else if (result == "VOA" || result == "ETA") {
-                              result = "Visa on arrival";
-                            } else {
-                              result = result + " days";
-                            }
                             print(result);
                           }
-                          ;
                         },
                       ),
                     ],
@@ -281,15 +203,20 @@ class _SearchScreen extends State<SearchScreen> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                top: 10,
+                top: 100,
+                  left: 12,
+                  right: 12,
               ),
               child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    Text(result),
-                  ],
+                decoration: BoxDecoration(
+                  color: resultColor,
                 ),
+                padding: EdgeInsets.all(50),
+                alignment: Alignment.center,
+                child: Center(
+                    child: Text(result, textAlign: TextAlign.center, style: TextStyle(fontSize: 30, color: Colors.white)
+                        ),
+                )
               ),
             )
           ],

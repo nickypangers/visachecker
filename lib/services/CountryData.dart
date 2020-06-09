@@ -3,7 +3,7 @@ Map<String, Map<String, String>> countryData = {
     "visa_free": "78",
     "visa_on_arrival": "31",
     "visa_required": "89",
-    "url": "https://www.immd.gov.hk/",
+    "url": "https://www.immd.gov.hk/eng/services/index.html",
   },
   "US":{ // United States
     "visa_free": "79",
