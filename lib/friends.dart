@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'search.dart';
@@ -17,6 +18,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
   TextEditingController _locController = TextEditingController();
 
   List<Friend> friends = [];
+
+  @override
+  initState() {
+    super.initState();
+  }
+
+
 
   _setDesCountry(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
