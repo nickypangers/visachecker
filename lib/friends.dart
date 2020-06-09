@@ -78,6 +78,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     content: Column(
                                       children: [
                                         TextField(
+                                          textCapitalization: TextCapitalization.sentences,
                                           controller: _nameController,
                                           decoration: InputDecoration(
                                             hintText: 'Enter Name',

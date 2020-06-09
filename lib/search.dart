@@ -176,6 +176,7 @@ class _SearchScreen extends State<SearchScreen> {
                             fetchVisa().then((value) {
                               setState(() {
                                 result = value;
+                                print(result);
                                 if (result == "VR") {
                                   resultColor = Colors.red[400];
                                   result = "Visa Required";
@@ -192,7 +193,7 @@ class _SearchScreen extends State<SearchScreen> {
                                 }
                               });
                             });
-                            print(result);
+                            // print(result);
                           }
                         },
                       ),

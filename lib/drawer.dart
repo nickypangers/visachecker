@@ -68,20 +68,20 @@ Widget drawer (BuildContext context) {
 //          ),
 //          onTap: () {},
 //        ),
-//        ListTile(
-//          leading: Icon(Icons.people, color: Colors.black),
-//          title: Text(
-//            "Friends",
-//            style: TextStyle(color: Colors.black),
-//          ),
-//          onTap: () {
-//            Navigator.pushReplacement(
-//              context,
-//              PageRouteBuilder(
-//                pageBuilder: (context, animation1, animation2) =>
-//                FriendsScreen()));
-//          },
-//        ),
+       ListTile(
+         leading: Icon(Icons.people, color: Colors.black),
+         title: Text(
+           "Friends",
+           style: TextStyle(color: Colors.black),
+         ),
+         onTap: () {
+           Navigator.pushReplacement(
+             context,
+             PageRouteBuilder(
+               pageBuilder: (context, animation1, animation2) =>
+               FriendsScreen()));
+         },
+       ),
         ListTile(
           leading: Icon(Icons.settings, color: Colors.black),
           title: Text(
