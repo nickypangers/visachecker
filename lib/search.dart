@@ -19,10 +19,10 @@ class _SearchScreen extends State<SearchScreen> {
   static String description;
   static Color resultColor;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
 
-  TextEditingController _passportController = new TextEditingController();
-  TextEditingController _desController = new TextEditingController();
+  TextEditingController _passportController =  TextEditingController();
+  TextEditingController _desController =  TextEditingController();
 
   Future<void> _getDestinationCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

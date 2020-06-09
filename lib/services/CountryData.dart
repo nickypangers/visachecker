@@ -269,11 +269,11 @@ Map<String, Map<String, String>> countryData = {
     "visa_required": "77",
     "url": "https://www.visa.go.kr/?LANG_TYPE=EN",
   },
-  "NZ":{ // New Zealand
+  "NZ":{ //  Zealand
     "visa_free": "72",
     "visa_on_arrival": "49",
     "visa_required": "77",
-    "url": "https://www.immigration.govt.nz/new-zealand-visas/apply-for-a-visa",
+    "url": "https://www.immigration.govt.nz/-zealand-visas/apply-for-a-visa",
   },
   "MY":{ // Malaysia
     "visa_free": "78",
@@ -671,7 +671,7 @@ Map<String, Map<String, String>> countryData = {
     "visa_required": "120",
     "url": "http://www.consular.go.th/main/th/other/7393",
   },
-  "PG":{ // Papua New Guinea
+  "PG":{ // Papua  Guinea
     "visa_free": "46",
     "visa_on_arrival": "40",
     "visa_required": "122",

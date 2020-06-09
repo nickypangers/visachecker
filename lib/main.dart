@@ -34,9 +34,9 @@ class _HomeScreen extends State<HomeScreen> {
   String visa_on_arrival = "";
   String visa_required = "";
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
 
-  TextEditingController _controller = new TextEditingController();
+  TextEditingController _controller =  TextEditingController();
 
   String cCode, cName;
 

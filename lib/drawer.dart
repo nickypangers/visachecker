@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'friends.dart';
+import 'contact.dart';
+// import 'friends.dart';
 import 'main.dart';
 import 'search.dart';
 import 'settings.dart';
@@ -94,6 +95,23 @@ Widget drawer (BuildContext context) {
                 PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) =>
                         SettingsScreen()));
+          },
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.email,
+            color: Colors.black,
+          ),
+          title: Text(
+            "Contact Developer",
+            style: TextStyle(color: Colors.black),
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        ContactScreen()));
           },
         ),
         ListTile(
