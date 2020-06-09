@@ -48,14 +48,6 @@ class _HomeScreen extends State<HomeScreen> {
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
-    fetchCountry().then((value) {
-      Country data = value;
-      setState(() {
-        visa_free = data.VF;
-        visa_on_arrival = data.VOA;
-        visa_required = data.VR;
-      });
-    });
   }
 
   _passportCountry() async {
@@ -77,6 +69,14 @@ class _HomeScreen extends State<HomeScreen> {
         print("prefs name: $cName");
         print("prefs code: $cCode");
       }
+      fetchCountry().then((value) {
+      Country data = value;
+      setState(() {
+        visa_free = data.VF;
+        visa_on_arrival = data.VOA;
+        visa_required = data.VR;
+      });
+    });
     });
   }
 
