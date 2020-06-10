@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 class ContactScreen extends StatelessWidget {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -7,6 +8,11 @@ class ContactScreen extends StatelessWidget {
 
   TextEditingController _subjectController = TextEditingController();
   TextEditingController _bodyController = TextEditingController();
+
+  openBrowserTab(String url) async {
+    await FlutterWebBrowser.openWebPage(
+        url: url, androidToolbarColor: Colors.white);
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +101,21 @@ class ContactScreen extends StatelessWidget {
               ),
             ),
           ),
-          FlatButton(
-            child: Text("Submit"),
-            onPressed: () {
-              
-            },
-          )
+          Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: SizedBox(
+              width: double.infinity,
+              child: FlatButton(
+                color: Colors.grey[300],
+                padding: EdgeInsets.all(25),
+                child: Text("Submit"),
+                onPressed: () {
+                  String url = "mailto:nickypangers@gmail.com?subject=${_subjectController.text}&body=${_bodyController.text}";
+                  openBrowserTab(url);
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
