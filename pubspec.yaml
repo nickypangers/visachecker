@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2+3
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -43,7 +43,7 @@ dev_dependencies:
 flutter_icons:
   ios: false
   android: true
-  image_path: "assets/launcher/icon-512.png"
+  image_path: "assets/launcher/icon.png"
 
 # The following section is specific to Flutter.
 flutter:
@@ -61,14 +61,7 @@ flutter:
           weight: 500
 
   assets:
-    - assets/launcher/icon-512.png
-    - assets/launcher/icon-192.png
-    - assets/launcher/icon-144.png
-    - assets/launcher/icon-96.png
-    - assets/launcher/icon-72.png
-    - assets/launcher/icon-48.png
-    - assets/launcher/icon-36.png
-
+    - assets/launcher/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
