@@ -82,9 +82,11 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   TextEditingController _controller = TextEditingController();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Color(0xFF00D46D),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -155,10 +157,9 @@ class _IntroScreenState extends State<IntroScreen> {
             ),
             onPressed: () {
               if (_controller.text.length == 0) {
-                final snackBar = SnackBar(
-                  content: Text("Please enter a country"),
-                );
-                snackBar;
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text("Please enter a country."),
+                ));
               } else {
                 setSeen(true);
                 setCountry(_controller.text);

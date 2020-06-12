@@ -146,9 +146,9 @@ Widget drawer(BuildContext context) {
               applicationLegalese: '© Developed by Nixon Pang, 2020.',
               children: <Widget>[
                 Text("""
-                Data source is accurate as of May 09, 2020. In certain curcumstances, travel bans may take precendance over the visa information recorded here. Please confirm actual visa policies with an embassy before your travel.\n
                 Passport cover source: http://passportindex.com\n
-                Data source: github.com/ilyankou/passport-index-dataset
+                Data source: github.com/ilyankou/passport-index-dataset\n
+                In certain curcumstances, travel bans may take precendance over the visa information recorded here. Please confirm actual visa policies with an embassy before your travel.
                 """),
               ],
             );
