@@ -98,77 +98,77 @@ class _IntroScreenState extends State<IntroScreen> {
           Text(
             "Visa Checker",
             style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 5, top: 15),
-                child: Container(
-                  width: 255,
-                  child: TextField(
-                    style: TextStyle(color: Colors.grey[700]),
-                    cursorColor: Colors.grey[700],
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Enter Passport Country',
-                      hintStyle: TextStyle(color: Colors.white),
-                      contentPadding: EdgeInsets.only(
-                          left: 10, right: 10, top: 5, bottom: 5),
-                    ),
-                    onTap: () {
-                      showSearch(
-                          context: context,
-                          delegate: DataSearch(controller: _controller));
-                    },
+          Padding(
+            padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+            child: Container(
+              child: TextField(
+                style: TextStyle(color: Colors.grey[700]),
+                cursorColor: Colors.grey[700],
+                controller: _controller,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: 'Enter Passport Country',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  contentPadding:
+                      EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.check),
-                alignment: Alignment.center,
-                color: Colors.white,
-                onPressed: () {
-                  if (_controller.text.length == 0) {
-                    final snackBar = SnackBar(
-                      content: Text("Please enter a country"),
-                    );
-                    snackBar;
-                  } else {
-                    setSeen(true);
-                    setCountry(_controller.text);
-                    Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                HomeScreen()));
-                  }
+                onTap: () {
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(controller: _controller));
                 },
               ),
-            ],
+            ),
+          ),
+          FlatButton(
+            child: Text(
+              "ENTER",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                letterSpacing: 3,
+              ),
+            ),
+            onPressed: () {
+              if (_controller.text.length == 0) {
+                final snackBar = SnackBar(
+                  content: Text("Please enter a country"),
+                );
+                snackBar;
+              } else {
+                setSeen(true);
+                setCountry(_controller.text);
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            HomeScreen()));
+              }
+            },
           ),
         ],
       ),
