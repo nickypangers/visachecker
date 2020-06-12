@@ -5,7 +5,7 @@ This app uses the API in my other repository, [Passport Visa API](https://github
 
 ## Download
 
-To download the official release, visit the Google App Store (soon).
+To download the official release, visit the Google App Store: https://play.google.com/store/apps/details?id=com.nickypangers.visacheckertravel
 
 ### Beta testing
 
