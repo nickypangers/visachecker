@@ -9,6 +9,7 @@ import 'settings.dart';
 import 'services/Key.dart';
 import 'services/SearchList.dart';
 import 'services/CountryData.dart';
+import 'splash.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -16,12 +17,14 @@ import 'package:http/http.dart' as http;
 void main() => runApp(MaterialApp(
       theme: ThemeData(fontFamily: 'Montserrat'),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/search': (context) => SearchScreen(),
-        '/settings': (context) => SettingsScreen(),
-      },
+      // initialRoute: '/splash',
+      // routes: {
+      //   '/splash': (context) => IntroScreen(),
+      //   '/': (context) => HomeScreen(),
+      //   '/search': (context) => SearchScreen(),
+      //   '/settings': (context) => SettingsScreen(),
+      // },
+      home: SplashScreen(),
     ));
 
 class HomeScreen extends StatefulWidget {
@@ -34,9 +37,9 @@ class _HomeScreen extends State<HomeScreen> {
   String visa_on_arrival = "";
   String visa_required = "";
 
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _controller =  TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   String cCode, cName;
 
@@ -52,38 +55,30 @@ class _HomeScreen extends State<HomeScreen> {
 
   _passportCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("pref: $prefs");
+    bool _seen = prefs.getBool('seen');
+    print("seen: $_seen");
     String countryName = prefs.getString('countryName');
-    String countryCode = prefs.getString('countryCode');
+    // String countryCode = cList[countryName];
     setState(() {
-      if (countryName == null || countryCode == null) {
-        prefs.setString('countryName', 'Hong Kong');
-        cName = prefs.getString('countryName');
-        print("prefs name: $cName");
-        cCode = cList[cName];
-        prefs.setString('countryCode', cCode);
-        print("prefs code: $cCode");
-      } else {
-        cName = countryName;
-        cCode = cList[cName];
-        print("prefs name: $cName");
-        print("prefs code: $cCode");
-      }
+      cName = countryName;
+      cCode = cList[cName];
+      print("prefs name: $cName");
+      print("prefs code: $cCode");
       fetchCountry().then((value) {
-      Country data = value;
-      setState(() {
-        visa_free = data.VF;
-        visa_on_arrival = data.VOA;
-        visa_required = data.VR;
+        Country data = value;
+        setState(() {
+          visa_free = data.VF;
+          visa_on_arrival = data.VOA;
+          visa_required = data.VR;
+        });
       });
-    });
     });
   }
 
   Future<Country> fetchCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String countryCode = prefs.getString('countryCode');
-    var url = "https://passportvisa-api.herokuapp.com/api/$countryCode";
+    var url = "https://passportvisa-api.herokuapp.com/api/$cCode";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);

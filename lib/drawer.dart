@@ -5,7 +5,7 @@ import 'main.dart';
 import 'search.dart';
 import 'settings.dart';
 
-Widget drawer (BuildContext context) {
+Widget drawer(BuildContext context) {
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -14,18 +14,32 @@ Widget drawer (BuildContext context) {
           height: 90,
           child: DrawerHeader(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // SizedBox(
+                  //   width: 34,
+                  //   height: 34,
+                  //   child: FittedBox(
+                  //     fit: BoxFit.fill,
+                  //     child: Image.asset("assets/launcher/icon-512.png"),
+                  //   ),
+                  // ),
                   Text(
                     "Visa Checker",
                     style: TextStyle(
                       fontSize: 17,
+                      fontWeight: FontWeight.bold,
                       //fontFamily: 'Montserrat',
                     ),
                   ),
                 ],
-              )),
+              ),
+            ],
+          )),
         ),
         ListTile(
           leading: Icon(
@@ -126,17 +140,17 @@ Widget drawer (BuildContext context) {
           onTap: () {
             showAboutDialog(
               context: context,
-//              applicationIcon: ImageIcon(AssetImage("assets/launcher/icon.png")),
+              applicationIcon: Image.asset("assets/launcher/Icon-72.png"),
               applicationName: 'Visa Checker',
-              applicationVersion: '1.0.0',
+              applicationVersion: '1.0.2',
               applicationLegalese: '© Developed by Nixon Pang, 2020.',
               children: <Widget>[
                 Text("""
-                Data source is accurate as of May 09, 2020. In certain curcumstances, travel bans may take precendance over the visa information recorded here. Although I try to keep the data as accurate as possible, Change of visa policy made by governments will not be reflected in this app instantly, Please confirm actual visa policies with an embassy before your travel.\n
+                Data source is accurate as of May 09, 2020. In certain curcumstances, travel bans may take precendance over the visa information recorded here. Please confirm actual visa policies with an embassy before your travel.\n
                 Passport cover source: http://passportindex.com\n
                 Data source: github.com/ilyankou/passport-index-dataset
-                """)
-              ]
+                """),
+              ],
             );
           },
         ),
