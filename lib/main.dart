@@ -53,12 +53,11 @@ class _HomeScreen extends State<HomeScreen> {
     print("Code: $cCode");
   }
 
-  _passportCountry() async {
+ _passportCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = prefs.getBool('seen');
     print("seen: $_seen");
     String countryName = prefs.getString('countryName');
-    // String countryCode = cList[countryName];
     setState(() {
       cName = countryName;
       cCode = cList[cName];
@@ -71,7 +70,7 @@ class _HomeScreen extends State<HomeScreen> {
           visa_on_arrival = data.VOA;
           visa_required = data.VR;
         });
-      });
+      });    
     });
   }
 
