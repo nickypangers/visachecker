@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'contact.dart';
-// import 'friends.dart';
+import 'friends.dart';
 import 'main.dart';
 import 'search.dart';
 import 'settings.dart';
@@ -20,14 +20,6 @@ Widget drawer(BuildContext context) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // SizedBox(
-                  //   width: 34,
-                  //   height: 34,
-                  //   child: FittedBox(
-                  //     fit: BoxFit.fill,
-                  //     child: Image.asset("assets/launcher/icon-512.png"),
-                  //   ),
-                  // ),
                   Text(
                     "Visa Checker",
                     style: TextStyle(
@@ -148,7 +140,7 @@ Widget drawer(BuildContext context) {
                 Text("""
                 Passport cover source: http://passportindex.com\n
                 Data source: github.com/ilyankou/passport-index-dataset\n
-                In certain curcumstances, travel bans may take precendance over the visa information recorded here. Please confirm actual visa policies with an embassy before your travel.
+                In certain circumstances, travel bans may take precendance over the visa information recorded here. Please confirm actual visa policies with an embassy before your travel.
                 """),
               ],
             );

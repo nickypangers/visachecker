@@ -204,13 +204,15 @@ class _HomeScreen extends State<HomeScreen> {
                                         IconButton(
                                           icon: Icon(Icons.search),
                                           onPressed: () {
-                                            print(_controller.text);
+                                            if (_controller.text.length > 0) {
+                                              print(_controller.text);
                                             _setDesCountry(_controller.text);
                                             Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         SearchScreen()));
+                                            }
                                           },
                                         )
                                       ],

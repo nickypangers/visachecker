@@ -55,6 +55,8 @@ class _SearchScreen extends State<SearchScreen> {
     return visa.code;
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +67,6 @@ class _SearchScreen extends State<SearchScreen> {
         ),
         child: drawer(context),
       ),
-//      backgroundColor: resultColor,
     backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(

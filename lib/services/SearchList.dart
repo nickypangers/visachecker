@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'CountryList.dart';
+import 'Key.dart';
 
 class DataSearch extends SearchDelegate<String> {
   TextEditingController controller;
@@ -33,7 +34,9 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    Navigator.pop(context);
+    if (controller.text != null) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -47,7 +50,8 @@ class DataSearch extends SearchDelegate<String> {
             Navigator.pop(context);
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          leading: Icon(Icons.location_on),
+          // leading: Icon(Icons.location_on),
+          leading: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png", scale: 0.5,),
           title: RichText(
             text: TextSpan(
               text: suggestionList[index].substring(0, query.length),

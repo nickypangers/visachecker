@@ -12,7 +12,7 @@ class FriendsScreen extends StatefulWidget {
 }
 
 class _FriendsScreenState extends State<FriendsScreen> {
-  GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _locController = TextEditingController();
@@ -23,8 +23,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
   initState() {
     super.initState();
   }
-
-
 
   _setDesCountry(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,7 +76,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           icon: Icon(Icons.add),
                           onPressed: () {
                             showDialog(
-                              barrierDismissible: false,
+                                barrierDismissible: false,
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
@@ -86,7 +84,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     content: Column(
                                       children: [
                                         TextField(
-                                          textCapitalization: TextCapitalization.sentences,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
                                           controller: _nameController,
                                           decoration: InputDecoration(
                                             hintText: 'Enter Name',
@@ -152,11 +151,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   direction: DismissDirection.endToStart,
                   confirmDismiss: (DismissDirection direction) {
                     return showDialog(
-                        context: context,
+                      context: context,
                       builder: (context) {
                         return AlertDialog(
                           title: Text("Are you sure?"),
-                          content: Text("You are about to remove ${friends[index].name} from your friends list, continue?"),
+                          content: Text(
+                              "You are about to remove ${friends[index].name} from your friends list, continue?"),
                           actions: [
                             FlatButton(
                               child: Text("No"),
@@ -178,9 +178,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   onDismissed: (direction) {
                     Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text("${friends[index].name} dismissed.")));
-                        setState(() {
-                          friends.removeAt(index);
-                        });
+                    setState(() {
+                      friends.removeAt(index);
+                    });
                   },
                   background: Container(
                     padding: EdgeInsets.only(
@@ -199,7 +199,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     trailing: Icon(Icons.navigate_next),
                     onTap: () {
                       _setDesCountry(friends[index].country);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen()));
                     },
                   ),
                 );
