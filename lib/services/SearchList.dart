@@ -50,8 +50,15 @@ class DataSearch extends SearchDelegate<String> {
             Navigator.pop(context);
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          // leading: Icon(Icons.location_on),
-          leading: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png", scale: 0.5,),
+          // leading: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png", scale: 0.5,),
+          leading: SizedBox(
+            width: 32,
+            height: 32,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png"),
+            ),
+          ),
           title: RichText(
             text: TextSpan(
               text: suggestionList[index].substring(0, query.length),
