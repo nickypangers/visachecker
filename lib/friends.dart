@@ -35,11 +35,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
     _pCountry();
   }
 
-  _setDesCountry(String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('desCountry', value);
-  }
-
   Color resultColor(String result) {
     if (result == "VR") {
       return Colors.red[400];
@@ -52,13 +47,32 @@ class _FriendsScreenState extends State<FriendsScreen> {
     }
   }
 
-  Future<String> fetchVisa() async {
+  Future<Friend> fetchVisa(String name, String desCountry) async {
     var url =
         "https://passportvisa-api.herokuapp.com/api/${cList[pCountry]}/${cList[desCountry]}";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     var visa = Visa(parsedJson);
-    return visa.code;
+    Friend newFriend = Friend(
+      name: name,
+      country: desCountry,
+      result: resultText(visa.code),
+      color: resultColor(visa.code),
+    );
+    print(newFriend);
+    return newFriend;
+  }
+
+  String resultText(String result) {
+    if (result == "VR") {
+      return "Visa Required";
+    } else if (result == "VOA" || result == "ETA") {
+      return "Visa on arrival";
+    } else if (result == "VF") {
+      return "Visa Free";
+    } else {
+      return "Visa Free\n$result days";
+    }
   }
 
   _pCountry() async {
@@ -155,18 +169,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     FlatButton(
                                       child: Text("Add"),
                                       onPressed: () {
-                                        desCountry = _locController.text;
-                                        // String name = _nameController.text;
-                                        String result;
-                                        fetchVisa().then((value) {
-                                          result = value;
+                                        fetchVisa(_nameController.text,
+                                                _locController.text)
+                                            .then((value) {
                                           setState(() {
-                                            friends.add(Friend(
-                                              name: _nameController.text,
-                                              country: _locController.text,
-                                              result: result,
-                                              color: resultColor(result),
-                                            ));
+                                            friends.add(value);
                                             _nameController.clear();
                                             _locController.clear();
                                             Navigator.of(context).pop();
@@ -200,7 +207,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
                     child: FlipCard(
                       direction: FlipDirection.HORIZONTAL,
-                      speed: 1000,
+                      speed: 700,
                       onFlipDone: (status) {
                         print(status);
                       },
@@ -223,6 +230,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                             ),
                             Text(
                               friends[index].name,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             ),
@@ -237,7 +245,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(friends[index].result),
+                            Text(
+                              friends[index].result,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 17),
+                            ),
                           ],
                         ),
                       ),
