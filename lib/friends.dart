@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'services/Key.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'search.dart';
+// import 'search.dart';
 import 'services/dataClass.dart';
 import 'services/friendObject.dart';
 import 'drawer.dart';
@@ -33,18 +33,36 @@ class _FriendsScreenState extends State<FriendsScreen> {
   initState() {
     super.initState();
     _pCountry();
+    _checkFriendsList();
   }
 
-  Color resultColor(String result) {
-    if (result == "VR") {
-      return Colors.red[400];
-    } else if (result == "VOA" || result == "ETA") {
-      return Colors.blue[400];
-    } else if (result == "VF") {
-      return Colors.green[400];
+  Color resultColor(int index) {
+    Color rColor;
+    if (pCountry == friends[index].country) {
+      setState(() {
+        rColor = Colors.orange[400];
+      });
     } else {
-      return Colors.green[400];
+      if (friends[index].result == "VR") {
+        setState(() {
+          rColor = Colors.red[400];
+        });
+      } else if (friends[index].result == "VOA" ||
+          friends[index].result == "ETA") {
+        setState(() {
+          rColor = Colors.blue[400];
+        });
+      } else if (friends[index].result == "VF") {
+        setState(() {
+          rColor = Colors.green[400];
+        });
+      } else {
+        setState(() {
+          rColor = Colors.green[400];
+        });
+      }
     }
+    return rColor;
   }
 
   Future<Friend> fetchVisa(String name, String desCountry) async {
@@ -56,23 +74,45 @@ class _FriendsScreenState extends State<FriendsScreen> {
     Friend newFriend = Friend(
       name: name,
       country: desCountry,
-      result: resultText(visa.code),
-      color: resultColor(visa.code),
+      result: visa.code,
     );
-    print(newFriend);
     return newFriend;
   }
 
-  String resultText(String result) {
-    if (result == "VR") {
-      return "Visa Required";
-    } else if (result == "VOA" || result == "ETA") {
-      return "Visa on arrival";
-    } else if (result == "VF") {
-      return "Visa Free";
+  String resultText(int index) {
+    if (pCountry == friends[index].country) {
+      return "Same Country";
     } else {
-      return "Visa Free\n$result days";
+      if (friends[index].result == "VR") {
+        return "Visa Required";
+      } else if (friends[index].result == "VOA" ||
+          friends[index].result == "ETA") {
+        return "Visa on arrival";
+      } else if (friends[index].result == "VF") {
+        return "Visa Free";
+      } else {
+        return "Visa Free\n${friends[index].result} days";
+      }
     }
+  }
+
+  _checkFriendsList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var returnList = prefs.getString('friendsList');
+    if (returnList != null) {
+      List readList = jsonDecode(returnList);
+      setState(() {
+        friends = readList.map((val) => Friend.fromJson(val)).toList();
+      });
+      print(friends);
+    }
+  }
+
+  _saveFriend(List<Friend> list) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('friendsList', jsonEncode(list));
+    String readList = prefs.getString('friendsList');
+    print(readList);
   }
 
   _pCountry() async {
@@ -172,12 +212,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                         fetchVisa(_nameController.text,
                                                 _locController.text)
                                             .then((value) {
+                                          friends.add(value);
                                           setState(() {
-                                            friends.add(value);
                                             _nameController.clear();
                                             _locController.clear();
-                                            Navigator.of(context).pop();
                                           });
+                                          // print(jsonEncode(friends));
+                                          _saveFriend(friends);
+                                          Navigator.of(context).pop();
                                         });
                                       },
                                     ),
@@ -213,15 +255,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       },
                       front: Container(
                         decoration: BoxDecoration(
-                          color: friends[index].color,
+                          color: resultColor(index),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              width: 48,
-                              height: 48,
+                              width: 64,
+                              height: 64,
                               child: FittedBox(
                                 fit: BoxFit.fill,
                                 child: Image.network(
@@ -239,14 +281,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       ),
                       back: Container(
                         decoration: BoxDecoration(
-                          color: friends[index].color,
+                          color: resultColor(index),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              friends[index].result,
+                              resultText(index),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 17),
                             ),
