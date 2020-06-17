@@ -243,59 +243,69 @@ class _FriendsScreenState extends State<FriendsScreen> {
               children: List.generate(
                 friends.length,
                 (index) {
-                  return Card(
-                    elevation: 0,
-                    margin: EdgeInsets.only(
-                        left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
-                    child: FlipCard(
-                      direction: FlipDirection.HORIZONTAL,
-                      speed: 700,
-                      onFlipDone: (status) {
-                        print(status);
-                      },
-                      front: Container(
-                        decoration: BoxDecoration(
-                          color: resultColor(index),
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 64,
-                              height: 64,
-                              child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: Image.network(
-                                    "https://www.countryflags.io/${cList[friends[index].country]}/flat/64.png"),
+                  return GestureDetector(
+                    child: Card(
+                      elevation: 0,
+                      margin: EdgeInsets.only(
+                          left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
+                      child: FlipCard(
+                        direction: FlipDirection.HORIZONTAL,
+                        speed: 700,
+                        onFlipDone: (status) {
+                          print(status);
+                        },
+                        front: Container(
+                          decoration: BoxDecoration(
+                            color: resultColor(index),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 64,
+                                height: 64,
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Image.network(
+                                      "https://www.countryflags.io/${cList[friends[index].country]}/flat/64.png"),
+                                ),
                               ),
-                            ),
-                            Text(
-                              friends[index].name,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                          ],
+                              Text(
+                                friends[index].name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      back: Container(
-                        decoration: BoxDecoration(
-                          color: resultColor(index),
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              resultText(index),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 17),
-                            ),
-                          ],
+                        back: Container(
+                          decoration: BoxDecoration(
+                            color: resultColor(index),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                resultText(index),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    onLongPress: () {
+                      setState(() {
+                        friends.removeAt(index);
+                        _saveFriend(friends);
+                      });
+                    },
                   );
                 },
               ),
