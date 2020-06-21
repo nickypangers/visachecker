@@ -24,10 +24,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
   List<DropdownMenuItem<int>> cardOptions = [
     DropdownMenuItem(
       child: Text("Edit"),
-      value: 1,),
+      value: 1,
+    ),
     DropdownMenuItem(
       child: Text("Delete"),
-      value: 2,)
+      value: 2,
+    )
   ];
 
   List<Friend> friends = [];
@@ -317,20 +319,94 @@ class _FriendsScreenState extends State<FriendsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               SizedBox(
-                                height: 135,
-                                child: Center(
-                                  child: Text(
-                                    resultText(index),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 17),
+                                  height: 135,
+                                  child: Center(
+                                    child: Text(
+                                      resultText(index),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                  )),
+                              Padding(
+                                padding: EdgeInsets.zero,
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            child: AlertDialog(
+                                              title: Text("Edit Friend"),
+                                              content: Column(
+                                                children: [
+                                                  TextField(
+                                                    textCapitalization:
+                                                        TextCapitalization
+                                                            .sentences,
+                                                    controller: _nameController..text = friends[index].name,
+                                                  ),
+                                                  TextField(
+                                                    controller: _locController..text = friends[index].country,
+                                                    onTap: () {
+                                                      showSearch(
+                                                        context: context,
+                                                        delegate: DataSearch(
+                                                            controller:
+                                                                _locController),
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    _nameController.clear();
+                                                    _locController.clear();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: Text("Confirm"),
+                                                  onPressed: () {
+                                                    fetchVisa(
+                                                            _nameController
+                                                                .text,
+                                                            _locController.text)
+                                                        .then((value) {
+                                                      friends[index] = value;
+                                                      setState(() {
+                                                        _nameController.clear();
+                                                        _locController.clear();
+                                                      });
+                                                      _saveFriend(friends);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () {
+                                            setState(() {
+                                              friends.removeAt(index);
+                                              _saveFriend(friends);
+                                            });
+                                            print("delete tapped");
+                                          })
+                                    ],
                                   ),
-                                )
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                child: DropdownButton(
-                                  items: cardOptions,
-                                  onChanged: null,
                                 ),
                               )
                             ],
@@ -338,12 +414,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         ),
                       ),
                     ),
-                    onLongPress: () {
-                      setState(() {
-                        friends.removeAt(index);
-                        _saveFriend(friends);
-                      });
-                    },
                   );
                 },
               ),
