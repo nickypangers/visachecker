@@ -16,7 +16,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreen extends State<SearchScreen> {
   static String result = "";
-  static String description;
   static Color resultColor;
 
   final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
@@ -40,7 +39,6 @@ class _SearchScreen extends State<SearchScreen> {
   void initState() {
     setState(() {
       result = "";
-      description = "";
       resultColor = Colors.white;
     });
     _getDestinationCountry();
@@ -154,7 +152,6 @@ class _SearchScreen extends State<SearchScreen> {
                           _desController.text = "";
                           setState(() {
                             result = "";
-                            description = "";
                             resultColor = Colors.white;
                           });
                         },
@@ -163,7 +160,6 @@ class _SearchScreen extends State<SearchScreen> {
                         child: Icon(Icons.search),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          description = "";
                           if (_passportController.text == _desController.text ||
                               _passportController.text.length == null ||
                               _desController.text.length == null) {
@@ -187,7 +183,6 @@ class _SearchScreen extends State<SearchScreen> {
                                 } else if (result == "VF") {
                                   resultColor = Colors.green[400];
                                   result = "Visa Free";
-                                  description = "Number of days is not applicable or known, eg freedom of movement";
                                 } else {
                                   resultColor = Colors.green[400];
                                   result = "Visa Free - $result days";

@@ -134,7 +134,7 @@ Widget drawer(BuildContext context) {
               context: context,
               applicationIcon: Image.asset("assets/launcher/Icon-72.png"),
               applicationName: 'Visa Checker',
-              applicationVersion: '1.0.2',
+              applicationVersion: '1.1',
               applicationLegalese: '© Developed by Nixon Pang, 2020.',
               children: <Widget>[
                 Text("""
