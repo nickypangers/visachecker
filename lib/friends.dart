@@ -21,6 +21,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _locController = TextEditingController();
 
+  List<DropdownMenuItem<int>> cardOptions = [
+    DropdownMenuItem(
+      child: Text("Edit"),
+      value: 1,),
+    DropdownMenuItem(
+      child: Text("Delete"),
+      value: 2,)
+  ];
+
   List<Friend> friends = [];
 
   Future visaBuilder;
@@ -96,6 +105,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
     }
   }
 
+  Future<String> fetchVisaValue(String name, String desCountry) async {
+    var url =
+        "https://passportvisa-api.herokuapp.com/api/${cList[pCountry]}/${cList[desCountry]}";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    var visa = Visa(parsedJson);
+    return visa.code;
+  }
+
   _checkFriendsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var returnList = prefs.getString('friendsList');
@@ -103,6 +121,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
       List readList = jsonDecode(returnList);
       setState(() {
         friends = readList.map((val) => Friend.fromJson(val)).toList();
+        for (int i = 0; i < friends.length; i++) {
+          fetchVisaValue(pCountry, friends[i].country).then((value) {
+            if (value != friends[i].result) {
+              setState(() {
+                friends[i].result = value;
+              });
+            }
+          });
+        }
       });
       print(friends);
     }
@@ -217,7 +244,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                             _nameController.clear();
                                             _locController.clear();
                                           });
-                                          // print(jsonEncode(friends));
                                           _saveFriend(friends);
                                           Navigator.of(context).pop();
                                         });
@@ -290,11 +316,23 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
-                                resultText(index),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 17),
+                              SizedBox(
+                                height: 135,
+                                child: Center(
+                                  child: Text(
+                                    resultText(index),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                )
                               ),
+                              Container(
+                                alignment: Alignment.center,
+                                child: DropdownButton(
+                                  items: cardOptions,
+                                  onChanged: null,
+                                ),
+                              )
                             ],
                           ),
                         ),
