@@ -18,7 +18,6 @@ var cList = {
   "Belgium": "BE",
   "Belize": "BZ",
   "Benin": "BJ",
-  //"Bermuda": "BM",
   "Bhutan": "BT",
   "Bolivia": "BO",
   "Bosnia and Herzegovina": "BA",

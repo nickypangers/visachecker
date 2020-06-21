@@ -115,7 +115,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
     var visa = Visa(parsedJson);
     return visa.code;
   }
-
+  
   _checkFriendsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var returnList = prefs.getString('friendsList');

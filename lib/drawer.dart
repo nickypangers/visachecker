@@ -20,14 +20,6 @@ Widget drawer(BuildContext context) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // SizedBox(
-                  //   width: 34,
-                  //   height: 34,
-                  //   child: FittedBox(
-                  //     fit: BoxFit.fill,
-                  //     child: Image.asset("assets/launcher/icon-512.png"),
-                  //   ),
-                  // ),
                   Text(
                     "Visa Checker",
                     style: TextStyle(
