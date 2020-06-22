@@ -238,6 +238,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     FlatButton(
                                       child: Text("Add"),
                                       onPressed: () {
+                                        print("Adding ${_nameController.text}, ${_locController.text}");
                                         fetchVisa(_nameController.text,
                                                 _locController.text)
                                             .then((value) {
@@ -319,7 +320,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               SizedBox(
-                                  height: 135,
+                                  height: 100,
                                   child: Center(
                                     child: Text(
                                       resultText(index),
@@ -336,6 +337,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     children: <Widget>[
                                       IconButton(
                                         icon: Icon(Icons.edit),
+                                        alignment: Alignment.bottomLeft,
                                         onPressed: () {
                                           showDialog(
                                             context: context,
@@ -398,6 +400,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                       ),
                                       IconButton(
                                           icon: Icon(Icons.delete),
+                                          alignment: Alignment.bottomRight,
                                           onPressed: () {
                                             setState(() {
                                               friends.removeAt(index);
