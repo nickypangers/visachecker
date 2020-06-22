@@ -16,7 +16,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreen extends State<SearchScreen> {
   static String result = "";
-  static String description;
   static Color resultColor;
 
   final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
@@ -40,7 +39,6 @@ class _SearchScreen extends State<SearchScreen> {
   void initState() {
     setState(() {
       result = "";
-      description = "";
       resultColor = Colors.white;
     });
     _getDestinationCountry();
@@ -55,6 +53,8 @@ class _SearchScreen extends State<SearchScreen> {
     return visa.code;
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +65,6 @@ class _SearchScreen extends State<SearchScreen> {
         ),
         child: drawer(context),
       ),
-//      backgroundColor: resultColor,
     backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -153,7 +152,6 @@ class _SearchScreen extends State<SearchScreen> {
                           _desController.text = "";
                           setState(() {
                             result = "";
-                            description = "";
                             resultColor = Colors.white;
                           });
                         },
@@ -162,7 +160,6 @@ class _SearchScreen extends State<SearchScreen> {
                         child: Icon(Icons.search),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          description = "";
                           if (_passportController.text == _desController.text ||
                               _passportController.text.length == null ||
                               _desController.text.length == null) {
@@ -176,6 +173,7 @@ class _SearchScreen extends State<SearchScreen> {
                             fetchVisa().then((value) {
                               setState(() {
                                 result = value;
+                                print(result);
                                 if (result == "VR") {
                                   resultColor = Colors.red[400];
                                   result = "Visa Required";
@@ -185,14 +183,13 @@ class _SearchScreen extends State<SearchScreen> {
                                 } else if (result == "VF") {
                                   resultColor = Colors.green[400];
                                   result = "Visa Free";
-                                  description = "Number of days is not applicable or known, eg freedom of movement";
                                 } else {
                                   resultColor = Colors.green[400];
                                   result = "Visa Free - $result days";
                                 }
                               });
                             });
-                            print(result);
+                            // print(result);
                           }
                         },
                       ),

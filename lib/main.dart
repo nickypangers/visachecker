@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:visachecker/services/dataClass.dart';
 import 'drawer.dart';
 import 'search.dart';
-import 'settings.dart';
 import 'services/Key.dart';
 import 'services/SearchList.dart';
 import 'services/CountryData.dart';
@@ -17,13 +17,6 @@ import 'package:http/http.dart' as http;
 void main() => runApp(MaterialApp(
       theme: ThemeData(fontFamily: 'Montserrat'),
       debugShowCheckedModeBanner: false,
-      // initialRoute: '/splash',
-      // routes: {
-      //   '/splash': (context) => IntroScreen(),
-      //   '/': (context) => HomeScreen(),
-      //   '/search': (context) => SearchScreen(),
-      //   '/settings': (context) => SettingsScreen(),
-      // },
       home: SplashScreen(),
     ));
 
@@ -45,12 +38,40 @@ class _HomeScreen extends State<HomeScreen> {
 
   Future passportBuilder;
 
+  _checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      return showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: AlertDialog(
+          title: Text("You are not connected to the internet."),
+          content: Text(
+              "This app requires internet access in order to function properly."),
+              actions: [
+                FlatButton(
+                  child: Text("Understood"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+        ),
+      );
+    }
+  }
+
   @override
   initState() {
     super.initState();
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
+    _checkConnection();
   }
 
   _passportCountry() async {
@@ -58,7 +79,6 @@ class _HomeScreen extends State<HomeScreen> {
     bool _seen = prefs.getBool('seen');
     print("seen: $_seen");
     String countryName = prefs.getString('countryName');
-    // String countryCode = cList[countryName];
     setState(() {
       cName = countryName;
       cCode = cList[cName];
@@ -76,8 +96,6 @@ class _HomeScreen extends State<HomeScreen> {
   }
 
   Future<Country> fetchCountry() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String countryCode = prefs.getString('countryCode');
     var url = "https://passportvisa-api.herokuapp.com/api/$cCode";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
@@ -205,13 +223,15 @@ class _HomeScreen extends State<HomeScreen> {
                                         IconButton(
                                           icon: Icon(Icons.search),
                                           onPressed: () {
-                                            print(_controller.text);
+                                            if (_controller.text.length > 0) {
+                                              print(_controller.text);
                                             _setDesCountry(_controller.text);
                                             Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         SearchScreen()));
+                                            }
                                           },
                                         )
                                       ],
