@@ -9,7 +9,7 @@ To download the official release, visit the Google App Store: https://play.googl
 
 ### Beta testing
 
-To join the beta testing group, please message me on my [discord channel](https://discord.gg/TEQZ9YG)
+To join the beta testing group, please fill in the [google form](https://forms.gle/VJgjwj4iUsBCv7YAA)
 
 ## Get Involved
 Feel free to stay connected with me via a number of social media platforms!
