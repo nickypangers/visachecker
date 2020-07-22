@@ -1,25 +1,23 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:visachecker/services/dataClass.dart';
 import 'drawer.dart';
 import 'search.dart';
-import 'settings.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'services/Key.dart';
 import 'services/SearchList.dart';
 import 'services/CountryData.dart';
+import 'splash.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MaterialApp(
       theme: ThemeData(fontFamily: 'Montserrat'),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/search': (context) => SearchScreen(),
-        '/settings': (context) => SettingsScreen(),
-      },
+      home: SplashScreen(),
     ));
 
 class HomeScreen extends StatefulWidget {
@@ -28,17 +26,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
-  int visa_free = 0;
-  int visa_on_arrival = 0;
-  int visa_required = 0;
+  String visa_free = "";
+  String visa_on_arrival = "";
+  String visa_required = "";
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<dynamic> vfreeList;
+  List<dynamic> voaList;
+  List<dynamic> vrList;
 
-  TextEditingController _controller = new TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  TextEditingController _controller = TextEditingController();
 
   String cCode, cName;
 
   Future passportBuilder;
+
+  _checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      return showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: AlertDialog(
+          title: Text("You are not connected to the internet."),
+          content: Text(
+              "This app requires internet access in order to function properly."),
+          actions: [
+            FlatButton(
+              child: Text("Understood"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   initState() {
@@ -46,28 +75,60 @@ class _HomeScreen extends State<HomeScreen> {
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
+    _checkConnection();
   }
 
   _passportCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("pref: $prefs");
+    bool _seen = prefs.getBool('seen');
+    print("seen: $_seen");
     String countryName = prefs.getString('countryName');
-    String countryCode = prefs.getString('countryCode');
     setState(() {
-      if (countryName == null || countryCode == null) {
-        prefs.setString('countryName', 'Hong Kong');
-        cName = prefs.getString('countryName');
-        print("prefs name: $cName");
-        cCode = cList[cName];
-        prefs.setString('countryCode', cCode);
-        print("prefs code: $cCode");
-      } else {
-        cName = countryName;
-        cCode = cList[cName];
-        print("prefs name: $cName");
-        print("prefs code: $cCode");
-      }
+      cName = countryName;
+      cCode = cList[cName];
+      print("prefs name: $cName");
+      print("prefs code: $cCode");
+      fetchCountry().then((value) {
+        Country data = value;
+        setState(() {
+          visa_free = data.VF;
+          visa_on_arrival = data.VOA;
+          visa_required = data.VR;
+        });
+      });
     });
+    _countryList();
+  }
+
+  _countryList() async {
+    fetchCountryList().then((value) {
+      CountryList data = value;
+      setState(() {
+        vfreeList = data.VF;
+        voaList = data.VOA;
+        vrList = data.VR;
+        print(
+            "VF: ${vfreeList.length} VOA: ${voaList.length} VR: ${vrList.length}");
+      });
+    });
+  }
+
+  Future<CountryList> fetchCountryList() async {
+    var url = "https://passportvisa-api.herokuapp.com/list/api/$cCode";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var countryList = CountryList(parsedJson);
+    return countryList;
+  }
+
+  Future<Country> fetchCountry() async {
+    var url = "https://passportvisa-api.herokuapp.com/api/$cCode";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var country = Country(parsedJson);
+    return country;
   }
 
   _setDesCountry(String value) async {
@@ -189,13 +250,15 @@ class _HomeScreen extends State<HomeScreen> {
                                         IconButton(
                                           icon: Icon(Icons.search),
                                           onPressed: () {
-                                            print(_controller.text);
-                                            _setDesCountry(_controller.text);
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SearchScreen()));
+                                            if (_controller.text.length > 0) {
+                                              print(_controller.text);
+                                              _setDesCountry(_controller.text);
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SearchScreen()));
+                                            }
                                           },
                                         )
                                       ],
@@ -242,6 +305,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa Free");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa Free: ${vfreeList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: vfreeList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${vfreeList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          vfreeList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -253,7 +368,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_free"]}",
+                                            "$visa_free",
                                             style: TextStyle(
                                               color: Colors.green[300],
                                               fontWeight: FontWeight.bold,
@@ -265,6 +380,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa-on-Arrival");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa On Arrival: ${voaList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: voaList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${voaList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          voaList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -276,7 +443,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_on_arrival"]}",
+                                            "$visa_on_arrival",
                                             style: TextStyle(
                                               color: Colors.orange[300],
                                               fontWeight: FontWeight.bold,
@@ -288,6 +455,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa Required");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa Required: ${vrList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: vrList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${vrList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          vrList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -299,7 +518,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${countryData[cCode]["visa_required"]}",
+                                            "$visa_required",
                                             style: TextStyle(
                                               color: Colors.red[400],
                                               fontWeight: FontWeight.bold,
@@ -337,7 +556,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               color: Colors.black, width: 2),
                                         ),
                                         color: Colors.white,
-                                        child: Text("Visit Official Site"),
+                                        child: Text("Learn More"),
                                         onPressed: () {
                                           print("link pressed.");
                                           openBrowserTab(
@@ -356,12 +575,14 @@ class _HomeScreen extends State<HomeScreen> {
               );
             } else {
               return Center(
-                child: Wrap(
-                  children: [
-                    Text("Loading..."),
-                  ],
-                )
-              );
+                  child: Wrap(
+                children: [
+                  Text(
+                    "Loading...",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
+              ));
             }
           },
         ));

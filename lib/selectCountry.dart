@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
-import 'main.dart';
 import 'services/Key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +10,7 @@ class SelectCountryScreen extends StatefulWidget {
 }
 
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-package com.nickypangers.visachecker
+package com.nickypangers.visacheckertravel
 
 import io.flutter.embedding.android.FlutterActivity
 
