@@ -141,6 +141,25 @@ class _HomeScreen extends State<HomeScreen> {
         url: url, androidToolbarColor: Colors.white);
   }
 
+  Widget visaList(List<dynamic> list) {
+    return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: SizedBox(
+              width: 64,
+              height: 64,
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Image.network(
+                    "https://www.countryflags.io/${list[index]}/flat/64.png"),
+              ),
+            ),
+            title: Text(reverseSearch(list[index])),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -326,25 +345,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               content: Container(
                                                 width: double.maxFinite,
                                                 height: 300,
-                                                child: ListView.builder(
-                                                  itemCount: vfreeList.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return ListTile(
-                                                      leading: SizedBox(
-                                                        width: 32,
-                                                        height: 32,
-                                                        child: FittedBox(
-                                                          fit: BoxFit.fill,
-                                                          child: Image.network(
-                                                              "https://www.countryflags.io/${vfreeList[index]}/flat/64.png"),
-                                                        ),
-                                                      ),
-                                                      title: Text(reverseSearch(
-                                                          vfreeList[index])),
-                                                    );
-                                                  },
-                                                ),
+                                                child: visaList(vfreeList),
                                               ),
                                               actions: <Widget>[
                                                 FlatButton(
@@ -401,25 +402,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               content: Container(
                                                 width: double.maxFinite,
                                                 height: 300,
-                                                child: ListView.builder(
-                                                  itemCount: voaList.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return ListTile(
-                                                      leading: SizedBox(
-                                                        width: 32,
-                                                        height: 32,
-                                                        child: FittedBox(
-                                                          fit: BoxFit.fill,
-                                                          child: Image.network(
-                                                              "https://www.countryflags.io/${voaList[index]}/flat/64.png"),
-                                                        ),
-                                                      ),
-                                                      title: Text(reverseSearch(
-                                                          voaList[index])),
-                                                    );
-                                                  },
-                                                ),
+                                                child: visaList(voaList),
                                               ),
                                               actions: <Widget>[
                                                 FlatButton(
@@ -476,25 +459,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               content: Container(
                                                 width: double.maxFinite,
                                                 height: 300,
-                                                child: ListView.builder(
-                                                  itemCount: vrList.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return ListTile(
-                                                      leading: SizedBox(
-                                                        width: 32,
-                                                        height: 32,
-                                                        child: FittedBox(
-                                                          fit: BoxFit.fill,
-                                                          child: Image.network(
-                                                              "https://www.countryflags.io/${vrList[index]}/flat/64.png"),
-                                                        ),
-                                                      ),
-                                                      title: Text(reverseSearch(
-                                                          vrList[index])),
-                                                    );
-                                                  },
-                                                ),
+                                                child: visaList(vrList),
                                               ),
                                               actions: <Widget>[
                                                 FlatButton(
