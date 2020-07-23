@@ -104,9 +104,9 @@ class _HomeScreen extends State<HomeScreen> {
     fetchCountryList().then((value) {
       CountryList data = value;
       setState(() {
-        vfreeList = data.VF;
-        voaList = data.VOA;
-        vrList = data.VR;
+        vfreeList = data.vf;
+        voaList = data.voa;
+        vrList = data.vr;
         print(
             "VF: ${vfreeList.length} VOA: ${voaList.length} VR: ${vrList.length}");
       });

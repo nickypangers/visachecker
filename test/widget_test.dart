@@ -15,7 +15,6 @@ Widget buildTestableWidget(Widget widget) {
 }
 
 void main() {
-
   testWidgets('Home Screen Test', (WidgetTester tester) async {
     await tester.pumpWidget(buildTestableWidget(HomeScreen()));
 
@@ -27,6 +26,5 @@ void main() {
     await tester.pumpWidget(buildTestableWidget(ContactScreen()));
 
     expect(find.byType(TextField), findsWidgets);
-
   });
 }
