@@ -53,7 +53,6 @@ class DataSearch extends SearchDelegate<String> {
             Navigator.pop(context);
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          // leading: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png", scale: 0.5,),
           leading: SizedBox(
             width: 32,
             height: 32,

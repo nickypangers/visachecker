@@ -158,11 +158,32 @@ class _SearchScreen extends State<SearchScreen> {
                         child: Icon(Icons.search),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          if (_passportController.text == _desController.text ||
-                              _passportController.text.length == null ||
-                              _desController.text.length == null) {
+                          if (_passportController.text == _desController.text) {
                             setState(() {
                               result = "";
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 3),
+                                  content: Text(
+                                      "Passport country and destination country cannot be the same.")));
+                            });
+                            return;
+                          } else if (_passportController.text.length == null) {
+                            setState(() {
+                              result = "";
+                              print('Show snackbar');
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 3),
+                                  content: Text(
+                                      "Please enter a passport country.")));
+                            });
+                            return;
+                          } else if (_desController.text.length == null) {
+                            setState(() {
+                              result = "";
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 3),
+                                  content: Text(
+                                      "Please enter a destination country.")));
                             });
                             return;
                           } else {

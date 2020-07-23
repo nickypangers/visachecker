@@ -200,31 +200,46 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text("Add Friend"),
-                                  content: Column(
-                                    children: [
-                                      TextField(
-                                        textCapitalization:
-                                            TextCapitalization.sentences,
-                                        controller: _nameController,
-                                        decoration: InputDecoration(
-                                          hintText: 'Enter Name',
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  title: Center(
+                                    child: Text(
+                                      "Add Friend",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  content: Container(
+                                    width: double.maxFinite,
+                                    height: 300,
+                                    child: Column(
+                                      children: [
+                                        TextField(
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
+                                          controller: _nameController,
+                                          decoration: InputDecoration(
+                                            hintText: 'Enter Name',
+                                          ),
                                         ),
-                                      ),
-                                      TextField(
-                                        controller: _locController,
-                                        decoration: InputDecoration(
-                                          hintText: 'Enter Country',
+                                        TextField(
+                                          controller: _locController,
+                                          decoration: InputDecoration(
+                                            hintText: 'Enter Country',
+                                          ),
+                                          onTap: () {
+                                            showSearch(
+                                              context: context,
+                                              delegate: DataSearch(
+                                                  controller: _locController),
+                                            );
+                                          },
                                         ),
-                                        onTap: () {
-                                          showSearch(
-                                            context: context,
-                                            delegate: DataSearch(
-                                                controller: _locController),
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
@@ -238,19 +253,63 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     FlatButton(
                                       child: Text("Add"),
                                       onPressed: () {
-                                        print(
-                                            "Adding ${_nameController.text}, ${_locController.text}");
-                                        fetchVisa(_nameController.text,
-                                                _locController.text)
-                                            .then((value) {
-                                          friends.add(value);
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        if (_nameController.text.length == 0 &&
+                                            _locController.text.length == 0) {
+                                          print(_nameController.text);
                                           setState(() {
-                                            _nameController.clear();
-                                            _locController.clear();
+                                            _scaffoldKey.currentState
+                                                .showSnackBar(SnackBar(
+                                              duration:
+                                                  const Duration(seconds: 3),
+                                              content: Text(
+                                                  "Please enter name and country."),
+                                            ));
                                           });
-                                          _saveFriend(friends);
-                                          Navigator.of(context).pop();
-                                        });
+                                          return;
+                                        } else {
+                                          if (_nameController.text.length ==
+                                              0) {
+                                            setState(() {
+                                              _scaffoldKey.currentState
+                                                  .showSnackBar(SnackBar(
+                                                duration:
+                                                    const Duration(seconds: 3),
+                                                content: Text(
+                                                    "Please enter a name."),
+                                              ));
+                                            });
+                                            return;
+                                          } else if (_locController
+                                                  .text.length ==
+                                              0) {
+                                            setState(() {
+                                              _scaffoldKey.currentState
+                                                  .showSnackBar(SnackBar(
+                                                duration:
+                                                    const Duration(seconds: 3),
+                                                content: Text(
+                                                    "Please enter a country."),
+                                              ));
+                                            });
+                                            return;
+                                          } else {
+                                            print(
+                                                "Adding ${_nameController.text}, ${_locController.text}");
+                                            fetchVisa(_nameController.text,
+                                                    _locController.text)
+                                                .then((value) {
+                                              friends.add(value);
+                                              setState(() {
+                                                _nameController.clear();
+                                                _locController.clear();
+                                              });
+                                              _saveFriend(friends);
+                                              Navigator.of(context).pop();
+                                            });
+                                          }
+                                        }
                                       },
                                     ),
                                   ],

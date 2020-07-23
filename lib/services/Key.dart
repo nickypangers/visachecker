@@ -199,3 +199,10 @@ var cList = {
   "Zambia": "ZM",
   "Zimbabwe": "ZW"
 };
+
+String reverseSearch(String code) {
+  var name = "${cList.keys.where((k) => cList[k] == code)}";
+  name = name.substring(1);
+  name = name.substring(0, name.indexOf(')'));
+  return name;
+}

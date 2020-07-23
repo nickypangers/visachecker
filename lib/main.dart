@@ -30,6 +30,10 @@ class _HomeScreen extends State<HomeScreen> {
   String visaOnArrival = "";
   String visaRequired = "";
 
+  List<dynamic> vfreeList;
+  List<dynamic> voaList;
+  List<dynamic> vrList;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _controller = TextEditingController();
@@ -93,6 +97,29 @@ class _HomeScreen extends State<HomeScreen> {
         });
       });
     });
+    _countryList();
+  }
+
+  _countryList() async {
+    fetchCountryList().then((value) {
+      CountryList data = value;
+      setState(() {
+        vfreeList = data.VF;
+        voaList = data.VOA;
+        vrList = data.VR;
+        print(
+            "VF: ${vfreeList.length} VOA: ${voaList.length} VR: ${vrList.length}");
+      });
+    });
+  }
+
+  Future<CountryList> fetchCountryList() async {
+    var url = "https://passportvisa-api.herokuapp.com/list/api/$cCode";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var countryList = CountryList(parsedJson);
+    return countryList;
   }
 
   Future<Country> fetchCountry() async {
@@ -278,6 +305,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa Free");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa Free: ${vfreeList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: vfreeList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${vfreeList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          vfreeList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -301,6 +380,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa-on-Arrival");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa On Arrival: ${voaList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: voaList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${voaList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          voaList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -324,6 +455,58 @@ class _HomeScreen extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         print("Tap Visa Required");
+                                        showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
+                                              title: Center(
+                                                child: Text(
+                                                  "Visa Required: ${vrList.length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: vrList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.network(
+                                                              "https://www.countryflags.io/${vrList[index]}/flat/64.png"),
+                                                        ),
+                                                      ),
+                                                      title: Text(reverseSearch(
+                                                          vrList[index])),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text("Back"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       child: Column(
                                         children: <Widget>[

@@ -145,31 +145,38 @@ class _IntroScreenState extends State<IntroScreen> {
               ),
             ),
           ),
-          FlatButton(
-            child: Text(
-              "ENTER",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                letterSpacing: 3,
-              ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: 10,
             ),
-            onPressed: () {
-              if (_controller.text.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text("Please enter a country."),
-                ));
-              } else {
-                setSeen(true);
-                setCountry(_controller.text);
-                Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            HomeScreen()));
-              }
-            },
+            child: FlatButton(
+              color: Color(0xFF00A957),
+              child: Text(
+                "ENTER",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  letterSpacing: 3,
+                ),
+              ),
+              onPressed: () {
+                if (_controller.text.length == 0) {
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                    content: Text("Please enter a country."),
+                  ));
+                  print("No country entered. Snackbar showed.");
+                } else {
+                  setSeen(true);
+                  setCountry(_controller.text);
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              HomeScreen()));
+                }
+              },
+            ),
           ),
         ],
       ),
