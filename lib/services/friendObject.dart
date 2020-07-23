@@ -1,5 +1,4 @@
 class Friend {
-
   String name;
   String country;
   String result;
@@ -13,9 +12,8 @@ class Friend {
   }
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'country': country,
-    'result': result,
-  };
-
+        'name': name,
+        'country': country,
+        'result': result,
+      };
 }

@@ -9,7 +9,6 @@ import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
-
   @override
   _SearchScreen createState() => _SearchScreen();
 }
@@ -18,16 +17,16 @@ class _SearchScreen extends State<SearchScreen> {
   static String result = "";
   static Color resultColor;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _passportController =  TextEditingController();
-  TextEditingController _desController =  TextEditingController();
+  TextEditingController _passportController = TextEditingController();
+  TextEditingController _desController = TextEditingController();
 
   Future<void> _getDestinationCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String desCountry = prefs.getString('desCountry');
     if (desCountry != null) {
-      setState((){
+      setState(() {
         _passportController.text = prefs.getString('countryName');
         _desController.text = desCountry;
         prefs.remove('desCountry');
@@ -46,14 +45,13 @@ class _SearchScreen extends State<SearchScreen> {
   }
 
   Future<String> fetchVisa() async {
-    var url = "https://passportvisa-api.herokuapp.com/api/${cList[_passportController.text]}/${cList[_desController.text]}";
+    var url =
+        "https://passportvisa-api.herokuapp.com/api/${cList[_passportController.text]}/${cList[_desController.text]}";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     var visa = Visa(parsedJson);
     return visa.code;
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class _SearchScreen extends State<SearchScreen> {
         ),
         child: drawer(context),
       ),
-    backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -201,20 +199,20 @@ class _SearchScreen extends State<SearchScreen> {
             Padding(
               padding: EdgeInsets.only(
                 top: 100,
-                  left: 12,
-                  right: 12,
+                left: 12,
+                right: 12,
               ),
               child: Container(
-                decoration: BoxDecoration(
-                  color: resultColor,
-                ),
-                padding: EdgeInsets.all(50),
-                alignment: Alignment.center,
-                child: Center(
-                    child: Text(result, textAlign: TextAlign.center, style: TextStyle(fontSize: 30, color: Colors.white)
-                        ),
-                )
-              ),
+                  decoration: BoxDecoration(
+                    color: resultColor,
+                  ),
+                  padding: EdgeInsets.all(50),
+                  alignment: Alignment.center,
+                  child: Center(
+                    child: Text(result,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 30, color: Colors.white)),
+                  )),
             )
           ],
         ),

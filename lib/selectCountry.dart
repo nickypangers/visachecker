@@ -10,7 +10,7 @@ class SelectCountryScreen extends StatefulWidget {
 }
 
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,10 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                       title: Text("$key"),
                       onTap: () {
                         setPassPortCountry(key);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsScreen()));
                       },
                     );
                   },

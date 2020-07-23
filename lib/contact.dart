@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
-class ContactScreen extends StatelessWidget {
+class ContactScreen extends StatefulWidget {
+  @override
+  ContactScreenState createState() => ContactScreenState();
+}
+
+class ContactScreenState extends State<ContactScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -110,7 +115,8 @@ class ContactScreen extends StatelessWidget {
                 padding: EdgeInsets.all(25),
                 child: Text("Submit"),
                 onPressed: () {
-                  String url = "mailto:nickypangers@gmail.com?subject=${_subjectController.text}&body=${_bodyController.text}";
+                  String url =
+                      "mailto:nickypangers@gmail.com?subject=${_subjectController.text}&body=${_bodyController.text}";
                   openBrowserTab(url);
                 },
               ),

@@ -26,9 +26,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
-  String visa_free = "";
-  String visa_on_arrival = "";
-  String visa_required = "";
+  String visaFree = "";
+  String visaOnArrival = "";
+  String visaRequired = "";
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -52,14 +52,14 @@ class _HomeScreen extends State<HomeScreen> {
           title: Text("You are not connected to the internet."),
           content: Text(
               "This app requires internet access in order to function properly."),
-              actions: [
-                FlatButton(
-                  child: Text("Understood"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+          actions: [
+            FlatButton(
+              child: Text("Understood"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         ),
       );
     }
@@ -87,9 +87,9 @@ class _HomeScreen extends State<HomeScreen> {
       fetchCountry().then((value) {
         Country data = value;
         setState(() {
-          visa_free = data.VF;
-          visa_on_arrival = data.VOA;
-          visa_required = data.VR;
+          visaFree = data.vf;
+          visaOnArrival = data.voa;
+          visaRequired = data.vr;
         });
       });
     });
@@ -225,12 +225,12 @@ class _HomeScreen extends State<HomeScreen> {
                                           onPressed: () {
                                             if (_controller.text.length > 0) {
                                               print(_controller.text);
-                                            _setDesCountry(_controller.text);
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SearchScreen()));
+                                              _setDesCountry(_controller.text);
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SearchScreen()));
                                             }
                                           },
                                         )
@@ -289,7 +289,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "$visa_free",
+                                            "$visaFree",
                                             style: TextStyle(
                                               color: Colors.green[300],
                                               fontWeight: FontWeight.bold,
@@ -312,7 +312,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "$visa_on_arrival",
+                                            "$visaOnArrival",
                                             style: TextStyle(
                                               color: Colors.orange[300],
                                               fontWeight: FontWeight.bold,
@@ -335,7 +335,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "$visa_required",
+                                            "$visaRequired",
                                             style: TextStyle(
                                               color: Colors.red[400],
                                               fontWeight: FontWeight.bold,

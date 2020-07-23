@@ -115,7 +115,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
     var visa = Visa(parsedJson);
     return visa.code;
   }
-  
+
   _checkFriendsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var returnList = prefs.getString('friendsList');
@@ -238,7 +238,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     FlatButton(
                                       child: Text("Add"),
                                       onPressed: () {
-                                        print("Adding ${_nameController.text}, ${_locController.text}");
+                                        print(
+                                            "Adding ${_nameController.text}, ${_locController.text}");
                                         fetchVisa(_nameController.text,
                                                 _locController.text)
                                             .then((value) {
@@ -350,10 +351,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                                     textCapitalization:
                                                         TextCapitalization
                                                             .sentences,
-                                                    controller: _nameController..text = friends[index].name,
+                                                    controller: _nameController
+                                                      ..text =
+                                                          friends[index].name,
                                                   ),
                                                   TextField(
-                                                    controller: _locController..text = friends[index].country,
+                                                    controller: _locController
+                                                      ..text = friends[index]
+                                                          .country,
                                                     onTap: () {
                                                       showSearch(
                                                         context: context,
