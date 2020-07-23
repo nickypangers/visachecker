@@ -11,25 +11,25 @@ class Visa {
 }
 
 class Country {
-  String VR;
-  String VOA;
-  String VF;
+  String vr;
+  String voa;
+  String vf;
 
   Country(Map<String, dynamic> json) {
-    VR = json['VR'];
-    VOA = json['VOA'];
-    VF = json['VF'];
+    vr = json['VR'];
+    voa = json['VOA'];
+    vf = json['VF'];
   }
 }
 
 class CountryList {
-  List<dynamic> VR;
-  List<dynamic> VOA;
-  List<dynamic> VF;
+  List<dynamic> vr;
+  List<dynamic> voa;
+  List<dynamic> vf;
 
   CountryList(Map<String, dynamic> json) {
-    VR = json['VR'];
-    VOA = json['VOA'];
-    VF = json['VF'];
+    vr = json['VR'];
+    voa = json['VOA'];
+    vf = json['VF'];
   }
 }

@@ -37,11 +37,14 @@ class DataSearch extends SearchDelegate<String> {
     if (controller.text != null) {
       Navigator.pop(context);
     }
+    return null;
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = countries.where((p) => p.toLowerCase().startsWith(query.toLowerCase())).toList();
+    final suggestionList = countries
+        .where((p) => p.toLowerCase().startsWith(query.toLowerCase()))
+        .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
@@ -55,7 +58,8 @@ class DataSearch extends SearchDelegate<String> {
             height: 32,
             child: FittedBox(
               fit: BoxFit.fill,
-              child: Image.network("https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png"),
+              child: Image.network(
+                  "https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png"),
             ),
           ),
           title: RichText(
