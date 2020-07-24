@@ -292,7 +292,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                             print(
                                                 "Adding ${_nameController.text}, ${_locController.text}");
                                             Navigator.of(context).pop();
-                                            _saveFriend(friends);
                                             fetchVisa(_nameController.text,
                                                     _locController.text)
                                                 .then((value) {
@@ -300,6 +299,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                               setState(() {
                                                 _nameController.clear();
                                                 _locController.clear();
+                                                _saveFriend(friends);
                                               });
                                             });
                                           }
