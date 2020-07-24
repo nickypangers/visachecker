@@ -26,6 +26,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _getPassportCountry();
   }
 
+  Widget categoryTitle(String text) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 15,
+        top: 10,
+        bottom: 3,
+      ),
+      child: Text(text,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   top: 0,
                 ),
                 children: <Widget>[
+                  categoryTitle("General"),
                   ListTile(
                     title: Text('Language',
                         style: TextStyle(
