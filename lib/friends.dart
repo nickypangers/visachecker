@@ -1,13 +1,12 @@
 import 'dart:convert';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'services/Key.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'search.dart';
 import 'services/dataClass.dart';
 import 'services/friendObject.dart';
 import 'drawer.dart';
 import 'services/SearchList.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:http/http.dart' as http;
 
 class FriendsScreen extends StatefulWidget {
@@ -149,6 +148,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
     pCountry = prefs.getString('countryName');
   }
 
+  Widget errorSnackBar(String text) {
+    return SnackBar(
+      duration: Duration(seconds: 1),
+      content: Text(text),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,12 +266,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                           print(_nameController.text);
                                           setState(() {
                                             _scaffoldKey.currentState
-                                                .showSnackBar(SnackBar(
-                                              duration:
-                                                  const Duration(seconds: 3),
-                                              content: Text(
-                                                  "Please enter name and country."),
-                                            ));
+                                                .showSnackBar(errorSnackBar(
+                                                    "Please enter name and country."));
                                           });
                                           return;
                                         } else {
@@ -273,12 +275,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                               0) {
                                             setState(() {
                                               _scaffoldKey.currentState
-                                                  .showSnackBar(SnackBar(
-                                                duration:
-                                                    const Duration(seconds: 3),
-                                                content: Text(
-                                                    "Please enter a name."),
-                                              ));
+                                                  .showSnackBar(errorSnackBar(
+                                                      "Please enter a name."));
                                             });
                                             return;
                                           } else if (_locController
@@ -286,17 +284,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                               0) {
                                             setState(() {
                                               _scaffoldKey.currentState
-                                                  .showSnackBar(SnackBar(
-                                                duration:
-                                                    const Duration(seconds: 3),
-                                                content: Text(
-                                                    "Please enter a country."),
-                                              ));
+                                                  .showSnackBar(errorSnackBar(
+                                                      "Please enter a country."));
                                             });
                                             return;
                                           } else {
                                             print(
                                                 "Adding ${_nameController.text}, ${_locController.text}");
+                                            Navigator.of(context).pop();
                                             fetchVisa(_nameController.text,
                                                     _locController.text)
                                                 .then((value) {
@@ -304,9 +299,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                               setState(() {
                                                 _nameController.clear();
                                                 _locController.clear();
+                                                _saveFriend(friends);
                                               });
-                                              _saveFriend(friends);
-                                              Navigator.of(context).pop();
                                             });
                                           }
                                         }
@@ -325,162 +319,121 @@ class _FriendsScreenState extends State<FriendsScreen> {
               ],
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: GridView.count(
-              crossAxisCount: 2,
-              children: List.generate(
-                friends.length,
-                (index) {
-                  return GestureDetector(
-                    child: Card(
-                      elevation: 0,
-                      margin: EdgeInsets.only(
-                          left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
-                      child: FlipCard(
-                        direction: FlipDirection.HORIZONTAL,
-                        speed: 700,
-                        onFlipDone: (status) {
-                          print(status);
-                        },
-                        front: Container(
-                          decoration: BoxDecoration(
-                            color: resultColor(index),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 64,
-                                height: 64,
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Image.network(
-                                      "https://www.countryflags.io/${cList[friends[index].country]}/flat/64.png"),
-                                ),
-                              ),
-                              Text(
-                                friends[index].name,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: friends.length,
+                itemBuilder: (context, index) {
+                  return Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: Container(
+                      color: Colors.white,
+                      child: ListTile(
+                        leading: SizedBox(
+                          width: 64,
+                          height: 64,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Image.network(
+                                "https://www.countryflags.io/${cList[friends[index].country]}/flat/64.png"),
                           ),
                         ),
-                        back: Container(
-                          decoration: BoxDecoration(
-                            color: resultColor(index),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                  height: 100,
-                                  child: Center(
-                                    child: Text(
-                                      resultText(index),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 17),
-                                    ),
-                                  )),
-                              Padding(
-                                padding: EdgeInsets.zero,
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(Icons.edit),
-                                        alignment: Alignment.bottomLeft,
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: false,
-                                            child: AlertDialog(
-                                              title: Text("Edit Friend"),
-                                              content: Column(
-                                                children: [
-                                                  TextField(
-                                                    textCapitalization:
-                                                        TextCapitalization
-                                                            .sentences,
-                                                    controller: _nameController
-                                                      ..text =
-                                                          friends[index].name,
-                                                  ),
-                                                  TextField(
-                                                    controller: _locController
-                                                      ..text = friends[index]
-                                                          .country,
-                                                    onTap: () {
-                                                      showSearch(
-                                                        context: context,
-                                                        delegate: DataSearch(
-                                                            controller:
-                                                                _locController),
-                                                      );
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  child: Text("Back"),
-                                                  onPressed: () {
-                                                    _nameController.clear();
-                                                    _locController.clear();
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                FlatButton(
-                                                  child: Text("Confirm"),
-                                                  onPressed: () {
-                                                    fetchVisa(
-                                                            _nameController
-                                                                .text,
-                                                            _locController.text)
-                                                        .then((value) {
-                                                      friends[index] = value;
-                                                      setState(() {
-                                                        _nameController.clear();
-                                                        _locController.clear();
-                                                      });
-                                                      _saveFriend(friends);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    });
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                          icon: Icon(Icons.delete),
-                                          alignment: Alignment.bottomRight,
-                                          onPressed: () {
-                                            setState(() {
-                                              friends.removeAt(index);
-                                              _saveFriend(friends);
-                                            });
-                                            print("delete tapped");
-                                          })
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        title: Text("${friends[index].name}"),
+                        subtitle: Text("${friends[index].country}"),
+                        trailing: Text(resultText(index)),
                       ),
                     ),
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Edit',
+                        color: Colors.black45,
+                        icon: Icons.edit,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              title: Text("Edit Friend"),
+                              content: Container(
+                                width: double.maxFinite,
+                                height: 300,
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      controller: _nameController
+                                        ..text = friends[index].name,
+                                    ),
+                                    TextField(
+                                      controller: _locController
+                                        ..text = friends[index].country,
+                                      onTap: () {
+                                        showSearch(
+                                          context: context,
+                                          delegate: DataSearch(
+                                              controller: _locController),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("Back"),
+                                  onPressed: () {
+                                    _nameController.clear();
+                                    _locController.clear();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text("Confirm"),
+                                  onPressed: () {
+                                    fetchVisa(_nameController.text,
+                                            _locController.text)
+                                        .then((value) {
+                                      friends[index] = value;
+                                      setState(() {
+                                        _nameController.clear();
+                                        _locController.clear();
+                                      });
+                                      _saveFriend(friends);
+                                      Navigator.of(context).pop();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      IconSlideAction(
+                          caption: 'Delete',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () {
+                            setState(() {
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                duration: Duration(seconds: 3),
+                                content:
+                                    Text("Deleted ${friends[index].name}."),
+                              ));
+                              friends.removeAt(index);
+                              _saveFriend(friends);
+                            });
+                            print("delete tapped");
+                          })
+                    ],
                   );
                 },
               ),

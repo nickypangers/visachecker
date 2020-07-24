@@ -16,7 +16,7 @@ class Country {
   String vf;
 
   Country(Map<String, dynamic> json) {
-    vf = json['VR'];
+    vr = json['VR'];
     voa = json['VOA'];
     vf = json['VF'];
   }
