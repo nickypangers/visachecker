@@ -4,13 +4,12 @@ import 'drawer.dart';
 import 'selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {
-
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String passportCountry;
 
@@ -21,14 +20,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  @override void initState() {
+  @override
+  void initState() {
     super.initState();
     _getPassportCountry();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: Theme(
@@ -89,8 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )),
                     subtitle: Text('English'),
                     //trailing: Icon(Icons.navigate_next),
-                    onTap: () {
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     title: Text('Passport Country',
@@ -101,7 +99,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     subtitle: Text('$passportCountry'),
                     trailing: Icon(Icons.navigate_next),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCountryScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SelectCountryScreen()));
                     },
                   ),
                 ],

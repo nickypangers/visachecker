@@ -1,28 +1,17 @@
-# Visa Checker mobile application
+# Visa Checker for Android
 
-This is an android application for checking if you require a visa before visiting your destination.
+This is an android application for checking if you require a visa before visiting your destination, great for planning ahead before trips.
+This app uses the API in my other repository, [Passport Visa API](https://github.com/nickypangers/passport-visa-api)
 
 ## Download
 
-To download the official release, visit the following links:
+To download the official release, visit the Google App Store: https://play.google.com/store/apps/details?id=com.nickypangers.visacheckertravel
 
-- Official nickypangers download page (in construction)
-- Google Play Store (pending)
+### Beta testing
 
-I recommend you to download via Google Play Store as the release there will always be the most up-to-date.
-
-There are three builds available:
-- Official Release
-- Beta
-- Alpha
-
-Beta is always open and you join via Google Play Store (pending). Feel free to beta test and  report any issues by raising an issue in this repo.
-
-Remember, builds other than the official release are not stable and may crash. This is normal as I will be experimenting frequently.
-
-Alpha is only available for selected people and I will increase the test group when necessary. This build will be the least stable and features in the alpha may sometimes not be implemented into the official release.
+To join the beta testing group, please fill in the [google form](https://forms.gle/VJgjwj4iUsBCv7YAA)
 
 ## Get Involved
 Feel free to stay connected with me via a number of social media platforms!
-- Discord
-- Twitter
+- [Discord](https://discord.gg/TEQZ9YG)
+- [Twitter](https://twitter.com/nickypangers)
