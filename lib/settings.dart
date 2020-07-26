@@ -22,8 +22,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void initState() {
-    super.initState();
     _getPassportCountry();
+    _getCurrencyConverterAPIKey();
+    super.initState();
   }
 
   Widget categoryTitle(String text) {
@@ -39,6 +40,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             fontWeight: FontWeight.bold,
           )),
     );
+  }
+
+  String currencyConverterAPIKey = "333ba142825cb4323982";
+
+  Future<void> _getCurrencyConverterAPIKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (currencyConverterAPIKey == null) {
+      setState(() {
+        currencyConverterAPIKey = prefs.getString('CurrencyConverterAPIKey');
+      });
+    } else {
+      prefs.setString("CurrencyConverterAPIKey", currencyConverterAPIKey);
+    }
   }
 
   @override
@@ -114,13 +128,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )),
                     subtitle: Text('$passportCountry'),
                     trailing: Icon(Icons.navigate_next),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SelectCountryScreen()));
-                    },
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectCountryScreen())),
                   ),
+                  categoryTitle("Features"),
+                  ListTile(
+                      title: Text("Currency Converter API Key"),
+                      subtitle: Text("$currencyConverterAPIKey"),
+                      trailing: Icon(Icons.navigate_next),
+                      onTap: () {})
                 ],
               ),
             ),

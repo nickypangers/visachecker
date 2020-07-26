@@ -33,3 +33,11 @@ class CountryList {
     vf = json['VF'];
   }
 }
+
+class CurrencyRate {
+  double rate;
+
+  CurrencyRate(String pair, Map<String, dynamic> json) {
+    rate = json['$pair'];
+  }
+}

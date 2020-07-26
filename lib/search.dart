@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/services/dataClass.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
+import 'services/currency.dart';
 import 'services/searchContent.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
@@ -40,10 +41,13 @@ class _SearchScreen extends State<SearchScreen> {
     setState(() {
       result = "";
       resultColor = Colors.white;
+      getAPIKey().then((val) => apiKey = val);
     });
     _getDestinationCountry();
     super.initState();
   }
+
+  String apiKey;
 
   Future<String> fetchVisa() async {
     var url =
@@ -54,9 +58,29 @@ class _SearchScreen extends State<SearchScreen> {
     return visa.code;
   }
 
+  Future<String> getAPIKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("CurrencyConverterAPIKey");
+  }
+
+  Future<double> getCurrencyRate(String from, String to) async {
+    String currencyPair =
+        "${currencyList[cList[from]]}_${currencyList[cList[to]]}";
+    print(currencyPair);
+    var url =
+        "https://free.currconv.com/api/v7/convert?q=$currencyPair&compact=ultra&apiKey=$apiKey";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    print(parsedJson);
+    var cRate = CurrencyRate(currencyPair, parsedJson);
+    return cRate.rate;
+  }
+
   bool isSearchPressed = false;
 
   int snackBarSeconds = 1;
+
+  double rate;
 
   String passportCountry, desCountry;
 
@@ -90,7 +114,7 @@ class _SearchScreen extends State<SearchScreen> {
                   },
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10), // center
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
                     "Search",
                     style: TextStyle(
@@ -124,10 +148,13 @@ class _SearchScreen extends State<SearchScreen> {
                                   hintText: 'Enter passport country',
                                 ),
                                 onTap: () {
-                                  showSearch(
-                                      context: context,
-                                      delegate: DataSearch(
-                                          controller: _passportController));
+                                  setState(() {
+                                    isSearchPressed = false;
+                                    showSearch(
+                                        context: context,
+                                        delegate: DataSearch(
+                                            controller: _passportController));
+                                  });
                                 },
                               ),
                             ),
@@ -138,10 +165,13 @@ class _SearchScreen extends State<SearchScreen> {
                                   hintText: 'Enter destination country',
                                 ),
                                 onTap: () {
-                                  showSearch(
-                                      context: context,
-                                      delegate: DataSearch(
-                                          controller: _desController));
+                                  setState(() {
+                                    isSearchPressed = false;
+                                    showSearch(
+                                        context: context,
+                                        delegate: DataSearch(
+                                            controller: _desController));
+                                  });
                                 },
                               ),
                             )
@@ -166,8 +196,9 @@ class _SearchScreen extends State<SearchScreen> {
                           FlatButton(
                             child: Icon(Icons.search),
                             onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
                               setState(() {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 passportCountry = _passportController.text;
                                 desCountry = _desController.text;
                                 if (passportCountry.length > 0 &&
@@ -211,18 +242,38 @@ class _SearchScreen extends State<SearchScreen> {
                                     result = value;
                                     print(result);
                                     if (result == "VR") {
-                                      resultColor = Colors.red[400];
-                                      result = "Visa Required";
+                                      setState(() {
+                                        getCurrencyRate(
+                                                passportCountry, desCountry)
+                                            .then((val) => rate = val);
+                                        resultColor = Colors.red[400];
+                                        result = "Visa Required";
+                                      });
                                     } else if (result == "VOA" ||
                                         result == "ETA") {
-                                      resultColor = Colors.blue[400];
-                                      result = "Visa on arrival";
+                                      setState(() {
+                                        getCurrencyRate(
+                                                passportCountry, desCountry)
+                                            .then((val) => rate = val);
+                                        resultColor = Colors.blue[400];
+                                        result = "Visa on arrival";
+                                      });
                                     } else if (result == "VF") {
-                                      resultColor = Colors.green[400];
-                                      result = "Visa Free";
+                                      setState(() {
+                                        getCurrencyRate(
+                                                passportCountry, desCountry)
+                                            .then((val) => rate = val);
+                                        resultColor = Colors.green[400];
+                                        result = "Visa Free";
+                                      });
                                     } else {
-                                      resultColor = Colors.green[400];
-                                      result = "Visa Free - $result days";
+                                      setState(() {
+                                        getCurrencyRate(
+                                                passportCountry, desCountry)
+                                            .then((val) => rate = val);
+                                        resultColor = Colors.green[400];
+                                        result = "Visa Free - $result days";
+                                      });
                                     }
                                     isSearchPressed = true;
                                   });
@@ -236,8 +287,24 @@ class _SearchScreen extends State<SearchScreen> {
                   ),
                 ),
                 isSearchPressed
-                    ? resultContent(
-                        passportCountry, desCountry, result, resultColor)
+                    ? FutureBuilder(
+                        future: getCurrencyRate(passportCountry, desCountry),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            print("snapshot: $rate");
+                            return resultContent(passportCountry, desCountry,
+                                result, resultColor, rate);
+                          } else {
+                            return Container(
+                              height: 100,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                        },
+                      )
                     : Container(),
               ],
             ),

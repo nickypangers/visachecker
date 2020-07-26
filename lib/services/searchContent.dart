@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visachecker/services/currency.dart';
 import 'Key.dart';
 
 Widget countryFlag(String country) {
@@ -39,8 +40,8 @@ Widget countryDetail(String category, String country) {
   );
 }
 
-Widget resultContent(
-    String passportCountry, String desCountry, String result, Color color) {
+Widget resultContent(String passportCountry, String desCountry, String result,
+    Color color, double rate) {
   return Padding(
     padding: EdgeInsets.only(
       top: 10,
@@ -75,6 +76,44 @@ Widget resultContent(
                 ),
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Text(
+                  "Currency Exchange Rate",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                "1 ${currencyList[cList[passportCountry]]}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "$rate ${currencyList[cList[desCountry]]}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
           ),
         ),
       ],
