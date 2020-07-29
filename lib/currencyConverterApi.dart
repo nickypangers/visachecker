@@ -138,7 +138,7 @@ class _CurrencyConverterAPIScreenState
               padding: EdgeInsets.only(left: 10, right: 10, top: 15),
               child: Text("""
               In order to show the currency rate, you will need to have an API Key from currencyconverterapi.com (not associated).\n
-              If you do not have an account, please register in order to retreive your API key and paste it into the text field above.
+              If you do not have an account, please register a free account in order to retreive your API key and paste it into the text field above.
               """),
             ),
             Padding(
