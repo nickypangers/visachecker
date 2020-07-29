@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'currencyConverterApi.dart';
 import 'drawer.dart';
 import 'selectCountry.dart';
 
@@ -20,10 +21,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  Future<bool> checkHasKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var check = prefs.getBool("hasApiKey");
+    (check != null) ? check = check : check = false;
+    return check;
+  }
+
   @override
   void initState() {
-    super.initState();
     _getPassportCountry();
+    _getCurrencyConverterAPIKey();
+    checkHasKey().then((val) => print("show currency rate: $val"));
+    super.initState();
   }
 
   Widget categoryTitle(String text) {
@@ -39,6 +49,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             fontWeight: FontWeight.bold,
           )),
     );
+  }
+
+  String currencyConverterAPIKey;
+
+  Future<void> _getCurrencyConverterAPIKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (currencyConverterAPIKey == null) {
+      setState(() {
+        currencyConverterAPIKey = prefs.getString('CurrencyConverterAPIKey');
+      });
+    } else {
+      prefs.setString("CurrencyConverterAPIKey", currencyConverterAPIKey);
+    }
   }
 
   @override
@@ -114,12 +137,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )),
                     subtitle: Text('$passportCountry'),
                     trailing: Icon(Icons.navigate_next),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SelectCountryScreen()));
-                    },
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectCountryScreen())),
+                  ),
+                  categoryTitle("Features"),
+                  ListTile(
+                    title: Text("Currency Converter API Key"),
+                    subtitle: Text("$currencyConverterAPIKey"),
+                    trailing: Icon(Icons.navigate_next),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CurrencyConverterAPIScreen())),
                   ),
                 ],
               ),
