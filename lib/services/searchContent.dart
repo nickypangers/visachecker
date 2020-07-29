@@ -42,7 +42,7 @@ Widget countryDetail(String category, String country) {
 
 Widget searchContent(bool hasKey, String passportCountry, String desCountry,
     String result, Color color, double rate) {
-  hasKey ? rate = rate : rate = 0;
+  print("rate: $rate");
   return Padding(
     padding: EdgeInsets.only(
       top: 10,
@@ -108,25 +108,29 @@ Widget currencyResult(String passportCountry, String desCountry, double rate) {
       ),
       Padding(
         padding: EdgeInsets.only(top: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              "1 ${currencyList[cList[passportCountry]]}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
+        child: (rate == -1)
+            ? Container(
+                child: Text("API Key is incorrect."),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    "1 ${currencyList[cList[passportCountry]]}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    "$rate ${currencyList[cList[desCountry]]}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              "$rate ${currencyList[cList[desCountry]]}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
       ),
     ],
   );

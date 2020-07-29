@@ -34,14 +34,13 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10), // center
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       "Select Country",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        //fontFamily: 'Montserrat',
                       ),
                     ),
                   ),

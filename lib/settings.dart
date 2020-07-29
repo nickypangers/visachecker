@@ -51,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  String currencyConverterAPIKey = "333ba142825cb4323982";
+  String currencyConverterAPIKey;
 
   Future<void> _getCurrencyConverterAPIKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

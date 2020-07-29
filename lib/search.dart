@@ -86,7 +86,12 @@ class _SearchScreen extends State<SearchScreen> {
     var parsedJson = json.decode(response.body);
     print(parsedJson);
     var cRate = CurrencyRate(currencyPair, parsedJson);
-    return cRate.rate;
+    print("status: ${cRate.status}");
+    if (cRate.status == 400) {
+      return -1;
+    } else {
+      return cRate.rate;
+    }
   }
 
   bool isSearchPressed = false;
