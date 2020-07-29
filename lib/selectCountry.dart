@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
 import 'services/Key.dart';
@@ -32,14 +31,12 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                       color: Colors.black,
                       size: 30,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 10), // center
                     child: Text(
-                      "Settings",
+                      "Select Country",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

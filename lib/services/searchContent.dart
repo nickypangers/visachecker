@@ -40,8 +40,9 @@ Widget countryDetail(String category, String country) {
   );
 }
 
-Widget resultContent(String passportCountry, String desCountry, String result,
-    Color color, double rate) {
+Widget searchContent(bool hasKey, String passportCountry, String desCountry,
+    String result, Color color, double rate) {
+  hasKey ? rate = rate : rate = 0;
   return Padding(
     padding: EdgeInsets.only(
       top: 10,
@@ -78,45 +79,55 @@ Widget resultContent(String passportCountry, String desCountry, String result,
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Text(
-                  "Currency Exchange Rate",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text(
-                "1 ${currencyList[cList[passportCountry]]}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "$rate ${currencyList[cList[desCountry]]}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-        ),
+        (hasKey == true)
+            ? currencyResult(passportCountry, desCountry, rate)
+            : Container(),
       ],
     ),
+  );
+}
+
+Widget currencyResult(String passportCountry, String desCountry, double rate) {
+  return Column(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.only(top: 10),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Text(
+                "Currency Exchange Rate",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "1 ${currencyList[cList[passportCountry]]}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              "$rate ${currencyList[cList[desCountry]]}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
   );
 }

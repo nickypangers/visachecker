@@ -36,15 +36,28 @@ class _SearchScreen extends State<SearchScreen> {
     }
   }
 
+  bool hasKey;
+
+  Future<bool> checkHasKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("hasApiKey");
+  }
+
   @override
   void initState() {
+    super.initState();
     setState(() {
+      checkHasKey().then((val) {
+        hasKey = val;
+        print("show currency rate: $hasKey");
+      });
       result = "";
       resultColor = Colors.white;
-      getAPIKey().then((val) => apiKey = val);
+      getAPIKey().then((val) {
+        apiKey = val;
+      });
     });
     _getDestinationCountry();
-    super.initState();
   }
 
   String apiKey;
@@ -243,34 +256,42 @@ class _SearchScreen extends State<SearchScreen> {
                                     print(result);
                                     if (result == "VR") {
                                       setState(() {
-                                        getCurrencyRate(
-                                                passportCountry, desCountry)
-                                            .then((val) => rate = val);
+                                        if (hasKey) {
+                                          getCurrencyRate(
+                                                  passportCountry, desCountry)
+                                              .then((val) => rate = val);
+                                        }
                                         resultColor = Colors.red[400];
                                         result = "Visa Required";
                                       });
                                     } else if (result == "VOA" ||
                                         result == "ETA") {
                                       setState(() {
-                                        getCurrencyRate(
-                                                passportCountry, desCountry)
-                                            .then((val) => rate = val);
+                                        if (hasKey) {
+                                          getCurrencyRate(
+                                                  passportCountry, desCountry)
+                                              .then((val) => rate = val);
+                                        }
                                         resultColor = Colors.blue[400];
                                         result = "Visa on arrival";
                                       });
                                     } else if (result == "VF") {
                                       setState(() {
-                                        getCurrencyRate(
-                                                passportCountry, desCountry)
-                                            .then((val) => rate = val);
+                                        if (hasKey) {
+                                          getCurrencyRate(
+                                                  passportCountry, desCountry)
+                                              .then((val) => rate = val);
+                                        }
                                         resultColor = Colors.green[400];
                                         result = "Visa Free";
                                       });
                                     } else {
                                       setState(() {
-                                        getCurrencyRate(
-                                                passportCountry, desCountry)
-                                            .then((val) => rate = val);
+                                        if (hasKey) {
+                                          getCurrencyRate(
+                                                  passportCountry, desCountry)
+                                              .then((val) => rate = val);
+                                        }
                                         resultColor = Colors.green[400];
                                         result = "Visa Free - $result days";
                                       });
@@ -287,24 +308,28 @@ class _SearchScreen extends State<SearchScreen> {
                   ),
                 ),
                 isSearchPressed
-                    ? FutureBuilder(
-                        future: getCurrencyRate(passportCountry, desCountry),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            print("snapshot: $rate");
-                            return resultContent(passportCountry, desCountry,
-                                result, resultColor, rate);
-                          } else {
-                            return Container(
-                              height: 100,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                        },
-                      )
+                    ? hasKey
+                        ? FutureBuilder(
+                            future:
+                                getCurrencyRate(passportCountry, desCountry),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                print("snapshot: $rate");
+                                return searchContent(hasKey, passportCountry,
+                                    desCountry, result, resultColor, rate);
+                              } else {
+                                return Container(
+                                  height: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : searchContent(hasKey, passportCountry, desCountry,
+                            result, resultColor, rate)
                     : Container(),
               ],
             ),
