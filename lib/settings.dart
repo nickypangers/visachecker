@@ -75,12 +75,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: drawer(context),
       ),
       backgroundColor: Colors.white,
-      body: Container(
+      body: SafeArea(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 12, right: 12, top: 30, bottom: 0),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[

@@ -164,246 +164,249 @@ class _SearchScreen extends State<SearchScreen> {
         child: drawer(context),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 12, right: 12, top: 30, bottom: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    _scaffoldKey.currentState.openDrawer();
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "Search",
-                    style: TextStyle(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      _scaffoldKey.currentState.openDrawer();
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      "Search",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 40,
-                    right: 5,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              child: TextField(
-                                readOnly: true,
-                                controller: _passportController,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter passport country',
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    isSearchPressed = false;
-                                    showSearch(
-                                        context: context,
-                                        delegate: DataSearch(
-                                            controller: _passportController));
-                                  });
-                                },
-                              ),
-                            ),
-                            Container(
-                              child: TextField(
-                                readOnly: true,
-                                controller: _desController,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter destination country',
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    isSearchPressed = false;
-                                    showSearch(
-                                        context: context,
-                                        delegate: DataSearch(
-                                            controller: _desController));
-                                  });
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                            child: Icon(Icons.clear_all),
-                            onPressed: () {
-                              _passportController.text = "";
-                              _desController.text = "";
-                              setState(() {
-                                passportCountry = "";
-                                desCountry = "";
-                                result = "";
-                                isSearchPressed = false;
-                              });
-                            },
-                          ),
-                          FlatButton(
-                            child: Icon(Icons.search),
-                            onPressed: () {
-                              setState(() {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                passportCountry = _passportController.text;
-                                desCountry = _desController.text;
-                                if (passportCountry.length > 0 &&
-                                    desCountry.length > 0 &&
-                                    passportCountry == desCountry) {
-                                  result = "";
-                                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                      duration:
-                                          Duration(seconds: snackBarSeconds),
-                                      content: Text(
-                                          "Passport country and destination country cannot be the same.")));
-                                } else if (passportCountry.length == 0 &&
-                                    desCountry.length == 0 &&
-                                    passportCountry == desCountry) {
-                                  result = "";
-                                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                      duration:
-                                          Duration(seconds: snackBarSeconds),
-                                      content: Text(
-                                          "Passport country and destination country cannot be empty.")));
-                                } else if (passportCountry == "") {
-                                  result = "";
-                                  print('Show snackbar');
-                                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                      duration:
-                                          Duration(seconds: snackBarSeconds),
-                                      content: Text(
-                                          "Please enter a passport country.")));
-                                } else if (desCountry == "") {
-                                  result = "";
-                                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                      duration:
-                                          Duration(seconds: snackBarSeconds),
-                                      content: Text(
-                                          "Please enter a destination country.")));
-                                } else {
-                                  print(
-                                      "passport: ${_passportController.text}");
-                                  print("destination: ${_desController.text}");
-                                  fetchVisa().then((value) {
-                                    result = value;
-                                    print(result);
-                                    if (result == "VR") {
-                                      setState(() {
-                                        if (hasKey) {
-                                          getCurrencyRate(
-                                                  passportCountry, desCountry)
-                                              .then((val) => rate = val);
-                                        }
-                                        resultColor = Colors.red[400];
-                                        result = "Visa Required";
-                                      });
-                                    } else if (result == "VOA" ||
-                                        result == "ETA") {
-                                      setState(() {
-                                        if (hasKey) {
-                                          getCurrencyRate(
-                                                  passportCountry, desCountry)
-                                              .then((val) => rate = val);
-                                        }
-                                        resultColor = Colors.blue[400];
-                                        result = "Visa on arrival";
-                                      });
-                                    } else if (result == "VF") {
-                                      setState(() {
-                                        if (hasKey) {
-                                          getCurrencyRate(
-                                                  passportCountry, desCountry)
-                                              .then((val) => rate = val);
-                                        }
-                                        resultColor = Colors.green[400];
-                                        result = "Visa Free";
-                                      });
-                                    } else {
-                                      setState(() {
-                                        if (hasKey) {
-                                          getCurrencyRate(
-                                                  passportCountry, desCountry)
-                                              .then((val) => rate = val);
-                                        }
-                                        resultColor = Colors.green[400];
-                                        result = "Visa Free - $result days";
-                                      });
-                                    }
-                                    isSearchPressed = true;
-                                  });
-                                }
-                              });
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: AdmobBanner(
-                    adUnitId: AdManager.searchBannerAdUnitId,
-                    adSize: bannerSize,
-                    listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-                      handleEvent(event, args, 'Banner');
-                    },
-                    onBannerCreated: (AdmobBannerController controller) {},
-                  ),
-                ),
-                isSearchPressed
-                    ? hasKey
-                        ? FutureBuilder(
-                            future:
-                                getCurrencyRate(passportCountry, desCountry),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                print("snapshot: $rate");
-                                return searchContent(hasKey, passportCountry,
-                                    desCountry, result, resultColor, rate);
-                              } else {
-                                return Container(
-                                  height: 100,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 40,
+                      right: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                child: TextField(
+                                  readOnly: true,
+                                  controller: _passportController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter passport country',
                                   ),
-                                );
-                              }
-                            },
-                          )
-                        : searchContent(hasKey, passportCountry, desCountry,
-                            result, resultColor, rate)
-                    : Container(),
-              ],
+                                  onTap: () {
+                                    setState(() {
+                                      isSearchPressed = false;
+                                      showSearch(
+                                          context: context,
+                                          delegate: DataSearch(
+                                              controller: _passportController));
+                                    });
+                                  },
+                                ),
+                              ),
+                              Container(
+                                child: TextField(
+                                  readOnly: true,
+                                  controller: _desController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter destination country',
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      isSearchPressed = false;
+                                      showSearch(
+                                          context: context,
+                                          delegate: DataSearch(
+                                              controller: _desController));
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            FlatButton(
+                              child: Icon(Icons.clear_all),
+                              onPressed: () {
+                                _passportController.text = "";
+                                _desController.text = "";
+                                setState(() {
+                                  passportCountry = "";
+                                  desCountry = "";
+                                  result = "";
+                                  isSearchPressed = false;
+                                });
+                              },
+                            ),
+                            FlatButton(
+                              child: Icon(Icons.search),
+                              onPressed: () {
+                                setState(() {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  passportCountry = _passportController.text;
+                                  desCountry = _desController.text;
+                                  if (passportCountry.length > 0 &&
+                                      desCountry.length > 0 &&
+                                      passportCountry == desCountry) {
+                                    result = "";
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                        duration:
+                                            Duration(seconds: snackBarSeconds),
+                                        content: Text(
+                                            "Passport country and destination country cannot be the same.")));
+                                  } else if (passportCountry.length == 0 &&
+                                      desCountry.length == 0 &&
+                                      passportCountry == desCountry) {
+                                    result = "";
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                        duration:
+                                            Duration(seconds: snackBarSeconds),
+                                        content: Text(
+                                            "Passport country and destination country cannot be empty.")));
+                                  } else if (passportCountry == "") {
+                                    result = "";
+                                    print('Show snackbar');
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                        duration:
+                                            Duration(seconds: snackBarSeconds),
+                                        content: Text(
+                                            "Please enter a passport country.")));
+                                  } else if (desCountry == "") {
+                                    result = "";
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                        duration:
+                                            Duration(seconds: snackBarSeconds),
+                                        content: Text(
+                                            "Please enter a destination country.")));
+                                  } else {
+                                    print(
+                                        "passport: ${_passportController.text}");
+                                    print(
+                                        "destination: ${_desController.text}");
+                                    fetchVisa().then((value) {
+                                      result = value;
+                                      print(result);
+                                      if (result == "VR") {
+                                        setState(() {
+                                          if (hasKey) {
+                                            getCurrencyRate(
+                                                    passportCountry, desCountry)
+                                                .then((val) => rate = val);
+                                          }
+                                          resultColor = Colors.red[400];
+                                          result = "Visa Required";
+                                        });
+                                      } else if (result == "VOA" ||
+                                          result == "ETA") {
+                                        setState(() {
+                                          if (hasKey) {
+                                            getCurrencyRate(
+                                                    passportCountry, desCountry)
+                                                .then((val) => rate = val);
+                                          }
+                                          resultColor = Colors.blue[400];
+                                          result = "Visa on arrival";
+                                        });
+                                      } else if (result == "VF") {
+                                        setState(() {
+                                          if (hasKey) {
+                                            getCurrencyRate(
+                                                    passportCountry, desCountry)
+                                                .then((val) => rate = val);
+                                          }
+                                          resultColor = Colors.green[400];
+                                          result = "Visa Free";
+                                        });
+                                      } else {
+                                        setState(() {
+                                          if (hasKey) {
+                                            getCurrencyRate(
+                                                    passportCountry, desCountry)
+                                                .then((val) => rate = val);
+                                          }
+                                          resultColor = Colors.green[400];
+                                          result = "Visa Free - $result days";
+                                        });
+                                      }
+                                      isSearchPressed = true;
+                                    });
+                                  }
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: AdmobBanner(
+                      adUnitId: AdManager.searchBannerAdUnitId,
+                      adSize: bannerSize,
+                      listener:
+                          (AdmobAdEvent event, Map<String, dynamic> args) {
+                        handleEvent(event, args, 'Banner');
+                      },
+                      onBannerCreated: (AdmobBannerController controller) {},
+                    ),
+                  ),
+                  isSearchPressed
+                      ? hasKey
+                          ? FutureBuilder(
+                              future:
+                                  getCurrencyRate(passportCountry, desCountry),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  print("snapshot: $rate");
+                                  return searchContent(hasKey, passportCountry,
+                                      desCountry, result, resultColor, rate);
+                                } else {
+                                  return Container(
+                                    height: 100,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                              },
+                            )
+                          : searchContent(hasKey, passportCountry, desCountry,
+                              result, resultColor, rate)
+                      : Container(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

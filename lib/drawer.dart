@@ -12,7 +12,7 @@ Widget drawer(BuildContext context) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         Container(
-          height: 90,
+          // height: MediaQuery.of(context).size.height * 0.2,
           child: DrawerHeader(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
