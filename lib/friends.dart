@@ -374,6 +374,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                         ..text = friends[index].name,
                                     ),
                                     TextField(
+                                      readOnly: true,
                                       controller: _locController
                                         ..text = friends[index].country,
                                       onTap: () {

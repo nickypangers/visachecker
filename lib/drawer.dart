@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visachecker/info/info.dart';
 import 'contact.dart';
 import 'friends.dart';
 import 'main.dart';
@@ -134,7 +135,7 @@ Widget drawer(BuildContext context) {
               context: context,
               applicationIcon: Image.asset("assets/launcher/Icon-72.png"),
               applicationName: 'Visa Checker',
-              applicationVersion: '1.1.2',
+              applicationVersion: version,
               applicationLegalese: '© Developed by Nixon Pang, 2020.',
               children: <Widget>[
                 Text("""

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/info/info.dart';
 import 'main.dart';
 
 import 'services/SearchList.dart';
@@ -42,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     setState(() {
       _packageInfo = info;
     });
+    version = _packageInfo.version;
     print('Current version: ' + _packageInfo.version);
   }
 
