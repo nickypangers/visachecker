@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "912935472555",
+    "firebase_url": "https://visa-checker-c3a31.firebaseio.com",
+    "project_id": "visa-checker-c3a31",
+    "storage_bucket": "visa-checker-c3a31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912935472555:android:c23466c8658469088296ee",
+        "android_client_info": {
+          "package_name": "com.nickypangers.visacheckertravel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912935472555-ouq1mifqmau329fj174rnker6ukfcprd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaXmihKgY9ZhUpctZVrQlL9-O269MA2DY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912935472555-ouq1mifqmau329fj174rnker6ukfcprd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "912935472555-gpbvddgg7uqsj626dei3spl2l8vouohb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nickypangers.visachecker"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-9340573218005429~5971013454"
+    }
+  ],
+  "configuration_version": "1"
+}

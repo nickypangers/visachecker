@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/admanager/admanager.dart';
 import 'package:visachecker/services/dataClass.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
@@ -36,19 +38,47 @@ class _SearchScreen extends State<SearchScreen> {
     }
   }
 
-  bool hasKey;
+  bool hasKey = false;
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("hasApiKey");
   }
 
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    nonPersonalizedAds: true,
+    childDirected: false,
+    keywords: <String>[
+      'travel',
+      'travelling',
+      'visit',
+      'trips',
+      'tours',
+    ],
+  );
+
+  BannerAd _bannerAd;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: AdManager.bannerAdUnitId,
+        size: AdSize.smartBanner,
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
   @override
   void initState() {
     super.initState();
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(anchorType: AnchorType.bottom);
     setState(() {
       checkHasKey().then((val) {
-        hasKey = val;
+        hasKey = (val == null) ? false : val;
         print("show currency rate: $hasKey");
       });
       result = "";
@@ -58,6 +88,13 @@ class _SearchScreen extends State<SearchScreen> {
       });
     });
     _getDestinationCountry();
+  }
+
+  @override
+  void dispose() {
+    print('ad disposed');
+    _bannerAd.dispose();
+    super.dispose();
   }
 
   String apiKey;
@@ -161,6 +198,7 @@ class _SearchScreen extends State<SearchScreen> {
                           children: <Widget>[
                             Container(
                               child: TextField(
+                                readOnly: true,
                                 controller: _passportController,
                                 decoration: InputDecoration(
                                   hintText: 'Enter passport country',
@@ -178,6 +216,7 @@ class _SearchScreen extends State<SearchScreen> {
                             ),
                             Container(
                               child: TextField(
+                                readOnly: true,
                                 controller: _desController,
                                 decoration: InputDecoration(
                                   hintText: 'Enter destination country',

@@ -34,10 +34,41 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (controller.text != null) {
-      Navigator.pop(context);
-    }
-    return null;
+    final suggestionList = countries
+        .where((p) => p.toLowerCase().startsWith(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+          onTap: () {
+            controller.text = suggestionList[index];
+            Navigator.pop(context);
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          leading: SizedBox(
+            width: 32,
+            height: 32,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Image.network(
+                  "https://www.countryflags.io/${cList[suggestionList[index]]}/flat/64.png"),
+            ),
+          ),
+          title: RichText(
+            text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          )),
+      itemCount: suggestionList.length,
+    );
   }
 
   @override

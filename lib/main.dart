@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:visachecker/admanager/admanager.dart';
 import 'package:visachecker/services/dataClass.dart';
 import 'drawer.dart';
 import 'search.dart';
@@ -42,6 +44,30 @@ class _HomeScreen extends State<HomeScreen> {
 
   Future passportBuilder;
 
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    nonPersonalizedAds: true,
+    childDirected: false,
+    keywords: <String>[
+      'travel',
+      'travelling',
+      'visit',
+      'trips',
+      'tours',
+    ],
+  );
+
+  BannerAd _bannerAd;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: AdManager.bannerAdUnitId,
+        size: AdSize.smartBanner,
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
   _checkConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -72,10 +98,21 @@ class _HomeScreen extends State<HomeScreen> {
   @override
   initState() {
     super.initState();
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(anchorType: AnchorType.bottom);
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
     _checkConnection();
+  }
+
+  @override
+  void dispose() {
+    print('ad disposed');
+    _bannerAd.dispose();
+    super.dispose();
   }
 
   _passportCountry() async {
@@ -244,6 +281,7 @@ class _HomeScreen extends State<HomeScreen> {
                                         Container(
                                           width: 255,
                                           child: TextField(
+                                            readOnly: true,
                                             style: TextStyle(
                                                 color: Colors.grey[700]),
                                             cursorColor: Colors.grey[700],
