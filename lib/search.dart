@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/admanager/admanager.dart';
@@ -45,37 +46,15 @@ class _SearchScreen extends State<SearchScreen> {
     return prefs.getBool("hasApiKey");
   }
 
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    nonPersonalizedAds: true,
-    childDirected: false,
-    keywords: <String>[
-      'travel',
-      'travelling',
-      'visit',
-      'trips',
-      'tours',
-    ],
-  );
-
-  BannerAd _bannerAd;
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-        adUnitId: AdManager.bannerAdUnitId,
-        size: AdSize.smartBanner,
-        targetingInfo: targetingInfo,
-        listener: (MobileAdEvent event) {
-          print("BannerAd $event");
-        });
-  }
+  AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(anchorType: AnchorType.bottom);
+    if (Platform.isIOS) {
+      Admob.requestTrackingAuthorization();
+    }
     setState(() {
       checkHasKey().then((val) {
         hasKey = (val == null) ? false : val;
@@ -90,11 +69,46 @@ class _SearchScreen extends State<SearchScreen> {
     _getDestinationCountry();
   }
 
-  @override
-  void dispose() {
-    print('ad disposed');
-    _bannerAd.dispose();
-    super.dispose();
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        print('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        print('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        print('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        print('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        showDialog(
+          context: scaffoldState.currentContext,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              child: AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Reward callback fired. Thanks Andrew!'),
+                    Text('Type: ${args['type']}'),
+                    Text('Amount: ${args['amount']}'),
+                  ],
+                ),
+              ),
+              onWillPop: () async {
+                scaffoldState.currentState.hideCurrentSnackBar();
+                return true;
+              },
+            );
+          },
+        );
+        break;
+      default:
+    }
   }
 
   String apiKey;
@@ -349,6 +363,17 @@ class _SearchScreen extends State<SearchScreen> {
                         ],
                       )
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: AdmobBanner(
+                    adUnitId: AdManager.bannerAdUnitId,
+                    adSize: bannerSize,
+                    listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+                      handleEvent(event, args, 'Banner');
+                    },
+                    onBannerCreated: (AdmobBannerController controller) {},
                   ),
                 ),
                 isSearchPressed

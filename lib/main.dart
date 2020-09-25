@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:visachecker/admanager/admanager.dart';
@@ -16,11 +16,15 @@ import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(MaterialApp(
-      theme: ThemeData(fontFamily: 'Montserrat'),
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-    ));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
+  runApp(MaterialApp(
+    theme: ThemeData(fontFamily: 'Montserrat'),
+    debugShowCheckedModeBanner: false,
+    home: SplashScreen(),
+  ));
+}
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -43,30 +47,6 @@ class _HomeScreen extends State<HomeScreen> {
   String cCode, cName;
 
   Future passportBuilder;
-
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    nonPersonalizedAds: true,
-    childDirected: false,
-    keywords: <String>[
-      'travel',
-      'travelling',
-      'visit',
-      'trips',
-      'tours',
-    ],
-  );
-
-  BannerAd _bannerAd;
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-        adUnitId: AdManager.bannerAdUnitId,
-        size: AdSize.smartBanner,
-        targetingInfo: targetingInfo,
-        listener: (MobileAdEvent event) {
-          print("BannerAd $event");
-        });
-  }
 
   _checkConnection() async {
     try {
@@ -95,24 +75,19 @@ class _HomeScreen extends State<HomeScreen> {
     }
   }
 
+  AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
+
   @override
   initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(anchorType: AnchorType.bottom);
+
+    if (Platform.isIOS) {
+      Admob.requestTrackingAuthorization();
+    }
     passportBuilder = _passportCountry();
     print("Name: $cName");
     print("Code: $cCode");
     _checkConnection();
-  }
-
-  @override
-  void dispose() {
-    print('ad disposed');
-    _bannerAd.dispose();
-    super.dispose();
   }
 
   _passportCountry() async {
@@ -195,6 +170,50 @@ class _HomeScreen extends State<HomeScreen> {
             title: Text(reverseSearch(list[index])),
           );
         });
+  }
+
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        print('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        print('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        print('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        print('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        showDialog(
+          context: scaffoldState.currentContext,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              child: AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Reward callback fired. Thanks Andrew!'),
+                    Text('Type: ${args['type']}'),
+                    Text('Amount: ${args['amount']}'),
+                  ],
+                ),
+              ),
+              onWillPop: () async {
+                scaffoldState.currentState.hideCurrentSnackBar();
+                return true;
+              },
+            );
+          },
+        );
+        break;
+      default:
+    }
   }
 
   @override
@@ -534,6 +553,19 @@ class _HomeScreen extends State<HomeScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: AdmobBanner(
+                            adUnitId: AdManager.bannerAdUnitId,
+                            adSize: bannerSize,
+                            listener: (AdmobAdEvent event,
+                                Map<String, dynamic> args) {
+                              handleEvent(event, args, 'Banner');
+                            },
+                            onBannerCreated:
+                                (AdmobBannerController controller) {},
                           ),
                         ),
                         Padding(
