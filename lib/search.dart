@@ -368,7 +368,7 @@ class _SearchScreen extends State<SearchScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 5),
                   child: AdmobBanner(
-                    adUnitId: AdManager.bannerAdUnitId,
+                    adUnitId: AdManager.searchBannerAdUnitId,
                     adSize: bannerSize,
                     listener: (AdmobAdEvent event, Map<String, dynamic> args) {
                       handleEvent(event, args, 'Banner');

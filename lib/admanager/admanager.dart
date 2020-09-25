@@ -13,11 +13,21 @@ class AdManager {
     }
   }
 
-  static String get bannerAdUnitId {
+  static String get homeBannerAdUnitId {
     if (Platform.isAndroid) {
       return "ca-app-pub-9340573218005429/8126584685";
     } else if (Platform.isIOS) {
-      return "ca-app-pub-9340573218005429/9603317888";
+      return "ca-app-pub-9340573218005429/3876735522";
+    } else {
+      throw new UnsupportedError("Unsupported Platform");
+    }
+  }
+
+  static String get searchBannerAdUnitId {
+    if (Platform.isAndroid) {
+      return 'ca-app-pub-9340573218005429/6964071470';
+    } else if (Platform.isIOS) {
+      return 'ca-app-pub-9340573218005429/4259878909';
     } else {
       throw new UnsupportedError("Unsupported Platform");
     }

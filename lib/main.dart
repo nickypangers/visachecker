@@ -558,7 +558,7 @@ class _HomeScreen extends State<HomeScreen> {
                         Padding(
                           padding: EdgeInsets.only(top: 5),
                           child: AdmobBanner(
-                            adUnitId: AdManager.bannerAdUnitId,
+                            adUnitId: AdManager.homeBannerAdUnitId,
                             adSize: bannerSize,
                             listener: (AdmobAdEvent event,
                                 Map<String, dynamic> args) {
