@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/currencyConverterApi.dart';
-import 'package:visachecker/drawer.dart';
+import 'package:visachecker/services/currencyConverterApi.dart';
+import 'package:visachecker/screens/drawer.dart';
 import 'selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {

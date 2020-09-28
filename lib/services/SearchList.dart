@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'CountryList.dart';
-import 'Key.dart';
+import '../data/countryList.dart';
+import '../models/Key.dart';
 
 class DataSearch extends SearchDelegate<String> {
   TextEditingController controller;

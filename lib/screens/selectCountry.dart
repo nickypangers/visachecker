@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:visachecker/services/Key.dart';
+import 'package:visachecker/models/Key.dart';
 import 'settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

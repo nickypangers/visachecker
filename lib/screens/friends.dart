@@ -3,11 +3,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:visachecker/drawer.dart';
-import 'package:visachecker/services/Key.dart';
-import 'package:visachecker/services/SearchList.dart';
-import 'package:visachecker/services/dataClass.dart';
-import 'package:visachecker/services/friendObject.dart';
+import 'package:visachecker/screens/drawer.dart';
+import 'package:visachecker/models/Key.dart';
+import 'package:visachecker/services/searchList.dart';
+import 'package:visachecker/models/dataClass.dart';
+import 'package:visachecker/models/friendObject.dart';
 
 class FriendsScreen extends StatefulWidget {
   @override

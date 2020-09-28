@@ -4,7 +4,7 @@ import 'package:visachecker/screens/friends.dart';
 import 'package:visachecker/screens/main.dart';
 import 'package:visachecker/screens/search.dart';
 import 'package:visachecker/screens/settings.dart';
-import 'screens/contact.dart';
+import 'contact.dart';
 
 Widget drawer(BuildContext context) {
   return Drawer(
