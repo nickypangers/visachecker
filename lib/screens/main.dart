@@ -5,13 +5,13 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:visachecker/admanager/admanager.dart';
+import 'package:visachecker/drawer.dart';
+import 'package:visachecker/screens/search.dart';
+import 'package:visachecker/screens/splash.dart';
+import 'package:visachecker/services/CountryData.dart';
+import 'package:visachecker/services/Key.dart';
+import 'package:visachecker/services/SearchList.dart';
 import 'package:visachecker/services/dataClass.dart';
-import 'drawer.dart';
-import 'search.dart';
-import 'services/Key.dart';
-import 'services/SearchList.dart';
-import 'services/CountryData.dart';
-import 'splash.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -74,8 +74,6 @@ class _HomeScreen extends State<HomeScreen> {
       );
     }
   }
-
-  AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
 
   @override
   initState() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/settings.dart';
+import 'package:visachecker/screens/settings.dart';
 
 class CurrencyConverterAPIScreen extends StatefulWidget {
   @override

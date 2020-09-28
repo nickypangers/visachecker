@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:visachecker/contact.dart';
-import 'package:visachecker/main.dart';
+import 'package:visachecker/screens/contact.dart';
+import 'package:visachecker/screens/main.dart';
 
 Widget buildTestableWidget(Widget widget) {
   return MediaQuery(data: MediaQueryData(), child: MaterialApp(home: widget));

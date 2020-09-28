@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/info/info.dart';
+import 'package:visachecker/services/SearchList.dart';
 import 'main.dart';
-
-import 'services/SearchList.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
