@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:visachecker/services/currency.dart';
+import 'package:visa_checker/services/currency.dart';
 import 'Key.dart';
 
 Widget countryFlag(String country) {

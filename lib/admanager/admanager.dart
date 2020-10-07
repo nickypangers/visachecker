@@ -32,4 +32,14 @@ class AdManager {
       throw new UnsupportedError("Unsupported Platform");
     }
   }
+
+  static String get searchPressedAdUnitId {
+    if (Platform.isAndroid) {
+      return 'ca-app-pub-9340573218005429/7612686585';
+    } else if (Platform.isIOS) {
+      return 'ca-app-pub-9340573218005429/8949641374';
+    } else {
+      throw new UnsupportedError("Unsupported Platform");
+    }
+  }
 }

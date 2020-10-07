@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/admanager/admanager.dart';
-import 'package:visachecker/services/dataClass.dart';
+import 'package:visa_checker/services/dataClass.dart';
+import 'admanager/admanager.dart';
 import 'services/SearchList.dart';
 import 'services/Key.dart';
 import 'services/currency.dart';
@@ -47,6 +47,7 @@ class _SearchScreen extends State<SearchScreen> {
   }
 
   AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
+  AdmobInterstitial interstitialAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @override
@@ -55,6 +56,13 @@ class _SearchScreen extends State<SearchScreen> {
     if (Platform.isIOS) {
       Admob.requestTrackingAuthorization();
     }
+    interstitialAd = AdmobInterstitial(
+      adUnitId: AdManager.searchPressedAdUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
     setState(() {
       checkHasKey().then((val) {
         hasKey = (val == null) ? false : val;
@@ -67,6 +75,13 @@ class _SearchScreen extends State<SearchScreen> {
       });
     });
     _getDestinationCountry();
+    interstitialAd.load();
+  }
+
+  @override
+  void dispose() {
+    interstitialAd.dispose();
+    super.dispose();
   }
 
   void handleEvent(
@@ -266,10 +281,14 @@ class _SearchScreen extends State<SearchScreen> {
                             ),
                             FlatButton(
                               child: Icon(Icons.search),
-                              onPressed: () {
+                              onPressed: () async {
+                                if (await interstitialAd.isLoaded) {
+                                  interstitialAd.show();
+                                  print('interstitial ad showed');
+                                } else {
+                                  print('interstitial ad failed to show');
+                                }
                                 setState(() {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
                                   passportCountry = _passportController.text;
                                   desCountry = _desController.text;
                                   if (passportCountry.length > 0 &&

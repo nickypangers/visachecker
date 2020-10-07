@@ -144,7 +144,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   categoryTitle("Features"),
                   ListTile(
                     title: Text("Currency Converter API Key"),
-                    subtitle: Text("$currencyConverterAPIKey"),
+                    subtitle: Text(currencyConverterAPIKey == null
+                        ? "disabled"
+                        : "$currencyConverterAPIKey"),
                     trailing: Icon(Icons.navigate_next),
                     onTap: () => Navigator.push(
                         context,

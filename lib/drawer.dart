@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:visachecker/info/info.dart';
+import 'package:visa_checker/info/info.dart';
 import 'contact.dart';
 import 'friends.dart';
 import 'main.dart';
