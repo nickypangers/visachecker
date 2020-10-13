@@ -108,7 +108,7 @@ Widget currencyResult(String passportCountry, String desCountry, double rate) {
       ),
       Padding(
         padding: EdgeInsets.only(top: 10),
-        child: (rate == -1)
+        child: (rate == -1 || rate == null)
             ? Container(
                 child: Text("API Key is incorrect."),
               )

@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'services/Key.dart';
+import 'package:visachecker/screens/drawer.dart';
+import 'package:visachecker/services/Key.dart';
+import 'package:visachecker/services/SearchList.dart';
+import 'package:visachecker/services/dataClass.dart';
+import 'package:visachecker/services/friendObject.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'services/dataClass.dart';
-import 'services/friendObject.dart';
-import 'drawer.dart';
-import 'services/SearchList.dart';
 import 'package:http/http.dart' as http;
 
 class FriendsScreen extends StatefulWidget {

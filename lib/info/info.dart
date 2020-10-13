@@ -1,1 +1,2 @@
 String version;
+String buildNumber;
