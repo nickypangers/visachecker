@@ -5,12 +5,14 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/admanager/admanager.dart';
-import 'package:visachecker/screens/search.dart';
-import 'package:visachecker/services/CountryData.dart';
-import 'package:visachecker/services/Key.dart';
-import 'package:visachecker/services/SearchList.dart';
-import 'package:visachecker/services/dataClass.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/prefs.dart';
+import '../admanager/admanager.dart';
+import '../screens/search.dart';
+import '../services/CountryData.dart';
+import '../services/Key.dart';
+import '../services/SearchList.dart';
+import '../services/dataClass.dart';
 import 'package:http/http.dart' as http;
 
 import 'drawer.dart';
@@ -69,7 +71,10 @@ class _HomeScreen extends State<HomeScreen> {
   @override
   initState() {
     super.initState();
-
+    checkHasKey("hasCurrencyApiKey").then((val) {
+      showCurrency = val;
+      print("show currency rate: $showCurrency");
+    });
     if (Platform.isIOS) {
       Admob.requestTrackingAuthorization();
     }

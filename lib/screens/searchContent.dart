@@ -1,142 +1,108 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:visachecker/components/currencyWidget.dart';
-import 'package:visachecker/services/currency.dart';
-import '../services/Key.dart';
+import 'package:http/http.dart' as http;
+import 'package:visa_checker/components/currencyWidget.dart';
+import 'package:visa_checker/components/searchWidgets.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/Key.dart';
+import 'package:visa_checker/services/dataClass.dart';
+import 'package:visa_checker/services/prefs.dart';
 
-Widget countryFlag(String country) {
-  return SizedBox(
-    width: 64,
-    height: 64,
-    child: FittedBox(
-      fit: BoxFit.fill,
-      child: (country.length > 0)
-          ? Image.network(
-              "https://www.countryflags.io/${cList[country]}/flat/64.png")
-          : Container(),
-    ),
-  );
+class SearchContent extends StatefulWidget {
+  SearchContent({this.passportCountry, this.desCountry});
+
+  final String passportCountry;
+  final String desCountry;
+
+  @override
+  _SearchContentState createState() => _SearchContentState();
 }
 
-Widget countryDetail(String category, String country) {
-  return Column(
-    children: <Widget>[
-      Container(
-        child: Center(
-          child: Text(
-            category,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-      Container(
-        child: Center(
-          child: countryFlag(country),
-        ),
-      ),
-    ],
-  );
-}
+class _SearchContentState extends State<SearchContent> {
+  Future<String> _fetchVisa() async {
+    var url =
+        "https://passportvisa-api.herokuapp.com/api/${cList[widget.passportCountry]}/${cList[widget.desCountry]}";
+    var response = await http.get(url);
+    var parsedJson = json.decode(response.body);
+    var visa = Visa(parsedJson);
+    return visa.code;
+  }
 
-Widget searchContent(bool hasKey, String passportCountry, String desCountry,
-    String result, Color color, double rate) {
-  print("rate: $rate");
-  return Padding(
-    padding: EdgeInsets.only(
-      top: 10,
-    ),
-    child: Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            countryDetail("Passport", passportCountry),
-            countryDetail("Destination", desCountry),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            top: 10,
+  String _result;
+  Color _color;
+
+  @override
+  void initState() {
+    super.initState();
+    getAPIKey("currencyConverterAPIKey");
+    _fetchVisa().then((value) {
+      _result = value;
+      print(_result);
+      setState(() {
+        if (_result == "VR") {
+          _color = Colors.red[400];
+          _result = "Visa Required";
+        } else if (_result == "VOA" || _result == "ETA") {
+          _color = Colors.blue[400];
+          _result = "Visa on arrival";
+        } else if (_result == "VF") {
+          _color = Colors.green[400];
+          _result = "Visa Free";
+        } else {
+          _color = Colors.green[400];
+          _result = "Visa Free - $_result days";
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 10,
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              countryDetail("Passport", widget.passportCountry),
+              countryDetail("Destination", widget.desCountry),
+            ],
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
+          Padding(
+            padding: EdgeInsets.only(
+              top: 10,
             ),
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  result,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+            child: Container(
+              decoration: BoxDecoration(
+                color: _color,
+              ),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Text(
+                    _result,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        (hasKey == true)
-            ? CurrencyWidget(
-                from: passportCountry,
-                to: desCountry,
-                // rate: rate,
-              )
-            : Container(),
-      ],
-    ),
-  );
-}
-
-Widget currencyResult(String passportCountry, String desCountry, double rate) {
-  return Column(
-    children: <Widget>[
-      Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Text(
-                "Currency Exchange Rate",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
+          (showCurrency == true)
+              ? CurrencyWidget(
+                  from: widget.passportCountry,
+                  to: widget.desCountry,
+                )
+              : Container(),
+        ],
       ),
-      Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: (rate == -1 || rate == null)
-            ? Container(
-                child: Text("API Key is incorrect."),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    "1 ${currencyList[cList[passportCountry]]}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    "$rate ${currencyList[cList[desCountry]]}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-      ),
-    ],
-  );
+    );
+  }
 }

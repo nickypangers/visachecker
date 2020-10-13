@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:visa_checker/services/Key.dart';
 import 'package:visa_checker/services/currency.dart';
+import 'package:visa_checker/services/dataClass.dart';
 import 'package:visa_checker/services/prefs.dart';
 
 class CurrencyWidget extends StatefulWidget {
@@ -18,16 +19,16 @@ class CurrencyWidget extends StatefulWidget {
 
 class _CurrencyWidgetState extends State<CurrencyWidget> {
   Future<double> getCurrencyRate(String from, String to) async {
-    String apiKey = await getAPIKey("CurrencyConverterAPIKey");
-    String currencyPair =
+    String _apiKey = await getAPIKey("CurrencyConverterAPIKey");
+    String _currencyPair =
         "${currencyList[cList[from]]}_${currencyList[cList[to]]}";
-    print(currencyPair);
+    print(_currencyPair);
     var url =
-        "https://free.currconv.com/api/v7/convert?q=$currencyPair&compact=ultra&apiKey=$apiKey";
+        "https://free.currconv.com/api/v7/convert?q=$_currencyPair&compact=ultra&apiKey=$_apiKey";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);
-    var cRate = CurrencyRate(currencyPair, parsedJson);
+    var cRate = CurrencyRate(_currencyPair, parsedJson);
     print("status: ${cRate.status}");
     if (cRate.status == 400) {
       return -1;
@@ -41,7 +42,6 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
   @override
   void initState() {
     super.initState();
-    // getCurrencyRate(widget.from, widget.to).then((val) => rate = val);
   }
 
   @override

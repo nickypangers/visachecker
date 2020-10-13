@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/screens/currencyConverterApi.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/prefs.dart';
+import '../screens/currencyConverterApi.dart';
 import 'drawer.dart';
 import 'selectCountry.dart';
 
@@ -21,19 +23,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<bool> checkHasKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasApiKey");
-    (check != null) ? check = check : check = false;
-    return check;
-  }
+  // Future<bool> checkHasKey() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var check = prefs.getBool("hasCurrencyApiKey");
+  //   (check != null) ? check = check : check = false;
+  //   return check;
+  // }
 
   @override
   void initState() {
+    super.initState();
     _getPassportCountry();
     _getCurrencyConverterAPIKey();
-    checkHasKey().then((val) => print("show currency rate: $val"));
-    super.initState();
+    checkHasKey("hasCurrencyApiKey").then((val) {
+      showCurrency = val;
+      print("show currency rate: $showCurrency");
+    });
   }
 
   Widget categoryTitle(String text) {
@@ -144,15 +149,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   categoryTitle("Features"),
                   ListTile(
                     title: Text("Currency Converter API Key"),
-<<<<<<< HEAD:lib/screens/settings.dart
-                    subtitle: Text((currencyConverterAPIKey == null
-                        ? "disabled"
-                        : currencyConverterAPIKey)),
-=======
-                    subtitle: Text(currencyConverterAPIKey == null
+                    subtitle: Text(!showCurrency
                         ? "disabled"
                         : "$currencyConverterAPIKey"),
->>>>>>> feature/1.3.1:lib/settings.dart
                     trailing: Icon(Icons.navigate_next),
                     onTap: () => Navigator.push(
                         context,

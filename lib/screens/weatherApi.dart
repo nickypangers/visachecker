@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/services/functions.dart';
+
+import 'settings.dart';
 
 class WeatherAPIScreen extends StatefulWidget {
   @override

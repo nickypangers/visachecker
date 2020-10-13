@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/admanager/admanager.dart';
-import 'package:visachecker/services/Key.dart';
-import 'package:visachecker/services/SearchList.dart';
-import 'package:visachecker/services/currency.dart';
-import 'package:visachecker/services/dataClass.dart';
-import 'package:visachecker/services/searchContent.dart';
+import 'package:visa_checker/services/prefs.dart';
+import '../admanager/admanager.dart';
+import '../services/Key.dart';
+import '../services/SearchList.dart';
+import '../services/currency.dart';
+import '../services/dataClass.dart';
+import '../services/searchContent.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,10 +42,10 @@ class _SearchScreen extends State<SearchScreen> {
 
   bool hasKey = false;
 
-  Future<bool> checkHasKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool("hasApiKey");
-  }
+  // Future<bool> checkHasKey() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getBool("hasCurrencyApiKey");
+  // }
 
   AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
   AdmobInterstitial interstitialAd;
@@ -64,7 +65,7 @@ class _SearchScreen extends State<SearchScreen> {
       },
     );
     setState(() {
-      checkHasKey().then((val) {
+      checkHasKey("hasCurrencyApiKey").then((val) {
         hasKey = (val == null) ? false : val;
         print("show currency rate: $hasKey");
       });

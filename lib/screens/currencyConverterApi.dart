@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/screens/settings.dart';
+import 'package:visa_checker/services/prefs.dart';
+import 'settings.dart';
 
 class CurrencyConverterAPIScreen extends StatefulWidget {
   @override
@@ -15,19 +16,19 @@ class _CurrencyConverterAPIScreenState
 
   TextEditingController _apiController = TextEditingController();
 
-  bool hasKey = false;
+  bool _hasKey = false;
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasApiKey");
+    var check = prefs.getBool("hasCurrencyApiKey");
     (check != null) ? check = check : check = false;
     return check;
   }
 
-  Future<void> setHasKey(bool val) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("hasApiKey", val);
-  }
+  // Future<void> setHasKey(bool val) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool("hasCurrencyApiKey", val);
+  // }
 
   Future<void> _setCurrencyConverterAPIKey(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,7 +49,7 @@ class _CurrencyConverterAPIScreenState
     _getCurrencyConverterAPIKey();
     checkHasKey().then((val) {
       setState(() {
-        hasKey = val;
+        _hasKey = val;
       });
     });
   }
@@ -78,7 +79,20 @@ class _CurrencyConverterAPIScreenState
                       size: 30,
                     ),
                     onPressed: () {
-                      setHasKey(hasKey);
+                      // setHasKey("hasCurrencyApiKey", _hasKey);
+                      // if (_apiController.text == null) {
+                      //   setState(() {
+                      //     _hasKey = false;
+                      //     setHasKey("hasCurrencyApiKey", _hasKey);
+                      //   });
+                      // }
+                      print(_apiController.text);
+                      if (_apiController.text.isEmpty) {
+                        setState(() {
+                          _hasKey = false;
+                        });
+                      }
+                      setHasKey("hasCurrencyApiKey", _hasKey);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -101,16 +115,16 @@ class _CurrencyConverterAPIScreenState
             ),
             SwitchListTile(
               title: Text("Show Currency Converter in Search"),
-              value: hasKey,
+              value: _hasKey,
               onChanged: (val) {
                 setState(() {
-                  hasKey = val;
-                  print(hasKey);
-                  setHasKey(hasKey);
+                  _hasKey = val;
+                  print(_hasKey);
+                  setHasKey("hasCurrencyApiKey", _hasKey);
                 });
               },
             ),
-            hasKey
+            _hasKey
                 ? Padding(
                     padding: EdgeInsets.only(
                       top: 10,
@@ -125,10 +139,10 @@ class _CurrencyConverterAPIScreenState
                         maxLines: 1,
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
-                          if (val.length > 0) {
+                          if (val.isEmpty) {
                             _setCurrencyConverterAPIKey(val);
                           } else {
-                            setState(() => hasKey = false);
+                            setState(() => _hasKey = false);
                           }
                         },
                       ),

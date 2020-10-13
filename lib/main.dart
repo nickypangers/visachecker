@@ -1,6 +1,6 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:visachecker/screens/splash.dart';
+import 'screens/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
