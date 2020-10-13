@@ -128,11 +128,7 @@ class _CurrencyConverterAPIScreenState
                           if (val.length > 0) {
                             _setCurrencyConverterAPIKey(val);
                           } else {
-<<<<<<< HEAD:lib/screens/currencyConverterApi.dart
                             setState(() => hasKey = false);
-=======
-                            _setCurrencyConverterAPIKey(null);
->>>>>>> feature/1.3.1:lib/currencyConverterApi.dart
                           }
                         },
                       ),
