@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visa_checker/info/info.dart';
-import 'main.dart';
-
-import 'services/SearchList.dart';
+import 'package:visachecker/info/info.dart';
+import 'package:visachecker/screens/home.dart';
+import 'package:visachecker/services/SearchList.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -44,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       _packageInfo = info;
     });
     version = _packageInfo.version;
+    buildNumber = _packageInfo.buildNumber;
     print('Current version: ' + _packageInfo.version);
   }
 

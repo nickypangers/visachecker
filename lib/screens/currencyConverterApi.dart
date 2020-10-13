@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visa_checker/settings.dart';
+import 'package:visachecker/screens/settings.dart';
 
 class CurrencyConverterAPIScreen extends StatefulWidget {
   @override
@@ -128,7 +128,11 @@ class _CurrencyConverterAPIScreenState
                           if (val.length > 0) {
                             _setCurrencyConverterAPIKey(val);
                           } else {
+<<<<<<< HEAD:lib/screens/currencyConverterApi.dart
+                            setState(() => hasKey = false);
+=======
                             _setCurrencyConverterAPIKey(null);
+>>>>>>> feature/1.3.1:lib/currencyConverterApi.dart
                           }
                         },
                       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'currencyConverterApi.dart';
+import 'package:visachecker/screens/currencyConverterApi.dart';
 import 'drawer.dart';
 import 'selectCountry.dart';
 
@@ -144,9 +144,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   categoryTitle("Features"),
                   ListTile(
                     title: Text("Currency Converter API Key"),
+<<<<<<< HEAD:lib/screens/settings.dart
+                    subtitle: Text((currencyConverterAPIKey == null
+                        ? "disabled"
+                        : currencyConverterAPIKey)),
+=======
                     subtitle: Text(currencyConverterAPIKey == null
                         ? "disabled"
                         : "$currencyConverterAPIKey"),
+>>>>>>> feature/1.3.1:lib/settings.dart
                     trailing: Icon(Icons.navigate_next),
                     onTap: () => Navigator.push(
                         context,

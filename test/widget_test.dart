@@ -7,7 +7,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+<<<<<<< HEAD
+import 'package:visachecker/screens/contact.dart';
+import 'package:visachecker/screens/home.dart';
+
+Widget buildTestableWidget(Widget widget) {
+  return MediaQuery(data: MediaQueryData(), child: MaterialApp(home: widget));
+}
+=======
 import 'package:visa_checker/splash.dart';
+>>>>>>> feature/1.3.1
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
