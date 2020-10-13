@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/screens/settings.dart';
 
-class CurrencyConverterAPIScreen extends StatefulWidget {
+class WeatherAPIScreen extends StatefulWidget {
   @override
-  _CurrencyConverterAPIScreenState createState() =>
-      _CurrencyConverterAPIScreenState();
+  _WeatherAPIScreenState createState() => _WeatherAPIScreenState();
 }
 
-class _CurrencyConverterAPIScreenState
-    extends State<CurrencyConverterAPIScreen> {
+class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _apiController = TextEditingController();
 
-  bool hasKey = false;
+  bool _hasKey = false;
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasApiKey");
+    var check = prefs.getBool("hasWeatherApiKey");
     (check != null) ? check = check : check = false;
     return check;
   }
 
   Future<void> setHasKey(bool val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("hasApiKey", val);
+    prefs.setBool("hasWeatherApiKey", val);
   }
 
   Future<void> _setCurrencyConverterAPIKey(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("CurrencyConverterAPIKey", key);
+    prefs.setString("WeatherAPIKey", key);
   }
 
   Future<void> _getCurrencyConverterAPIKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var key = prefs.getString("CurrencyConverterAPIKey");
+    var key = prefs.getString("WeatherAPIKey");
     if (key != null) {
       _apiController..text = key;
     }
@@ -48,21 +44,15 @@ class _CurrencyConverterAPIScreenState
     _getCurrencyConverterAPIKey();
     checkHasKey().then((val) {
       setState(() {
-        hasKey = val;
+        _hasKey = val;
       });
     });
-  }
-
-  openBrowserTab(String url) async {
-    await FlutterWebBrowser.openWebPage(
-        url: url, androidToolbarColor: Colors.white);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -78,7 +68,7 @@ class _CurrencyConverterAPIScreenState
                       size: 30,
                     ),
                     onPressed: () {
-                      setHasKey(hasKey);
+                      setHasKey(_hasKey);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -88,7 +78,7 @@ class _CurrencyConverterAPIScreenState
                   Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      "Currency Converter API",
+                      "Weather API",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -100,17 +90,17 @@ class _CurrencyConverterAPIScreenState
               ),
             ),
             SwitchListTile(
-              title: Text("Show Currency Converter in Search"),
-              value: hasKey,
+              title: Text("Show Weather in Search"),
+              value: _hasKey,
               onChanged: (val) {
                 setState(() {
-                  hasKey = val;
-                  print(hasKey);
-                  setHasKey(hasKey);
+                  _hasKey = val;
+                  print(_hasKey);
+                  setHasKey(_hasKey);
                 });
               },
             ),
-            hasKey
+            _hasKey
                 ? Padding(
                     padding: EdgeInsets.only(
                       top: 10,
@@ -120,7 +110,8 @@ class _CurrencyConverterAPIScreenState
                     child: Container(
                       child: TextField(
                         autocorrect: false,
-                        decoration: InputDecoration(labelText: 'API Key'),
+                        decoration:
+                            InputDecoration(labelText: 'Weather API Key'),
                         controller: _apiController,
                         maxLines: 1,
                         keyboardType: TextInputType.text,
@@ -128,11 +119,7 @@ class _CurrencyConverterAPIScreenState
                           if (val.length > 0) {
                             _setCurrencyConverterAPIKey(val);
                           } else {
-<<<<<<< HEAD:lib/screens/currencyConverterApi.dart
-                            setState(() => hasKey = false);
-=======
-                            _setCurrencyConverterAPIKey(null);
->>>>>>> feature/1.3.1:lib/currencyConverterApi.dart
+                            setState(() => _hasKey = false);
                           }
                         },
                       ),
@@ -155,9 +142,9 @@ class _CurrencyConverterAPIScreenState
                       borderRadius: BorderRadius.circular(7),
                       side: BorderSide(color: Colors.black, width: 2),
                     ),
-                    child: Text("Get API Key"),
+                    child: Text("Get Weather API Key"),
                     onPressed: () =>
-                        openBrowserTab("https://www.currencyconverterapi.com/"),
+                        openBrowserTab("https://openweathermap.org/"),
                   ),
                 ),
               ),

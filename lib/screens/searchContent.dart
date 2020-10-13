@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:visa_checker/services/currency.dart';
-import 'Key.dart';
+import 'package:visachecker/components/currencyWidget.dart';
+import 'package:visachecker/services/currency.dart';
+import '../services/Key.dart';
 
 Widget countryFlag(String country) {
   return SizedBox(
@@ -80,7 +81,11 @@ Widget searchContent(bool hasKey, String passportCountry, String desCountry,
           ),
         ),
         (hasKey == true)
-            ? currencyResult(passportCountry, desCountry, rate)
+            ? CurrencyWidget(
+                from: passportCountry,
+                to: desCountry,
+                // rate: rate,
+              )
             : Container(),
       ],
     ),
