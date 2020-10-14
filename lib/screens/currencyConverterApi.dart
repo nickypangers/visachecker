@@ -87,11 +87,11 @@ class _CurrencyConverterAPIScreenState
                       //   });
                       // }
                       print(_apiController.text);
-                      if (_apiController.text.isEmpty) {
-                        setState(() {
+                      setState(() {
+                        if (_apiController.text.isEmpty) {
                           _hasKey = false;
-                        });
-                      }
+                        }
+                      });
                       setHasKey("hasCurrencyApiKey", _hasKey);
                       Navigator.push(
                           context,
@@ -139,7 +139,7 @@ class _CurrencyConverterAPIScreenState
                         maxLines: 1,
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
-                          if (val.isEmpty) {
+                          if (val.isNotEmpty) {
                             _setCurrencyConverterAPIKey(val);
                           } else {
                             setState(() => _hasKey = false);
