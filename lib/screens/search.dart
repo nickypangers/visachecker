@@ -52,7 +52,7 @@ class _SearchScreen extends State<SearchScreen> {
         print("show currency rate: $_hasKey");
       });
       getAPIKey().then((val) {
-        apiKey = val;
+        _apiKey = val;
       });
     });
     _getDestinationCountry();
@@ -100,7 +100,7 @@ class _SearchScreen extends State<SearchScreen> {
     }
   }
 
-  String apiKey;
+  String _apiKey;
 
   Future<String> fetchVisa() async {
     var url =
@@ -117,15 +117,15 @@ class _SearchScreen extends State<SearchScreen> {
   }
 
   Future<double> getCurrencyRate(String from, String to) async {
-    String currencyPair =
+    String _currencyPair =
         "${currencyList[cList[from]]}_${currencyList[cList[to]]}";
-    print(currencyPair);
+    print(_currencyPair);
     var url =
-        "https://free.currconv.com/api/v7/convert?q=$currencyPair&compact=ultra&apiKey=$apiKey";
+        "https://free.currconv.com/api/v7/convert?q=$_currencyPair&compact=ultra&apiKey=$_apiKey";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);
-    var cRate = CurrencyRate(currencyPair, parsedJson);
+    var cRate = CurrencyRate(_currencyPair, parsedJson);
     print("status: ${cRate.status}");
     if (cRate.status == 400) {
       return -1;

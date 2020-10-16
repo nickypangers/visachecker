@@ -20,10 +20,6 @@ class SearchContent extends StatefulWidget {
 
 class _SearchContentState extends State<SearchContent> {
   String _result = "";
-  Color _color;
-  int _snackBarSeconds = 1;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<String> _fetchVisa() async {
     var url =
@@ -34,109 +30,114 @@ class _SearchContentState extends State<SearchContent> {
     return visa.code;
   }
 
-  _getResult(String passportCountry, String desCountry) {
-    if (passportCountry.isEmpty &&
-        desCountry.isEmpty &&
-        passportCountry == desCountry) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-          duration: Duration(seconds: _snackBarSeconds),
-          content: Text(
-              "Passport country and destination country cannot be the same.")));
-    } else if (passportCountry.isEmpty &&
-        desCountry.isEmpty &&
-        passportCountry == desCountry) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-          duration: Duration(seconds: _snackBarSeconds),
-          content: Text(
-              "Passport country and destination country cannot be empty.")));
+  Future<List> _getResult(String passportCountry, String desCountry) async {
+    if (passportCountry == desCountry) {
+      return [
+        -1,
+        "Passport country and destination country cannot be the same."
+      ];
+    } else if (passportCountry.isEmpty && desCountry.isEmpty) {
+      return [-1, "Passport country and destination country cannot be empty."];
     } else if (passportCountry == "") {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-          duration: Duration(seconds: _snackBarSeconds),
-          content: Text("Please enter a passport country.")));
+      return [-1, "Please enter a passport country."];
     } else if (desCountry.isEmpty) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-          duration: Duration(seconds: _snackBarSeconds),
-          content: Text("Please enter a destination country.")));
+      return [-1, "Please enter a destination country."];
     } else {
       print("passport: $passportCountry");
       print("destination: $desCountry");
-      _fetchVisa().then((value) {
-        _result = value;
-        print(_result);
-        setState(() {
-          if (_result == "VR") {
-            _color = Colors.red[400];
-            _result = "Visa Required";
-          } else if (_result == "VOA" || _result == "ETA") {
-            return [Colors.blue[400], "Visa on arrival"];
-          } else if (_result == "VF") {
-            return [Colors.green[400], "Visa Free"];
-          } else {
-            return [Colors.green[400], "Visa Free - $_result days"];
-          }
-        });
-      });
+      _result = await _fetchVisa();
+      print(_result);
+      if (_result == "VR") {
+        return [Colors.red[400], "Visa Required"];
+      } else if (_result == "VOA" || _result == "ETA") {
+        return [Colors.blue[400], "Visa On Arrival"];
+      } else if (_result == "VF") {
+        return [Colors.green[400], "Visa Free"];
+      } else {
+        return [Colors.green[400], "Visa Free - $_result days"];
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _getResult(widget.passportCountry, widget.desCountry);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 10,
-      ),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              CountryDetail(
-                isPassport: true,
-                country: widget.passportCountry,
-              ),
-              CountryDetail(
-                isPassport: false,
-                country: widget.desCountry,
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 10,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: _color,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Text(
-                    _result,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+    return FutureBuilder(
+        future: _getResult(widget.passportCountry, widget.desCountry),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data[0] != -1) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: 10,
                 ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        CountryDetail(
+                          isPassport: true,
+                          country: widget.passportCountry,
+                        ),
+                        CountryDetail(
+                          isPassport: false,
+                          country: widget.desCountry,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: snapshot.data[0],
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              snapshot.data[1],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    (showCurrency == true)
+                        ? CurrencyWidget(
+                            from: widget.passportCountry,
+                            to: widget.desCountry,
+                          )
+                        : Container(),
+                  ],
+                ),
+              );
+            } else {
+              return Container(
+                height: 100,
+                child: Center(
+                  child: Text(snapshot.data[1]),
+                ),
+              );
+            }
+          } else {
+            return Container(
+              height: 100,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          ),
-          (showCurrency == true)
-              ? CurrencyWidget(
-                  from: widget.passportCountry,
-                  to: widget.desCountry,
-                )
-              : Container(),
-        ],
-      ),
-    );
+            );
+          }
+        });
   }
 }

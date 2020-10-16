@@ -25,11 +25,6 @@ class _CurrencyConverterAPIScreenState
     return check;
   }
 
-  // Future<void> setHasKey(bool val) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool("hasCurrencyApiKey", val);
-  // }
-
   Future<void> _setCurrencyConverterAPIKey(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("CurrencyConverterAPIKey", key);
@@ -79,13 +74,6 @@ class _CurrencyConverterAPIScreenState
                       size: 30,
                     ),
                     onPressed: () {
-                      // setHasKey("hasCurrencyApiKey", _hasKey);
-                      // if (_apiController.text == null) {
-                      //   setState(() {
-                      //     _hasKey = false;
-                      //     setHasKey("hasCurrencyApiKey", _hasKey);
-                      //   });
-                      // }
                       print(_apiController.text);
                       setState(() {
                         if (_apiController.text.isEmpty) {
