@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/functions.dart';
 import 'package:visa_checker/services/prefs.dart';
 import 'settings.dart';
 
@@ -20,38 +21,24 @@ class _CurrencyConverterAPIScreenState
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasCurrencyApiKey");
+    var check = prefs.getBool(showCurrencyKey);
     (check != null) ? check = check : check = false;
     return check;
-  }
-
-  Future<void> _setCurrencyConverterAPIKey(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("CurrencyConverterAPIKey", key);
-  }
-
-  Future<void> _getCurrencyConverterAPIKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var key = prefs.getString("CurrencyConverterAPIKey");
-    if (key != null) {
-      _apiController..text = key;
-    }
   }
 
   @override
   void initState() {
     super.initState();
-    _getCurrencyConverterAPIKey();
+    getAPIKey(currencyKey).then((val) {
+      if (val != null) {
+        _apiController..text = val;
+      }
+    });
     checkHasKey().then((val) {
       setState(() {
         _hasKey = val;
       });
     });
-  }
-
-  openBrowserTab(String url) async {
-    await FlutterWebBrowser.openWebPage(
-        url: url, androidToolbarColor: Colors.white);
   }
 
   @override
@@ -80,7 +67,7 @@ class _CurrencyConverterAPIScreenState
                           _hasKey = false;
                         }
                       });
-                      setHasKey("hasCurrencyApiKey", _hasKey);
+                      setHasKey(showCurrencyKey, _hasKey);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -108,7 +95,7 @@ class _CurrencyConverterAPIScreenState
                 setState(() {
                   _hasKey = val;
                   print(_hasKey);
-                  setHasKey("hasCurrencyApiKey", _hasKey);
+                  setHasKey(showCurrencyKey, _hasKey);
                 });
               },
             ),
@@ -127,8 +114,9 @@ class _CurrencyConverterAPIScreenState
                         maxLines: 1,
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
+                          print(val);
                           if (val.isNotEmpty) {
-                            _setCurrencyConverterAPIKey(val);
+                            setAPIKey(currencyKey, val);
                           } else {
                             setState(() => _hasKey = false);
                           }

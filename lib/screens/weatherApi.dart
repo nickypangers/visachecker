@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/functions.dart';
+import 'package:visa_checker/services/prefs.dart';
 
 import 'settings.dart';
 
@@ -18,33 +20,24 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasWeatherApiKey");
+    var check = prefs.getBool(showWeatherKey);
     (check != null) ? check = check : check = false;
     return check;
   }
 
-  Future<void> setHasKey(bool val) async {
+  Future<void> _setweatherKey(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("hasWeatherApiKey", val);
-  }
-
-  Future<void> _setCurrencyConverterAPIKey(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("WeatherAPIKey", key);
-  }
-
-  Future<void> _getCurrencyConverterAPIKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var key = prefs.getString("WeatherAPIKey");
-    if (key != null) {
-      _apiController..text = key;
-    }
+    prefs.setString("weatherKey", key);
   }
 
   @override
   void initState() {
     super.initState();
-    _getCurrencyConverterAPIKey();
+    getAPIKey("weatherKey").then((val) {
+      if (val != null) {
+        _apiController..text = val;
+      }
+    });
     checkHasKey().then((val) {
       setState(() {
         _hasKey = val;
@@ -71,7 +64,13 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                       size: 30,
                     ),
                     onPressed: () {
-                      setHasKey(_hasKey);
+                      print(_apiController.text);
+                      setState(() {
+                        if (_apiController.text.isEmpty) {
+                          _hasKey = false;
+                        }
+                      });
+                      setHasKey(showWeatherKey, _hasKey);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -99,7 +98,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                 setState(() {
                   _hasKey = val;
                   print(_hasKey);
-                  setHasKey(_hasKey);
+                  setHasKey(showWeatherKey, _hasKey);
                 });
               },
             ),
@@ -120,7 +119,8 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
                           if (val.length > 0) {
-                            _setCurrencyConverterAPIKey(val);
+                            _setweatherKey(val);
+                            setAPIKey("weatherKey", val);
                           } else {
                             setState(() => _hasKey = false);
                           }
@@ -132,7 +132,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10, top: 15),
               child: Text("""
-              In order to show the currency rate, you will need to have an API Key from currencyconverterapi.com (not associated).\n
+              In order to show weather data, you will need to have an API Key from openweathermap.org (not associated).\n
               If you do not have an account, please register a free account in order to retreive your API key and paste it into the text field above.
               """),
             ),

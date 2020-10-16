@@ -4,6 +4,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visa_checker/components/searchContent.dart';
+import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/prefs.dart';
 import '../admanager/admanager.dart';
 import '../services/Key.dart';
@@ -47,7 +48,7 @@ class _SearchScreen extends State<SearchScreen> {
     super.initState();
 
     setState(() {
-      checkHasKey("hasCurrencyApiKey").then((val) {
+      checkHasKey(showCurrencyKey).then((val) {
         _hasKey = (val == null) ? false : val;
         print("show currency rate: $_hasKey");
       });
@@ -113,7 +114,7 @@ class _SearchScreen extends State<SearchScreen> {
 
   Future<String> getAPIKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("CurrencyConverterAPIKey");
+    return prefs.getString(currencyKey);
   }
 
   Future<double> getCurrencyRate(String from, String to) async {

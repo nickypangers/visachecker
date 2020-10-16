@@ -67,77 +67,77 @@ class _SearchContentState extends State<SearchContent> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _getResult(widget.passportCountry, widget.desCountry),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data[0] != -1) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        CountryDetail(
-                          isPassport: true,
-                          country: widget.passportCountry,
-                        ),
-                        CountryDetail(
-                          isPassport: false,
-                          country: widget.desCountry,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 10,
+      future: _getResult(widget.passportCountry, widget.desCountry),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data[0] != -1) {
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 10,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      CountryDetail(
+                        isPassport: true,
+                        country: widget.passportCountry,
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: snapshot.data[0],
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              snapshot.data[1],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      CountryDetail(
+                        isPassport: false,
+                        country: widget.desCountry,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 10,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: snapshot.data[0],
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Text(
+                            snapshot.data[1],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    (showCurrency == true)
-                        ? CurrencyWidget(
-                            from: widget.passportCountry,
-                            to: widget.desCountry,
-                          )
-                        : Container(),
-                  ],
-                ),
-              );
-            } else {
-              return Container(
-                height: 100,
-                child: Center(
-                  child: Text(snapshot.data[1]),
-                ),
-              );
-            }
+                  ),
+                  (showCurrency == true)
+                      ? CurrencyWidget(
+                          from: widget.passportCountry, to: widget.desCountry)
+                      : Container(),
+                  (showWeather == true) ? Container() : Container(),
+                ],
+              ),
+            );
           } else {
             return Container(
               height: 100,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: Text(snapshot.data[1]),
               ),
             );
           }
-        });
+        } else {
+          return Container(
+            height: 100,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/Key.dart';
 import 'package:visa_checker/services/currency.dart';
 import 'package:visa_checker/services/dataClass.dart';
@@ -19,7 +20,8 @@ class CurrencyWidget extends StatefulWidget {
 
 class _CurrencyWidgetState extends State<CurrencyWidget> {
   Future<double> getCurrencyRate(String from, String to) async {
-    String _apiKey = await getAPIKey("CurrencyConverterAPIKey");
+    String _apiKey = await getAPIKey(currencyKey);
+    print("Currency API Key: $_apiKey");
     String _currencyPair =
         "${currencyList[cList[from]]}_${currencyList[cList[to]]}";
     print(_currencyPair);
@@ -33,6 +35,7 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
     if (cRate.status == 400) {
       return -1;
     } else {
+      print(cRate.rate);
       return cRate.rate;
     }
   }
@@ -71,7 +74,7 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: (rate == -1 || rate == null)
+                  child: (snapshot.data == -1)
                       ? Container(
                           child: Text("API Key is incorrect."),
                         )
@@ -86,7 +89,7 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
                               ),
                             ),
                             Text(
-                              "$rate ${currencyList[cList[widget.to]]}",
+                              "${snapshot.data} ${currencyList[cList[widget.to]]}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,

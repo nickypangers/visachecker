@@ -233,6 +233,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                             ),
                                           ),
                                           TextField(
+                                            readOnly: true,
                                             controller: _locController,
                                             decoration: InputDecoration(
                                               hintText: 'Enter Country',
