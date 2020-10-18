@@ -52,24 +52,20 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
     return FutureBuilder(
         future: getCurrencyRate(widget.from, widget.to),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
             print("snapshot: $rate");
             return Column(
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Currency Exchange Rate",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
+                  child: Container(
+                    child: Text(
+                      "Currency Exchange Rate",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
                 Padding(

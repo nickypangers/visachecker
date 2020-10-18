@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:visa_checker/components/countryDetail.dart';
 import 'package:visa_checker/components/currencyWidget.dart';
+import 'package:visa_checker/components/weatherWidget.dart';
 import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/Key.dart';
 import 'package:visa_checker/services/dataClass.dart';
@@ -70,6 +71,7 @@ class _SearchContentState extends State<SearchContent> {
       future: _getResult(widget.passportCountry, widget.desCountry),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          print(snapshot.data.length);
           if (snapshot.data[0] != -1) {
             return Padding(
               padding: EdgeInsets.only(
@@ -113,11 +115,15 @@ class _SearchContentState extends State<SearchContent> {
                       ),
                     ),
                   ),
+                  WeatherWidget(
+                    from: widget.passportCountry,
+                    to: widget.desCountry,
+                  ),
                   (showCurrency == true)
                       ? CurrencyWidget(
                           from: widget.passportCountry, to: widget.desCountry)
                       : Container(),
-                  (showWeather == true) ? Container() : Container(),
+                  // (showWeather == true) ? Container() : Container(),
                 ],
               ),
             );

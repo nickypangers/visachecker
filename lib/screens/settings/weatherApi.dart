@@ -4,7 +4,7 @@ import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/functions.dart';
 import 'package:visa_checker/services/prefs.dart';
 
-import 'settings.dart';
+import '../settings.dart';
 
 class WeatherAPIScreen extends StatefulWidget {
   @override
@@ -120,7 +120,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                         onSubmitted: (val) {
                           if (val.length > 0) {
                             _setweatherKey(val);
-                            setAPIKey("weatherKey", val);
+                            setAPIKey(weatherKey, val);
                           } else {
                             setState(() => _hasKey = false);
                           }
@@ -132,7 +132,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10, top: 15),
               child: Text("""
-              In order to show weather data, you will need to have an API Key from openweathermap.org (not associated).\n
+              In order to show weather data, you will need to have an API Key from weatherapi.com (not associated).\n
               If you do not have an account, please register a free account in order to retreive your API key and paste it into the text field above.
               """),
             ),
@@ -147,7 +147,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                     ),
                     child: Text("Get Weather API Key"),
                     onPressed: () =>
-                        openBrowserTab("https://openweathermap.org/"),
+                        openBrowserTab("https://www.weatherapi.com/"),
                   ),
                 ),
               ),

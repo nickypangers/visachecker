@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visa_checker/info/info.dart';
-import 'package:visa_checker/screens/weatherApi.dart';
+import 'package:visa_checker/screens/settings/weatherApi.dart';
 import 'package:visa_checker/services/prefs.dart';
-import '../screens/currencyConverterApi.dart';
+import 'settings/currencyConverterApi.dart';
 import 'drawer.dart';
-import 'selectCountry.dart';
+import 'settings/selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
     checkHasKey(showWeatherKey).then((val) {
       showWeather = val;
-      print("show currency rate: $showWeather");
+      print("show weather: $showWeather");
     });
   }
 

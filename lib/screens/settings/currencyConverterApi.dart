@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/functions.dart';
 import 'package:visa_checker/services/prefs.dart';
-import 'settings.dart';
+import '../settings.dart';
 
 class CurrencyConverterAPIScreen extends StatefulWidget {
   @override

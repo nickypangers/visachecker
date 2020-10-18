@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../screens/settings.dart';
-import '../services/Key.dart';
+import '../settings.dart';
+import '../../services/Key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectCountryScreen extends StatefulWidget {
