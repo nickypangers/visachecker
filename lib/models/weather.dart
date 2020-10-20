@@ -17,6 +17,7 @@ class WeatherData {
 
   Location location;
   Current current;
+  Error error;
 
   factory WeatherData.fromJson(Map<String, dynamic> json) => WeatherData(
         location: Location.fromJson(json["location"]),

@@ -13,7 +13,7 @@ import '../screens/search.dart';
 import '../services/CountryData.dart';
 import '../services/Key.dart';
 import '../services/SearchList.dart';
-import '../services/dataClass.dart';
+import '../models/visa.dart';
 import 'package:http/http.dart' as http;
 
 import 'drawer.dart';
@@ -80,6 +80,10 @@ class _HomeScreen extends State<HomeScreen> {
       showWeather = val;
       print("show weather: $showWeather");
     });
+    checkHasKey(weatherUnitKey).then((val) {
+      isCelcius = (val == null) ? false : val;
+      print("show weather in celcius: $isCelcius");
+    });
     if (Platform.isIOS) {
       Admob.requestTrackingAuthorization();
     }
@@ -100,7 +104,7 @@ class _HomeScreen extends State<HomeScreen> {
       print("prefs name: $cName");
       print("prefs code: $cCode");
       _fetchCountry().then((value) {
-        Country data = value;
+        CountryVisa data = value;
         setState(() {
           visaFree = data.vf;
           visaOnArrival = data.voa;
@@ -133,12 +137,12 @@ class _HomeScreen extends State<HomeScreen> {
     return countryList;
   }
 
-  Future<Country> _fetchCountry() async {
+  Future<CountryVisa> _fetchCountry() async {
     var url = "https://passportvisa-api.herokuapp.com/api/$cCode";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);
-    var country = Country(parsedJson);
+    var country = CountryVisa(parsedJson);
     return country;
   }
 

@@ -6,7 +6,7 @@ import 'package:visa_checker/components/currencyWidget.dart';
 import 'package:visa_checker/components/weatherWidget.dart';
 import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/Key.dart';
-import 'package:visa_checker/services/dataClass.dart';
+import 'package:visa_checker/models/visa.dart';
 import 'package:http/http.dart' as http;
 
 class SearchContent extends StatefulWidget {

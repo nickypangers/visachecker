@@ -10,12 +10,12 @@ class Visa {
   }
 }
 
-class Country {
+class CountryVisa {
   String vr;
   String voa;
   String vf;
 
-  Country(Map<String, dynamic> json) {
+  CountryVisa(Map<String, dynamic> json) {
     vr = json['VR'];
     voa = json['VOA'];
     vf = json['VF'];
@@ -31,15 +31,5 @@ class CountryList {
     vr = json['VR'];
     voa = json['VOA'];
     vf = json['VF'];
-  }
-}
-
-class CurrencyRate {
-  double rate;
-  int status;
-
-  CurrencyRate(String pair, Map<String, dynamic> json) {
-    rate = json['$pair'];
-    status = json['status'];
   }
 }

@@ -161,14 +161,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             builder: (context) =>
                                 CurrencyConverterAPIScreen())),
                   ),
-                  ListTile(
-                    title: Text("Weather API Key"),
-                    subtitle: Text(!showWeather ? "disabled" : "$_weatherKey"),
-                    trailing: Icon(Icons.navigate_next),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WeatherAPIScreen())),
+                  ExpansionTile(
+                    title: Text("Weather"),
+                    children: [
+                      ListTile(
+                        title: Text("Weather API Key"),
+                        subtitle:
+                            Text(!showWeather ? "disabled" : "$_weatherKey"),
+                        trailing: Icon(Icons.navigate_next),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WeatherAPIScreen())),
+                      ),
+                      SwitchListTile(
+                        value: isCelcius,
+                        title: Text("Display Unit"),
+                        subtitle: Text(isCelcius ? "Celcius" : "Fahrenheit"),
+                        onChanged: (value) {
+                          setState(() => isCelcius = !isCelcius);
+                          setBoolAPIKey(weatherUnitKey, value);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -4,8 +4,11 @@ String buildNumber;
 bool showCurrency;
 bool showWeather;
 
-final String currencyKey = "CurrencyConverterAPIKey";
-final String weatherKey = "WeatherAPIKey";
+bool isCelcius;
+
+const String currencyKey = "CurrencyConverterAPIKey";
+const String weatherKey = "WeatherAPIKey";
+const String weatherUnitKey = "WeatherUnit";
 
 const String showCurrencyKey = "hasCurrencyConverterAPIKey";
 const String showWeatherKey = "hasWeatherAPIKey";

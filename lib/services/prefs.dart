@@ -10,6 +10,11 @@ Future setAPIKey(String key, String value) async {
   prefs.setString(key, value);
 }
 
+Future setBoolAPIKey(String key, bool value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool(key, value);
+}
+
 Future<bool> checkHasKey(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var val = prefs.getBool(key);

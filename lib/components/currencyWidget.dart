@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/models/currency.dart';
 import 'package:visa_checker/services/Key.dart';
 import 'package:visa_checker/services/currency.dart';
-import 'package:visa_checker/services/dataClass.dart';
 import 'package:visa_checker/services/prefs.dart';
 
 class CurrencyWidget extends StatefulWidget {

@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visa_checker/components/searchContent.dart';
 import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/models/currency.dart';
 import 'package:visa_checker/services/prefs.dart';
 import '../admanager/admanager.dart';
 import '../services/Key.dart';
 import '../services/SearchList.dart';
 import '../services/currency.dart';
-import '../services/dataClass.dart';
+import '../models/visa.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
 

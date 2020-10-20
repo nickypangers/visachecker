@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'drawer.dart';
 import '../services/Key.dart';
 import '../services/SearchList.dart';
-import '../services/dataClass.dart';
+import '../models/visa.dart';
 import '../services/friendObject.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
