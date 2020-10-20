@@ -115,10 +115,12 @@ class _SearchContentState extends State<SearchContent> {
                       ),
                     ),
                   ),
-                  WeatherWidget(
-                    from: widget.passportCountry,
-                    to: widget.desCountry,
-                  ),
+                  (showWeather == true)
+                      ? WeatherWidget(
+                          from: widget.passportCountry,
+                          to: widget.desCountry,
+                        )
+                      : Container(),
                   (showCurrency == true)
                       ? CurrencyWidget(
                           from: widget.passportCountry, to: widget.desCountry)
