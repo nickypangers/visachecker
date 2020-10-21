@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:visachecker/screens/drawer.dart';
-import 'package:visachecker/services/Key.dart';
-import 'package:visachecker/services/SearchList.dart';
-import 'package:visachecker/services/dataClass.dart';
-import 'package:visachecker/services/friendObject.dart';
+import 'drawer.dart';
+import '../services/Key.dart';
+import '../services/SearchList.dart';
+import '../models/visa.dart';
+import '../services/friendObject.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -233,6 +233,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                             ),
                                           ),
                                           TextField(
+                                            readOnly: true,
                                             controller: _locController,
                                             decoration: InputDecoration(
                                               hintText: 'Enter Country',

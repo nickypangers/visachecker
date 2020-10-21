@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/screens/currencyConverterApi.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/screens/settings/weatherApi.dart';
+import 'package:visa_checker/services/prefs.dart';
+import 'settings/currencyConverterApi.dart';
 import 'drawer.dart';
-import 'selectCountry.dart';
+import 'settings/selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -21,19 +24,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<bool> checkHasKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasApiKey");
-    (check != null) ? check = check : check = false;
-    return check;
-  }
-
   @override
   void initState() {
-    _getPassportCountry();
-    _getCurrencyConverterAPIKey();
-    checkHasKey().then((val) => print("show currency rate: $val"));
     super.initState();
+    _getPassportCountry();
+    getAPIKey(currencyKey).then((val) {
+      if (val != null) {
+        setState(() {
+          _currencyConverterAPIKey = val;
+        });
+      }
+    });
+    getAPIKey("weatherKey").then((val) {
+      if (val != null) {
+        setState(() {
+          _weatherKey = val;
+        });
+      }
+    });
+    checkHasKey(showCurrencyKey).then((val) {
+      showCurrency = val;
+      print("show currency rate: $showCurrency");
+    });
+    checkHasKey(showWeatherKey).then((val) {
+      showWeather = val;
+      print("show weather: $showWeather");
+    });
   }
 
   Widget categoryTitle(String text) {
@@ -43,26 +59,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
         top: 10,
         bottom: 3,
       ),
-      child: Text(text,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          )),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 
-  String currencyConverterAPIKey;
-
-  Future<void> _getCurrencyConverterAPIKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (currencyConverterAPIKey == null) {
-      setState(() {
-        currencyConverterAPIKey = prefs.getString('CurrencyConverterAPIKey');
-      });
-    } else {
-      prefs.setString("CurrencyConverterAPIKey", currencyConverterAPIKey);
-    }
-  }
+  String _currencyConverterAPIKey, _weatherKey;
 
   @override
   Widget build(BuildContext context) {
@@ -144,21 +151,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   categoryTitle("Features"),
                   ListTile(
                     title: Text("Currency Converter API Key"),
-<<<<<<< HEAD:lib/screens/settings.dart
-                    subtitle: Text((currencyConverterAPIKey == null
+                    subtitle: Text(!showCurrency
                         ? "disabled"
-                        : currencyConverterAPIKey)),
-=======
-                    subtitle: Text(currencyConverterAPIKey == null
-                        ? "disabled"
-                        : "$currencyConverterAPIKey"),
->>>>>>> feature/1.3.1:lib/settings.dart
+                        : "$_currencyConverterAPIKey"),
                     trailing: Icon(Icons.navigate_next),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 CurrencyConverterAPIScreen())),
+                  ),
+                  ExpansionTile(
+                    title: Text("Weather"),
+                    children: [
+                      ListTile(
+                        title: Text("Weather API Key"),
+                        subtitle:
+                            Text(!showWeather ? "disabled" : "$_weatherKey"),
+                        trailing: Icon(Icons.navigate_next),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WeatherAPIScreen())),
+                      ),
+                      SwitchListTile(
+                        value: isCelcius,
+                        title: Text("Display Unit"),
+                        subtitle: Text(isCelcius ? "Celcius" : "Fahrenheit"),
+                        onChanged: (value) {
+                          setState(() => isCelcius = !isCelcius);
+                          setBoolAPIKey(weatherUnitKey, value);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

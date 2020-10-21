@@ -5,12 +5,15 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visachecker/admanager/admanager.dart';
-import 'package:visachecker/screens/search.dart';
-import 'package:visachecker/services/CountryData.dart';
-import 'package:visachecker/services/Key.dart';
-import 'package:visachecker/services/SearchList.dart';
-import 'package:visachecker/services/dataClass.dart';
+import 'package:visa_checker/components/visaList.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/prefs.dart';
+import '../admanager/admanager.dart';
+import '../screens/search.dart';
+import '../services/CountryData.dart';
+import '../services/Key.dart';
+import '../services/SearchList.dart';
+import '../models/visa.dart';
 import 'package:http/http.dart' as http;
 
 import 'drawer.dart';
@@ -69,7 +72,18 @@ class _HomeScreen extends State<HomeScreen> {
   @override
   initState() {
     super.initState();
-
+    checkHasKey(showCurrencyKey).then((val) {
+      showCurrency = val;
+      print("show currency rate: $showCurrency");
+    });
+    checkHasKey(showWeatherKey).then((val) {
+      showWeather = val;
+      print("show weather: $showWeather");
+    });
+    checkHasKey(weatherUnitKey).then((val) {
+      isCelcius = (val == null) ? false : val;
+      print("show weather in celcius: $isCelcius");
+    });
     if (Platform.isIOS) {
       Admob.requestTrackingAuthorization();
     }
@@ -89,8 +103,8 @@ class _HomeScreen extends State<HomeScreen> {
       cCode = cList[cName];
       print("prefs name: $cName");
       print("prefs code: $cCode");
-      fetchCountry().then((value) {
-        Country data = value;
+      _fetchCountry().then((value) {
+        CountryVisa data = value;
         setState(() {
           visaFree = data.vf;
           visaOnArrival = data.voa;
@@ -102,7 +116,7 @@ class _HomeScreen extends State<HomeScreen> {
   }
 
   _countryList() async {
-    fetchCountryList().then((value) {
+    _fetchCountryList().then((value) {
       CountryList data = value;
       setState(() {
         vfreeList = data.vf;
@@ -114,7 +128,7 @@ class _HomeScreen extends State<HomeScreen> {
     });
   }
 
-  Future<CountryList> fetchCountryList() async {
+  Future<CountryList> _fetchCountryList() async {
     var url = "https://passportvisa-api.herokuapp.com/list/api/$cCode";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
@@ -123,12 +137,12 @@ class _HomeScreen extends State<HomeScreen> {
     return countryList;
   }
 
-  Future<Country> fetchCountry() async {
+  Future<CountryVisa> _fetchCountry() async {
     var url = "https://passportvisa-api.herokuapp.com/api/$cCode";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);
-    var country = Country(parsedJson);
+    var country = CountryVisa(parsedJson);
     return country;
   }
 
@@ -140,25 +154,6 @@ class _HomeScreen extends State<HomeScreen> {
   openBrowserTab(String url) async {
     await FlutterWebBrowser.openWebPage(
         url: url, androidToolbarColor: Colors.white);
-  }
-
-  Widget visaList(List<dynamic> list) {
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: SizedBox(
-              width: 64,
-              height: 64,
-              child: FittedBox(
-                fit: BoxFit.fill,
-                child: Image.network(
-                    "https://www.countryflags.io/${list[index]}/flat/64.png"),
-              ),
-            ),
-            title: Text(reverseSearch(list[index])),
-          );
-        });
   }
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
@@ -357,7 +352,7 @@ class _HomeScreen extends State<HomeScreen> {
                                     child: Container(
                                       padding: EdgeInsets.all(5),
                                       child: Text(
-                                        "Your Passport Stats",
+                                        "Passport Overview",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17.0,
@@ -396,7 +391,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                 content: Container(
                                                   width: double.maxFinite,
                                                   height: 300,
-                                                  child: visaList(vfreeList),
+                                                  child:
+                                                      VisaList(list: vfreeList),
                                                 ),
                                                 actions: <Widget>[
                                                   FlatButton(
@@ -456,7 +452,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                 content: Container(
                                                   width: double.maxFinite,
                                                   height: 300,
-                                                  child: visaList(voaList),
+                                                  child:
+                                                      VisaList(list: voaList),
                                                 ),
                                                 actions: <Widget>[
                                                   FlatButton(
@@ -516,7 +513,7 @@ class _HomeScreen extends State<HomeScreen> {
                                                 content: Container(
                                                   width: double.maxFinite,
                                                   height: 300,
-                                                  child: visaList(vrList),
+                                                  child: VisaList(list: vrList),
                                                 ),
                                                 actions: <Widget>[
                                                   FlatButton(

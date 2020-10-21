@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/models/currency.dart';
 import 'package:visa_checker/services/Key.dart';
 import 'package:visa_checker/services/currency.dart';
 import 'package:visa_checker/services/prefs.dart';
@@ -18,20 +20,22 @@ class CurrencyWidget extends StatefulWidget {
 
 class _CurrencyWidgetState extends State<CurrencyWidget> {
   Future<double> getCurrencyRate(String from, String to) async {
-    String apiKey = await getAPIKey("CurrencyConverterAPIKey");
-    String currencyPair =
+    String _apiKey = await getAPIKey(currencyKey);
+    print("Currency API Key: $_apiKey");
+    String _currencyPair =
         "${currencyList[cList[from]]}_${currencyList[cList[to]]}";
-    print(currencyPair);
+    print(_currencyPair);
     var url =
-        "https://free.currconv.com/api/v7/convert?q=$currencyPair&compact=ultra&apiKey=$apiKey";
+        "https://free.currconv.com/api/v7/convert?q=$_currencyPair&compact=ultra&apiKey=$_apiKey";
     var response = await http.get(url);
     var parsedJson = json.decode(response.body);
     print(parsedJson);
-    var cRate = CurrencyRate(currencyPair, parsedJson);
+    var cRate = CurrencyRate(_currencyPair, parsedJson);
     print("status: ${cRate.status}");
     if (cRate.status == 400) {
       return -1;
     } else {
+      print(cRate.rate);
       return cRate.rate;
     }
   }
@@ -41,7 +45,6 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
   @override
   void initState() {
     super.initState();
-    // getCurrencyRate(widget.from, widget.to).then((val) => rate = val);
   }
 
   @override
@@ -49,29 +52,25 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
     return FutureBuilder(
         future: getCurrencyRate(widget.from, widget.to),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
             print("snapshot: $rate");
             return Column(
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Currency Exchange Rate",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
+                  child: Container(
+                    child: Text(
+                      "Currency Exchange Rate",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: (rate == -1 || rate == null)
+                  child: (snapshot.data == -1)
                       ? Container(
                           child: Text("API Key is incorrect."),
                         )
@@ -86,7 +85,7 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
                               ),
                             ),
                             Text(
-                              "$rate ${currencyList[cList[widget.to]]}",
+                              "${snapshot.data} ${currencyList[cList[widget.to]]}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,

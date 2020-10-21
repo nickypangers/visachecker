@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/services/functions.dart';
+import 'package:visa_checker/services/prefs.dart';
+import '../settings.dart';
 
-class WeatherAPIScreen extends StatefulWidget {
+class CurrencyConverterAPIScreen extends StatefulWidget {
   @override
-  _WeatherAPIScreenState createState() => _WeatherAPIScreenState();
+  _CurrencyConverterAPIScreenState createState() =>
+      _CurrencyConverterAPIScreenState();
 }
 
-class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
+class _CurrencyConverterAPIScreenState
+    extends State<CurrencyConverterAPIScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _apiController = TextEditingController();
@@ -15,33 +21,19 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
 
   Future<bool> checkHasKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var check = prefs.getBool("hasWeatherApiKey");
+    var check = prefs.getBool(showCurrencyKey);
     (check != null) ? check = check : check = false;
     return check;
-  }
-
-  Future<void> setHasKey(bool val) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("hasWeatherApiKey", val);
-  }
-
-  Future<void> _setCurrencyConverterAPIKey(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("WeatherAPIKey", key);
-  }
-
-  Future<void> _getCurrencyConverterAPIKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var key = prefs.getString("WeatherAPIKey");
-    if (key != null) {
-      _apiController..text = key;
-    }
   }
 
   @override
   void initState() {
     super.initState();
-    _getCurrencyConverterAPIKey();
+    getAPIKey(currencyKey).then((val) {
+      if (val != null) {
+        _apiController..text = val;
+      }
+    });
     checkHasKey().then((val) {
       setState(() {
         _hasKey = val;
@@ -53,6 +45,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -68,7 +61,13 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                       size: 30,
                     ),
                     onPressed: () {
-                      setHasKey(_hasKey);
+                      print(_apiController.text);
+                      setState(() {
+                        if (_apiController.text.isEmpty) {
+                          _hasKey = false;
+                        }
+                      });
+                      setHasKey(showCurrencyKey, _hasKey);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -78,7 +77,7 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                   Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      "Weather API",
+                      "Currency Converter API",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -90,13 +89,13 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
               ),
             ),
             SwitchListTile(
-              title: Text("Show Weather in Search"),
+              title: Text("Show Currency Converter in Search"),
               value: _hasKey,
               onChanged: (val) {
                 setState(() {
                   _hasKey = val;
                   print(_hasKey);
-                  setHasKey(_hasKey);
+                  setHasKey(showCurrencyKey, _hasKey);
                 });
               },
             ),
@@ -110,14 +109,14 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                     child: Container(
                       child: TextField(
                         autocorrect: false,
-                        decoration:
-                            InputDecoration(labelText: 'Weather API Key'),
+                        decoration: InputDecoration(labelText: 'API Key'),
                         controller: _apiController,
                         maxLines: 1,
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
-                          if (val.length > 0) {
-                            _setCurrencyConverterAPIKey(val);
+                          print(val);
+                          if (val.isNotEmpty) {
+                            setAPIKey(currencyKey, val);
                           } else {
                             setState(() => _hasKey = false);
                           }
@@ -142,9 +141,9 @@ class _WeatherAPIScreenState extends State<WeatherAPIScreen> {
                       borderRadius: BorderRadius.circular(7),
                       side: BorderSide(color: Colors.black, width: 2),
                     ),
-                    child: Text("Get Weather API Key"),
+                    child: Text("Get API Key"),
                     onPressed: () =>
-                        openBrowserTab("https://openweathermap.org/"),
+                        openBrowserTab("https://www.currencyconverterapi.com/"),
                   ),
                 ),
               ),

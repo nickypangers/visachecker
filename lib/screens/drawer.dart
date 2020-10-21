@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:visachecker/info/info.dart';
-import 'package:visachecker/screens/contact.dart';
-import 'package:visachecker/screens/friends.dart';
-import 'package:visachecker/screens/home.dart';
-import 'package:visachecker/screens/search.dart';
-import 'package:visachecker/screens/settings.dart';
+import '../info/info.dart';
+import 'contact.dart';
+import 'home.dart';
+import 'search.dart';
+import 'settings.dart';
+import 'friends.dart';
 
 Widget drawer(BuildContext context) {
   return Drawer(
