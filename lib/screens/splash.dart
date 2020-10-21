@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main.dart';
-
-import 'services/SearchList.dart';
+import '../info/info.dart';
+import '../screens/home.dart';
+import '../services/SearchList.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -29,9 +30,27 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
+
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+    version = _packageInfo.version;
+    buildNumber = _packageInfo.buildNumber;
+    print('Current version: ' + _packageInfo.version);
+  }
+
   @override
   void initState() {
     super.initState();
+    _initPackageInfo();
     seen();
   }
 
@@ -106,6 +125,7 @@ class _IntroScreenState extends State<IntroScreen> {
             padding: EdgeInsets.only(top: 15, left: 15, right: 15),
             child: Container(
               child: TextField(
+                readOnly: true,
                 style: TextStyle(color: Colors.grey[700]),
                 cursorColor: Colors.grey[700],
                 controller: _controller,

@@ -13,6 +13,14 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Visa Checker"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9340573218005429~5971013454"/>
+            <meta-data
+    android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+    android:value="true"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

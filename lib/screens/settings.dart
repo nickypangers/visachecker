@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/info/info.dart';
+import 'package:visa_checker/screens/settings/weatherApi.dart';
+import 'package:visa_checker/services/prefs.dart';
+import 'settings/currencyConverterApi.dart';
 import 'drawer.dart';
-import 'selectCountry.dart';
+import 'settings/selectCountry.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -24,7 +28,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     _getPassportCountry();
+    getAPIKey(currencyKey).then((val) {
+      if (val != null) {
+        setState(() {
+          _currencyConverterAPIKey = val;
+        });
+      }
+    });
+    getAPIKey("weatherKey").then((val) {
+      if (val != null) {
+        setState(() {
+          _weatherKey = val;
+        });
+      }
+    });
+    checkHasKey(showCurrencyKey).then((val) {
+      showCurrency = val;
+      print("show currency rate: $showCurrency");
+    });
+    checkHasKey(showWeatherKey).then((val) {
+      showWeather = val;
+      print("show weather: $showWeather");
+    });
   }
+
+  Widget categoryTitle(String text) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 15,
+        top: 10,
+        bottom: 3,
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  String _currencyConverterAPIKey, _weatherKey;
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +82,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: drawer(context),
       ),
       backgroundColor: Colors.white,
-      body: Container(
+      body: SafeArea(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 12, right: 12, top: 30, bottom: 0),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -80,6 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   top: 0,
                 ),
                 children: <Widget>[
+                  categoryTitle("General"),
                   ListTile(
                     title: Text('Language',
                         style: TextStyle(
@@ -98,12 +143,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )),
                     subtitle: Text('$passportCountry'),
                     trailing: Icon(Icons.navigate_next),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SelectCountryScreen()));
-                    },
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectCountryScreen())),
+                  ),
+                  categoryTitle("Features"),
+                  ListTile(
+                    title: Text("Currency Converter API Key"),
+                    subtitle: Text(!showCurrency
+                        ? "disabled"
+                        : "$_currencyConverterAPIKey"),
+                    trailing: Icon(Icons.navigate_next),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CurrencyConverterAPIScreen())),
+                  ),
+                  ExpansionTile(
+                    title: Text("Weather"),
+                    children: [
+                      ListTile(
+                        title: Text("Weather API Key"),
+                        subtitle:
+                            Text(!showWeather ? "disabled" : "$_weatherKey"),
+                        trailing: Icon(Icons.navigate_next),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WeatherAPIScreen())),
+                      ),
+                      SwitchListTile(
+                        value: isCelcius,
+                        title: Text("Display Unit"),
+                        subtitle: Text(isCelcius ? "Celcius" : "Fahrenheit"),
+                        onChanged: (value) {
+                          setState(() => isCelcius = !isCelcius);
+                          setBoolAPIKey(weatherUnitKey, value);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

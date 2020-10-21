@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'settings.dart';
-import 'services/Key.dart';
+import '../settings.dart';
+import '../../services/Key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectCountryScreen extends StatefulWidget {
@@ -17,12 +16,11 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      body: Container(
+      body: SafeArea(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 12, right: 12, top: 30, bottom: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -32,19 +30,16 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                       color: Colors.black,
                       size: 30,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10), // center
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      "Settings",
+                      "Select Country",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        //fontFamily: 'Montserrat',
                       ),
                     ),
                   ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../info/info.dart';
 import 'contact.dart';
-import 'friends.dart';
-import 'main.dart';
+import 'home.dart';
 import 'search.dart';
 import 'settings.dart';
+import 'friends.dart';
 
 Widget drawer(BuildContext context) {
   return Drawer(
@@ -11,7 +12,7 @@ Widget drawer(BuildContext context) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         Container(
-          height: 90,
+          // height: MediaQuery.of(context).size.height * 0.2,
           child: DrawerHeader(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +135,7 @@ Widget drawer(BuildContext context) {
               context: context,
               applicationIcon: Image.asset("assets/launcher/Icon-72.png"),
               applicationName: 'Visa Checker',
-              applicationVersion: '1.1.1',
+              applicationVersion: '$version ($buildNumber)',
               applicationLegalese: '© Developed by Nixon Pang, 2020.',
               children: <Widget>[
                 Text("""
