@@ -15,7 +15,8 @@ class _CurrencyConverterAPIScreenState
     extends State<CurrencyConverterAPIScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _apiController = TextEditingController();
+  TextEditingController _apiController =
+      TextEditingController(text: dCurrencyKey);
 
   bool _hasKey = false;
 
@@ -112,9 +113,11 @@ class _CurrencyConverterAPIScreenState
                         decoration: InputDecoration(labelText: 'API Key'),
                         controller: _apiController,
                         maxLines: 1,
+                        readOnly: true,
                         keyboardType: TextInputType.text,
                         onSubmitted: (val) {
                           print(val);
+                          print(val.isNotEmpty);
                           if (val.isNotEmpty) {
                             setAPIKey(currencyKey, val);
                           } else {

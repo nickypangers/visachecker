@@ -42,11 +42,21 @@ class _SearchScreen extends State<SearchScreen> {
 
   AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
   AdmobInterstitial interstitialAd;
+
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+
+    interstitialAd = AdmobInterstitial(
+      adUnitId: AdManager.searchPressedAdUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
 
     setState(() {
       checkHasKey(showCurrencyKey).then((val) {
@@ -100,6 +110,12 @@ class _SearchScreen extends State<SearchScreen> {
         break;
       default:
     }
+  }
+
+  @override
+  void dispose() {
+    interstitialAd.dispose();
+    super.dispose();
   }
 
   String _apiKey;
@@ -256,8 +272,15 @@ class _SearchScreen extends State<SearchScreen> {
                             ),
                             FlatButton(
                               child: Icon(Icons.search),
-                              onPressed: (() =>
-                                  setState(() => _isSearchPressed = true)),
+
+                              // onPressed: (() =>
+                              //     setState(() => )),
+                              onPressed: () async {
+                                if (await interstitialAd.isLoaded) {
+                                  interstitialAd.show();
+                                  setState(() => _isSearchPressed = true);
+                                }
+                              },
                             ),
                           ],
                         )
