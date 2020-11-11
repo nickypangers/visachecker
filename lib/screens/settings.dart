@@ -35,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         });
       }
     });
-    getAPIKey("weatherKey").then((val) {
+    getAPIKey(weatherKey).then((val) {
       if (val != null) {
         setState(() {
           _weatherKey = val;
@@ -149,40 +149,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             builder: (context) => SelectCountryScreen())),
                   ),
                   categoryTitle("Features"),
-                  ListTile(
-                    title: Text("Currency Converter API Key"),
-                    subtitle: Text(!showCurrency
-                        ? "disabled"
-                        : "$_currencyConverterAPIKey"),
-                    trailing: Icon(Icons.navigate_next),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CurrencyConverterAPIScreen())),
+                  // ListTile(
+                  //   title: Text("Currency Converter API Key"),
+                  //   subtitle: Text(!showCurrency
+                  //       ? "disabled"
+                  //       : "$_currencyConverterAPIKey"),
+                  //   trailing: Icon(Icons.navigate_next),
+                  //   onTap: () => Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               CurrencyConverterAPIScreen())),
+                  // ),
+                  SwitchListTile(
+                    title: Text("Show Currency Conversion"),
+                    value: showCurrency,
+                    onChanged: (value) {
+                      setState(() => showCurrency = value);
+                      setHasKey(showCurrencyKey, value);
+                    },
                   ),
                   ExpansionTile(
                     title: Text("Weather"),
                     children: [
-                      ListTile(
-                        title: Text("Weather API Key"),
-                        subtitle:
-                            Text(!showWeather ? "disabled" : "$_weatherKey"),
-                        trailing: Icon(Icons.navigate_next),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WeatherAPIScreen())),
-                      ),
+                      // ListTile(
+                      //   title: Text("Weather API Key"),
+                      //   subtitle:
+                      //       Text(!showWeather ? "disabled" : "$_weatherKey"),
+                      //   trailing: Icon(Icons.navigate_next),
+                      //   onTap: () => Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => WeatherAPIScreen())),
+                      // ),
                       SwitchListTile(
-                        value: isCelcius,
-                        title: Text("Display Unit"),
-                        subtitle: Text(isCelcius ? "Celcius" : "Fahrenheit"),
+                        value: showWeather,
+                        title: Text("Show Weather"),
                         onChanged: (value) {
-                          setState(() => isCelcius = !isCelcius);
-                          setBoolAPIKey(weatherUnitKey, value);
+                          setState(() => showWeather = value);
+                          setHasKey(showWeatherKey, value);
                         },
                       ),
+                      showWeather
+                          ? SwitchListTile(
+                              value: isCelcius,
+                              title: Text("Display Unit"),
+                              subtitle:
+                                  Text(isCelcius ? "Celcius" : "Fahrenheit"),
+                              onChanged: (value) {
+                                setState(() => isCelcius = !isCelcius);
+                                setBoolAPIKey(weatherUnitKey, value);
+                              },
+                            )
+                          : Container(),
                     ],
                   ),
                 ],

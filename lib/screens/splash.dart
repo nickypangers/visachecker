@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visa_checker/services/prefs.dart';
 import '../info/info.dart';
 import '../screens/home.dart';
 import '../services/SearchList.dart';
@@ -50,6 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    setAPIKey(currencyKey, dCurrencyKey);
+    setAPIKey(weatherKey, dWeatherKey);
     _initPackageInfo();
     seen();
   }
