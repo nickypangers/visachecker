@@ -272,9 +272,6 @@ class _SearchScreen extends State<SearchScreen> {
                             ),
                             FlatButton(
                               child: Icon(Icons.search),
-
-                              // onPressed: (() =>
-                              //     setState(() => )),
                               onPressed: () async {
                                 if (await interstitialAd.isLoaded) {
                                   interstitialAd.show();

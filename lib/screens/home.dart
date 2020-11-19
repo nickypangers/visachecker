@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visa_checker/components/visaList.dart';
+import 'package:visa_checker/components/passportOverview.dart';
 import 'package:visa_checker/info/info.dart';
 import 'package:visa_checker/services/prefs.dart';
 import '../admanager/admanager.dart';
@@ -27,10 +28,14 @@ class _HomeScreen extends State<HomeScreen> {
   String visaFree = "";
   String visaOnArrival = "";
   String visaRequired = "";
+  String visaCovidban = "";
+  String visaNoAdmission = "";
 
   List<dynamic> vfreeList;
   List<dynamic> voaList;
   List<dynamic> vrList;
+  List<dynamic> cbList;
+  List<dynamic> naList;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -69,9 +74,24 @@ class _HomeScreen extends State<HomeScreen> {
 
   AdmobBannerSize bannerSize = AdmobBannerSize.BANNER;
 
+  RateMyApp rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 0, // Show rate popup on first day of install.
+    minLaunches:
+        3, // Show rate popup after 3 launches of app after minDays is passed.
+  );
+
   @override
   initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await rateMyApp.init();
+      if (mounted && rateMyApp.shouldOpenDialog) {
+        rateMyApp.showRateDialog(context);
+      }
+    });
+
     checkHasKey(showCurrencyKey).then((val) {
       showCurrency = val;
       print("show currency rate: $showCurrency");
@@ -109,6 +129,8 @@ class _HomeScreen extends State<HomeScreen> {
           visaFree = data.vf;
           visaOnArrival = data.voa;
           visaRequired = data.vr;
+          visaCovidban = data.cb;
+          visaNoAdmission = data.na;
         });
       });
     });
@@ -122,8 +144,10 @@ class _HomeScreen extends State<HomeScreen> {
         vfreeList = data.vf;
         voaList = data.voa;
         vrList = data.vr;
+        cbList = data.cb;
+        naList = data.na;
         print(
-            "VF: ${vfreeList.length} VOA: ${voaList.length} VR: ${vrList.length}");
+            "VF: ${vfreeList.length} VOA: ${voaList.length} VR: ${vrList.length} CB: ${cbList.length} NA: ${naList.length}");
       });
     });
   }
@@ -334,223 +358,17 @@ class _HomeScreen extends State<HomeScreen> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(10),
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                top: 5,
-                                left: 5,
-                                right: 5,
-                                bottom: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                color: Color(0xFF1443A1),
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Text(
-                                        "Passport Overview",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17.0,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        onTap: () {
-                                          print("Tap Visa Free");
-                                          showDialog(
-                                            barrierDismissible: true,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(15),
-                                                  ),
-                                                ),
-                                                title: Center(
-                                                  child: Text(
-                                                    "Visa Free: ${vfreeList.length}",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                content: Container(
-                                                  width: double.maxFinite,
-                                                  height: 300,
-                                                  child:
-                                                      VisaList(list: vfreeList),
-                                                ),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    child: Text("Back"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              "Visa Free",
-                                              style: TextStyle(
-                                                color: Colors.green[300],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "$visaFree",
-                                              style: TextStyle(
-                                                color: Colors.green[300],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          print("Tap Visa-on-Arrival");
-                                          showDialog(
-                                            barrierDismissible: true,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(15),
-                                                  ),
-                                                ),
-                                                title: Center(
-                                                  child: Text(
-                                                    "Visa On Arrival: ${voaList.length}",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                content: Container(
-                                                  width: double.maxFinite,
-                                                  height: 300,
-                                                  child:
-                                                      VisaList(list: voaList),
-                                                ),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    child: Text("Back"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              "Visa On Arrival",
-                                              style: TextStyle(
-                                                color: Colors.orange[300],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "$visaOnArrival",
-                                              style: TextStyle(
-                                                color: Colors.orange[300],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          print("Tap Visa Required");
-                                          showDialog(
-                                            barrierDismissible: true,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(15),
-                                                  ),
-                                                ),
-                                                title: Center(
-                                                  child: Text(
-                                                    "Visa Required: ${vrList.length}",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                content: Container(
-                                                  width: double.maxFinite,
-                                                  height: 300,
-                                                  child: VisaList(list: vrList),
-                                                ),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    child: Text("Back"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              "Visa Required",
-                                              style: TextStyle(
-                                                color: Colors.red[400],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "$visaRequired",
-                                              style: TextStyle(
-                                                color: Colors.red[400],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            child: PassportOverview(
+                              vf: visaFree,
+                              voa: visaOnArrival,
+                              vr: visaRequired,
+                              cb: visaCovidban,
+                              na: visaNoAdmission,
+                              vfList: vfreeList,
+                              voaList: voaList,
+                              vrList: vrList,
+                              cbList: cbList,
+                              naList: naList,
                             ),
                           ),
                           Padding(
