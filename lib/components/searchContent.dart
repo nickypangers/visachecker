@@ -54,6 +54,10 @@ class _SearchContentState extends State<SearchContent> {
         return [Colors.blue[400], "Visa On Arrival"];
       } else if (_result == "VF") {
         return [Colors.green[400], "Visa Free"];
+      } else if (_result == "covid ban") {
+        return [Colors.red[400], "Travel Ban"];
+      } else if (_result == "no admission") {
+        return [Colors.red[400], "No Admission"];
       } else {
         return [Colors.green[400], "Visa Free - $_result days"];
       }
@@ -125,7 +129,6 @@ class _SearchContentState extends State<SearchContent> {
                       ? CurrencyWidget(
                           from: widget.passportCountry, to: widget.desCountry)
                       : Container(),
-                  // (showWeather == true) ? Container() : Container(),
                 ],
               ),
             );
@@ -133,7 +136,13 @@ class _SearchContentState extends State<SearchContent> {
             return Container(
               height: 100,
               child: Center(
-                child: Text(snapshot.data[1]),
+                child: Text(
+                  snapshot.data[1],
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             );
           }

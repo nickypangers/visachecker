@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visa_checker/info/info.dart';
-import 'package:visa_checker/screens/settings/weatherApi.dart';
 import 'package:visa_checker/services/prefs.dart';
-import 'settings/currencyConverterApi.dart';
 import 'drawer.dart';
 import 'settings/selectCountry.dart';
 
