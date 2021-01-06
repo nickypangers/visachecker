@@ -5,7 +5,17 @@ const Color kIconBackgroundColor = Color(0xFF00d46d);
 
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 16,
-  color: kIconBackgroundColor,
+  fontSize: 14,
+  color: Colors.white,
+);
+
+const TextStyle kOnBoardingTitleTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+);
+
+const TextStyle kOnBoardingBodyTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 18,
 );
