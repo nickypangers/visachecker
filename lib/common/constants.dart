@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // Color Scheme
 const Color kIconBackgroundColor = Color(0xFF00d46d);
 
+const Color kBackgroundColor = Colors.white;
+
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
   fontSize: 14,

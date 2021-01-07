@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:visa_checker/common/constants.dart';
+import 'package:visa_checker/common/tranisitons/reveal_route.dart';
+import 'package:visa_checker/screens/homeScreen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -59,7 +61,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return IntroductionScreen(
       pages: getPages(),
       globalBackgroundColor: kIconBackgroundColor,
-      onDone: () => print('done'),
+      onDone: () {
+        Navigator.pushReplacement(
+          context,
+          RevealRoute(
+            page: HomeScreen(),
+            maxRadius: 800,
+            centerAlignment: Alignment.center,
+          ),
+        );
+      },
       showNextButton: true,
       next: const Icon(
         Icons.arrow_forward,
