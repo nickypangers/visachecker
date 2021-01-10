@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 340,
           width: size.width,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: Color(0xff6a7bc9),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(25),
               bottomRight: Radius.circular(25),
@@ -63,7 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 10,
+            ),
             child: Column(
               children: [
                 buildTopMenuRow(context),
@@ -80,27 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         buildTopMenuRowButton(
-          color: Colors.grey.withOpacity(0.5),
+          color: Colors.grey.withOpacity(0.4),
           icon: Icons.menu,
         ),
         buildTopMenuRowButton(
-          icon: Icons.notifications,
+          icon: Icons.notifications_outlined,
         ),
       ],
-    );
-  }
-
-  Widget buildMenuButton(context) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey.withOpacity(0.5),
-      ),
-      padding: EdgeInsets.all(10),
-      child: Icon(
-        Icons.menu,
-        color: Colors.white,
-      ),
     );
   }
 
@@ -108,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Color color = Colors.transparent,
     IconData icon,
     Color iconColor = Colors.white,
-    double padding = 10,
+    double padding = 8,
   }) {
     return Container(
       decoration: BoxDecoration(
