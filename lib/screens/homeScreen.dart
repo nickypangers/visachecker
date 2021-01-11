@@ -70,6 +70,15 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 buildTopMenuRow(context),
+                buildSpacing(
+                  context,
+                  height: 40,
+                ),
+                buildSearchBar(
+                  context,
+                  radius: 30,
+                ),
+                buildHomeCircle(context, dimension: 50),
               ],
             ),
           ),
@@ -109,6 +118,43 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Icon(
         icon,
         color: iconColor,
+      ),
+    );
+  }
+
+  Widget buildSpacing(context, {double height = 0}) {
+    return SizedBox(
+      height: height,
+    );
+  }
+
+  Widget buildSearchBar(
+    context, {
+    double radius = 10,
+  }) {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(radius)),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        width: double.infinity,
+        color: Colors.white.withOpacity(0.7),
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: 'Search Location',
+            border: InputBorder.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildHomeCircle(context, {double dimension = 50}) {
+    return Container(
+      width: dimension,
+      height: dimension,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(dimension / 2)),
+        color: Colors.white,
       ),
     );
   }
