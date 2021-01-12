@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visa_checker/common/components/bottom_nav_bar.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/tranisitons/reveal_route.dart';
@@ -50,14 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
     var size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        Container(
-          height: 340,
-          width: size.width,
-          decoration: BoxDecoration(
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+          child: Container(
+            height: 340,
+            width: size.width,
             color: Color(0xff6a7bc9),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(25),
-              bottomRight: Radius.circular(25),
+            child: Image.network(
+              'https://cdn.pixabay.com/photo/2014/05/02/23/46/bridge-336475_960_720.jpg',
+              fit: BoxFit.fill,
             ),
           ),
         ),
@@ -78,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   radius: 30,
                 ),
-                buildHomeCircle(context, dimension: 50),
+                buildHomeCircleRow(context),
               ],
             ),
           ),
@@ -95,10 +100,23 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.grey.withOpacity(0.4),
           icon: Icons.menu,
         ),
-        buildTopMenuRowButton(
-          icon: Icons.notifications_outlined,
-        ),
+        // buildTopMenuRowButton(
+        //   icon: Icons.notifications_outlined,
+        // ),
+        buildFlagCircle(context),
       ],
+    );
+  }
+
+  Widget buildFlagCircle(context) {
+    var dimension = 40.0;
+    return Container(
+      height: dimension,
+      width: dimension,
+      child: SvgPicture.network(
+        'https://hatscripts.github.io/circle-flags/flags/european_union.svg',
+        placeholderBuilder: (context) => CircularProgressIndicator(),
+      ),
     );
   }
 
@@ -148,14 +166,73 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildHomeCircle(context, {double dimension = 50}) {
+  Widget buildHomeCircleRow(context) {
     return Container(
-      width: dimension,
-      height: dimension,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(dimension / 2)),
-        color: Colors.white,
+      padding: EdgeInsets.only(
+        top: 30,
+        left: 10,
+        right: 10,
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          buildHomeCircleColumn(
+            context,
+            color: Color(0xff40cbfb),
+            title: 'Free',
+          ),
+          buildHomeCircleColumn(
+            context,
+            color: Color(0xfffeb05e),
+            title: 'On Arrival',
+          ),
+          buildHomeCircleColumn(
+            context,
+            color: Color(0xffff6182),
+            title: 'Required',
+          ),
+          buildHomeCircleColumn(
+            context,
+            color: Color(0xff9a76d6),
+            title: 'Ban',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildHomeCircleColumn(
+    context, {
+    Color color = Colors.white,
+    double dimension = 50,
+    int value = 100,
+    @required String title,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: dimension,
+          height: dimension,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(dimension / 2)),
+            color: color,
+          ),
+          child: Center(
+            child: Text(
+              "$value",
+              textAlign: TextAlign.center,
+              style: kHomeCircleTextStyle,
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 5),
+          child: Text(
+            title,
+            style: kHomeCircleTitleTextStyle,
+          ),
+        ),
+      ],
     );
   }
 }

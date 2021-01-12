@@ -21,3 +21,12 @@ const TextStyle kOnBoardingBodyTextStyle = TextStyle(
   color: Colors.white,
   fontSize: 18,
 );
+
+const TextStyle kHomeCircleTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle kHomeCircleTitleTextStyle = TextStyle(
+  color: Colors.white,
+);
