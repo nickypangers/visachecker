@@ -16,14 +16,19 @@ class _HomeScreenState extends State<HomeScreen> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Container(
-        height: size.height,
-        width: size.width,
-        color: kBackgroundColor,
-        child: Column(
-          children: [
-            buildHomeTopCard(context),
-          ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          height: size.height,
+          width: size.width,
+          color: kBackgroundColor,
+          child: Column(
+            children: [
+              buildHomeTopCard(context),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBar(
