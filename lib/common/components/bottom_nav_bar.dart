@@ -65,7 +65,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ));
       },
       child: Container(
-        height: 50,
+        height: 60,
         width: MediaQuery.of(context).size.width / _iconList.length,
         child: Icon(
           icon,

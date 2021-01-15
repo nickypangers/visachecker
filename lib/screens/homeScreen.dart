@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visa_checker/common/components/bottom_nav_bar.dart';
+import 'package:visa_checker/common/components/popular_locations.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/tranisitons/reveal_route.dart';
 import 'package:visa_checker/screens/onBoardingScreen.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               buildHomeTopCard(context),
+              PopularLocations(),
             ],
           ),
         ),
@@ -206,13 +208,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildHomeCircleColumn(
-    context, {
-    Color color = Colors.white,
-    double dimension = 50,
-    int value = 100,
-    @required String title,
-  }) {
+  Widget buildHomeCircleColumn(context,
+      {Color color = Colors.white,
+      double dimension = 50,
+      int value = 100,
+      @required String title}) {
     return Column(
       children: [
         Container(
