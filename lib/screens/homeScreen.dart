@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visa_checker/common/components/bottom_nav_bar.dart';
+import 'package:visa_checker/common/components/homepage_header.dart';
 import 'package:visa_checker/common/components/popular_locations.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/tranisitons/reveal_route.dart';
@@ -16,21 +18,167 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
+    // return Scaffold(
+    //   body: GestureDetector(
+    //     onTap: () {
+    //       FocusScope.of(context).unfocus();
+    //     },
+    //     child: Container(
+    //       height: size.height,
+    //       width: size.width,
+    //       color: kBackgroundColor,
+    //       child: Column(
+    //         children: [
+    //           buildHomeTopCard(context),
+    //           PopularLocations(),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // bottomNavigationBar: BottomNavBar(
+    //   iconList: [
+    //     Icons.home,
+    //     Icons.card_travel,
+    //     Icons.navigation,
+    //     Icons.person,
+    //   ],
+    //   pageList: [
+    //     OnBoardingScreen(),
+    //     OnBoardingScreen(),
+    //     OnBoardingScreen(),
+    //     OnBoardingScreen(),
+    //   ],
+    //   onChange: (val) {
+    //     print(val);
+    //   },
+    //   defaultSelectedIndex: 0,
+    // ),
+    // );
+
     return Scaffold(
       body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          height: size.height,
-          width: size.width,
-          color: kBackgroundColor,
-          child: Column(
-            children: [
-              buildHomeTopCard(context),
-              PopularLocations(),
-            ],
-          ),
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: [
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: HomePageHeader(
+                minExtent: 90,
+                maxExtent: 320,
+                child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: buildHomeTopCard(context)),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                // SliverToBoxAdapter(
+                //   child: PopularLocations(),
+                // ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Sunday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('Monday'),
+                  subtitle: Text('sunny, h: 80, l: 65'),
+                ),
+                // ListTiles++
+              ]),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavBar(
@@ -59,17 +207,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Stack(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(25),
-            bottomRight: Radius.circular(25),
-          ),
+          // borderRadius: BorderRadius.only(
+          //   bottomLeft: Radius.circular(25),
+          //   bottomRight: Radius.circular(25),
+          // ),
           child: Container(
             height: 340,
             width: size.width,
             color: Color(0xff6a7bc9),
-            child: Image.network(
-              'https://cdn.pixabay.com/photo/2014/05/02/23/46/bridge-336475_960_720.jpg',
-              fit: BoxFit.fill,
+            child: Image.asset(
+              'assets/images/homeheader.jpg',
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -117,12 +265,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildFlagCircle(context) {
     var dimension = 40.0;
-    return Container(
-      height: dimension,
-      width: dimension,
-      child: SvgPicture.network(
-        'https://hatscripts.github.io/circle-flags/flags/european_union.svg',
-        placeholderBuilder: (context) => CircularProgressIndicator(),
+    return GestureDetector(
+      onTap: () => print('hi'),
+      child: Container(
+        height: dimension,
+        width: dimension,
+        child: SvgPicture.network(
+          'https://hatscripts.github.io/circle-flags/flags/european_union.svg',
+          placeholderBuilder: (context) => CircularProgressIndicator(),
+        ),
       ),
     );
   }
