@@ -70,11 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: buildHomeTopCard(context)),
               ),
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 400,
+                child: PopularLocations(),
+              ),
+            ),
             SliverList(
               delegate: SliverChildListDelegate([
-                // SliverToBoxAdapter(
-                //   child: PopularLocations(),
-                // ),
                 ListTile(
                   leading: Icon(Icons.wb_sunny),
                   title: Text('Sunday'),

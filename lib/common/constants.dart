@@ -5,6 +5,10 @@ const Color kIconBackgroundColor = Color(0xFF00d46d);
 
 const Color kBackgroundColor = Colors.white;
 
+const Color kLocationUnselectedColor = Color(0xffa9aaae);
+
+const Color kLocationSelectedColor = Color(0xff7cacc0);
+
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
   fontSize: 14,

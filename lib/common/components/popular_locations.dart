@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants.dart';
 
 class PopularLocations extends StatefulWidget {
   @override
@@ -6,7 +7,39 @@ class PopularLocations extends StatefulWidget {
 }
 
 class _PopularLocationsState extends State<PopularLocations> {
+  PageController _pageController;
+
   double yPadding = 20.0;
+
+  List<String> _categoryList = [
+    'All Worlds',
+    'Africa',
+    'Asia',
+    'Europe',
+    'North America',
+    'South America',
+    'Oceania'
+  ];
+
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  onTabPressed(int index) {
+    _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,14 +57,35 @@ class _PopularLocationsState extends State<PopularLocations> {
                 ),
               ),
               Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Text(
-                  "All World",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Color(0xff63bed5)),
+                height: 45,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categoryList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        print('$index - ${_categoryList[index]}');
+                        setState(() {
+                          onTabPressed(index);
+                          _selectedIndex = index;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          buildCategoryTab(context,
+                              category: _categoryList[index],
+                              color: (index == _selectedIndex)
+                                  ? kLocationSelectedColor
+                                  : kLocationUnselectedColor),
+                          (index != _categoryList.length - 1)
+                              ? SizedBox(
+                                  width: 20,
+                                )
+                              : Container()
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -44,26 +98,47 @@ class _PopularLocationsState extends State<PopularLocations> {
     );
   }
 
+  Widget buildCategoryTab(context, {String category, Color color}) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+      child: Text(
+        category,
+        style:
+            TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color),
+      ),
+    );
+  }
+
   Widget buildPageView() {
     return PageView(
+      controller: _pageController,
       children: [
         buildPage(color: Colors.red),
         buildPage(color: Colors.yellow),
         buildPage(color: Colors.green),
+        buildPage(color: Colors.blue),
+        buildPage(color: Colors.grey),
+        buildPage(color: Colors.orange),
+        buildPage(color: Colors.purple),
       ],
     );
   }
 
   Widget buildPage({Color color}) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 70,
-      itemBuilder: (context, index) {
-        return Container(
-          color: color,
-          child: Text("$index"),
-        );
-      },
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 70,
+        itemBuilder: (context, index) {
+          return Container(
+            color: color,
+            child: Text("$index"),
+          );
+        },
+      ),
     );
   }
 }
