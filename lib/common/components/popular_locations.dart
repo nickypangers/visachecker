@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:visa_checker/common/data/countryList.dart';
+import 'package:visa_checker/common/models/country.dart';
 import '../constants.dart';
+
+import 'package:http/http.dart' as http;
 
 class PopularLocations extends StatefulWidget {
   @override
@@ -21,12 +27,29 @@ class _PopularLocationsState extends State<PopularLocations> {
     'Oceania'
   ];
 
+  List<Country> allList = [],
+      afList = [],
+      asList = [],
+      euList = [],
+      naList = [],
+      saList = [],
+      ocList = [];
+
   int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    getAllCountryList().then((_) {
+      var totalCountries = afList.length +
+          asList.length +
+          euList.length +
+          naList.length +
+          saList.length +
+          ocList.length;
+      print(totalCountries);
+    });
   }
 
   @override
@@ -38,6 +61,45 @@ class _PopularLocationsState extends State<PopularLocations> {
   onTabPressed(int index) {
     _pageController.animateToPage(index,
         duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+  }
+
+  Future getAllCountryList() async {
+    afList = await getCountryList('Africa');
+    asList = await getCountryList('Asia');
+    euList = await getCountryList('Europe');
+    naList = await getCountryList('North America');
+    saList = await getCountryList('South America');
+    ocList = await getCountryList('Oceania');
+  }
+
+  Future<List<Country>> getCountryList(String continent) async {
+    var url =
+        "https://pkgstore.datahub.io/JohnSnowLabs/country-and-continent-codes-list/country-and-continent-codes-list-csv_json/data/c218eebbf2f8545f3db9051ac893d69c/country-and-continent-codes-list-csv_json.json";
+
+    var response = await http.get(url);
+
+    var parsedJson = json.decode(response.body);
+
+    print(parsedJson.runtimeType);
+
+    List<Country> data = [];
+
+    parsedJson.forEach((item) {
+      Country country = Country.fromJson(item);
+
+      if (country.continentName == continent) {
+        countryList.forEach((k, v) {
+          if (k == country.twoLetterCountryCode) {
+            country.countryName = v;
+            print(
+                "Country: ${country.countryName} - ${country.twoLetterCountryCode}");
+            data.add(country);
+          }
+        });
+      }
+    });
+
+    return data;
   }
 
   @override
@@ -113,29 +175,36 @@ class _PopularLocationsState extends State<PopularLocations> {
   Widget buildPageView() {
     return PageView(
       controller: _pageController,
+      onPageChanged: (val) {
+        setState(() {
+          _selectedIndex = val;
+        });
+        print(_selectedIndex);
+      },
       children: [
-        buildPage(color: Colors.red),
-        buildPage(color: Colors.yellow),
-        buildPage(color: Colors.green),
-        buildPage(color: Colors.blue),
-        buildPage(color: Colors.grey),
-        buildPage(color: Colors.orange),
-        buildPage(color: Colors.purple),
+        buildPage([], color: Colors.red), // All Worlds
+        buildPage(afList, color: Colors.yellow), // Africa
+        buildPage(asList, color: Colors.green), // Asia
+        buildPage(euList, color: Colors.blue), // Europe
+        buildPage(naList, color: Colors.grey), // North America
+        buildPage(saList, color: Colors.orange), // South America
+        buildPage(ocList, color: Colors.purple), // Oceania
       ],
     );
   }
 
-  Widget buildPage({Color color}) {
+  Widget buildPage(List<Country> dataList, {Color color}) {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 70,
+        itemCount: dataList.length,
         itemBuilder: (context, index) {
           return Container(
             color: color,
-            child: Text("$index"),
+            child: Text(
+                "${dataList[index].countryName} - ${dataList[index].threeLetterCountryCode}"),
           );
         },
       ),

@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: Container(
-                height: 400,
+                height: 700,
                 child: PopularLocations(),
               ),
             ),
