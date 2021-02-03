@@ -1,8 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:visa_checker/common/constants.dart';
+import 'package:visa_checker/common/data/countryData.dart';
+import 'package:visa_checker/common/data/countryList.dart';
+import 'package:visa_checker/common/models/country.dart';
 
 import 'onBoardingScreen.dart';
 
@@ -13,18 +19,91 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    // getAllCountryList().then((_) {
+    //   var totalCountries = afList.length +
+    //       asList.length +
+    //       euList.length +
+    //       naList.length +
+    //       saList.length +
+    //       ocList.length;
+    //   print(totalCountries);
+    // });
+  }
+
+  Future<bool> getAllCountryList() async {
+    afList = await getCountryList('Africa');
+    asList = await getCountryList('Asia');
+    euList = await getCountryList('Europe');
+    naList = await getCountryList('North America');
+    saList = await getCountryList('South America');
+    ocList = await getCountryList('Oceania');
+
+    allList = [
+      ...afList,
+      ...asList,
+      ...euList,
+      ...naList,
+      ...saList,
+      ...ocList
+    ];
+    print(allList.length);
+
+    return true;
+  }
+
+  Future<List<Country>> getCountryList(String continent) async {
+    var url =
+        "https://pkgstore.datahub.io/JohnSnowLabs/country-and-continent-codes-list/country-and-continent-codes-list-csv_json/data/c218eebbf2f8545f3db9051ac893d69c/country-and-continent-codes-list-csv_json.json";
+
+    var response = await http.get(url);
+
+    var parsedJson = json.decode(response.body);
+
+    print(parsedJson.runtimeType);
+
+    List<Country> data = [];
+
+    parsedJson.forEach((item) {
+      Country country = Country.fromJson(item);
+
+      if (country.continentName == continent) {
+        countryList.forEach((k, v) {
+          if (k == country.twoLetterCountryCode) {
+            country.countryName = v;
+            print(
+                "Country: ${country.countryName} - ${country.twoLetterCountryCode}");
+            data.add(country);
+          }
+        });
+      }
+    });
+
+    return data;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => OnBoardingScreen())));
-    return Container(
-      color: kIconBackgroundColor,
-      child: Center(
-        child: SpinKitChasingDots(
-          color: Colors.white,
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: getAllCountryList(),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            Timer(
+                Duration(seconds: 3),
+                () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OnBoardingScreen())));
+          }
+          return Container(
+            color: kIconBackgroundColor,
+            child: Center(
+              child: SpinKitChasingDots(
+                color: Colors.white,
+              ),
+            ),
+          );
+        });
   }
 }
