@@ -9,6 +9,10 @@ const Color kLocationUnselectedColor = Color(0xffa9aaae);
 
 const Color kLocationSelectedColor = Color(0xff7cacc0);
 
+const Color kScaffoldColor = Color(0xfffffaf2);
+
+const Color kPrimaryColor = Color(0xfffffaf2);
+
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
   fontSize: 14,
