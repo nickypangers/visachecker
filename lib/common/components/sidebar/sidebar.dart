@@ -69,45 +69,7 @@ class _SideBarState extends State<SideBar>
             children: [
               Expanded(
                 child: Container(
-                  color: Color(0xFF262AAA),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                      ),
-                      ListTile(
-                        title: Text(
-                          "Ralph",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "testing@gmail.com",
-                          style: TextStyle(
-                            color: Color(0xff1bb5fd),
-                            fontSize: 20,
-                          ),
-                        ),
-                        leading: CircleAvatar(
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Colors.white,
-                          ),
-                          radius: 40,
-                        ),
-                      ),
-                      Divider(
-                        height: 64,
-                        thickness: 0.5,
-                        color: Colors.white.withOpacity(0.3),
-                        indent: 16,
-                        endIndent: 16,
-                      ),
-                    ],
-                  ),
+                  color: kSidebarPrimaryColor,
                 ),
               ),
               Align(
@@ -116,16 +78,19 @@ class _SideBarState extends State<SideBar>
                   onTap: () {
                     onIconPressed();
                   },
-                  child: Container(
-                    width: _tabWidth,
-                    height: 110,
-                    color: Color(0xFF262AAA),
-                    alignment: Alignment.centerLeft,
-                    child: AnimatedIcon(
-                      progress: _animationController.view,
-                      icon: AnimatedIcons.menu_close,
-                      color: Color(0xFF1BB5FD),
-                      size: 25,
+                  child: ClipPath(
+                    clipper: CustomMenuClipper(),
+                    child: Container(
+                      width: _tabWidth,
+                      height: 110,
+                      color: Color(0xFF262AAA),
+                      alignment: Alignment.centerLeft,
+                      child: AnimatedIcon(
+                        progress: _animationController.view,
+                        icon: AnimatedIcons.menu_close,
+                        color: Color(0xFF1BB5FD),
+                        size: 25,
+                      ),
                     ),
                   ),
                 ),
@@ -135,5 +100,33 @@ class _SideBarState extends State<SideBar>
         );
       },
     );
+  }
+}
+
+class CustomMenuClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Paint paint = Paint();
+    paint.color = Colors.white;
+
+    final width = size.width;
+    final height = size.height;
+
+    Path path = Path();
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(0, 8, 10, 16);
+    path.quadraticBezierTo(width - 1, height / 2 - 20, width, height / 2);
+    path.quadraticBezierTo(width + 1, height / 2 + 20, 10, height - 16);
+    path.quadraticBezierTo(0, height - 8, 0, height);
+
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
   }
 }

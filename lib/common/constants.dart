@@ -13,6 +13,8 @@ const Color kScaffoldColor = Color(0xfffffaf2);
 
 const Color kPrimaryColor = Color(0xfffffaf2);
 
+const Color kSidebarPrimaryColor = Color(0xFF262AAA);
+
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
   fontSize: 14,
