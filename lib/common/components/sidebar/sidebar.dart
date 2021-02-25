@@ -69,7 +69,7 @@ class _SideBarState extends State<SideBar>
             children: [
               Expanded(
                 child: Container(
-                  color: kSidebarPrimaryColor,
+                  color: kIconBackgroundColor,
                 ),
               ),
               Align(
@@ -83,12 +83,12 @@ class _SideBarState extends State<SideBar>
                     child: Container(
                       width: _tabWidth,
                       height: 110,
-                      color: Color(0xFF262AAA),
+                      color: kIconBackgroundColor,
                       alignment: Alignment.centerLeft,
                       child: AnimatedIcon(
                         progress: _animationController.view,
                         icon: AnimatedIcons.menu_close,
-                        color: Color(0xFF1BB5FD),
+                        color: kBackgroundColor,
                         size: 25,
                       ),
                     ),

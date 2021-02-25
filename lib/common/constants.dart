@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 // Color Scheme
 const Color kIconBackgroundColor = Color(0xFF00d46d);
 
-const Color kBackgroundColor = Colors.white;
+// const Color kBackgroundColor = Colors.white;
+const Color kBackgroundColor = Color(0xFF003D00);
 
 const Color kLocationUnselectedColor = Color(0xffa9aaae);
 
 const Color kLocationSelectedColor = Color(0xff7cacc0);
 
-const Color kScaffoldColor = Color(0xfffffaf2);
+const Color kScaffoldColor = Color(0xffE7EAD7);
 
 const Color kPrimaryColor = Color(0xfffffaf2);
 
