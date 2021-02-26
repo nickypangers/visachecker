@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visa_checker/common/components/bottom_nav_bar.dart';
 import 'package:visa_checker/common/components/homepage_header.dart';
 import 'package:visa_checker/common/components/popular_locations.dart';
+import 'package:visa_checker/common/components/sidebar/sidebar.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/tranisitons/reveal_route.dart';
 import 'package:visa_checker/screens/onBoardingScreen.dart';
@@ -16,192 +17,35 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    // return Scaffold(
-    //   body: GestureDetector(
-    //     onTap: () {
-    //       FocusScope.of(context).unfocus();
-    //     },
-    //     child: Container(
-    //       height: size.height,
-    //       width: size.width,
-    //       color: kBackgroundColor,
-    //       child: Column(
-    //         children: [
-    //           buildHomeTopCard(context),
-    //           PopularLocations(),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // bottomNavigationBar: BottomNavBar(
-    //   iconList: [
-    //     Icons.home,
-    //     Icons.card_travel,
-    //     Icons.navigation,
-    //     Icons.person,
-    //   ],
-    //   pageList: [
-    //     OnBoardingScreen(),
-    //     OnBoardingScreen(),
-    //     OnBoardingScreen(),
-    //     OnBoardingScreen(),
-    //   ],
-    //   onChange: (val) {
-    //     print(val);
-    //   },
-    //   defaultSelectedIndex: 0,
-    // ),
-    // );
+    // var size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: HomePageHeader(
-                minExtent: 90,
-                maxExtent: 320,
-                child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: buildHomeTopCard(context)),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 700,
-                child: PopularLocations(),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                // ListTiles++
-              ]),
-            ),
+        child: Stack(
+          children: [
+            SideBar(),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        iconList: [
-          Icons.home,
-          Icons.card_travel,
-          Icons.navigation,
-          Icons.person,
-        ],
-        pageList: [
-          OnBoardingScreen(),
-          OnBoardingScreen(),
-          OnBoardingScreen(),
-          OnBoardingScreen(),
-        ],
-        onChange: (val) {
-          print(val);
-        },
-        defaultSelectedIndex: 0,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   iconList: [
+      //     Icons.home,
+      //     Icons.card_travel,
+      //     Icons.navigation,
+      //     Icons.person,
+      //   ],
+      //   pageList: [
+      //     OnBoardingScreen(),
+      //     OnBoardingScreen(),
+      //     OnBoardingScreen(),
+      //     OnBoardingScreen(),
+      //   ],
+      //   onChange: (val) {
+      //     print(val);
+      //   },
+      //   defaultSelectedIndex: 0,
+      // ),
     );
   }
 
