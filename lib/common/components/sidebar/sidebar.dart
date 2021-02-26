@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:visa_checker/common/components/sidebar/menu_item.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,9 +22,13 @@ class _SideBarState extends State<SideBar>
 
   final double _tabWidth = 35.0;
 
+  bool _changeFlag = false;
+  String _flagUrl;
+
   @override
   void initState() {
     super.initState();
+    _flagUrl = "assets/flags/hk.svg";
     _animationController =
         AnimationController(vsync: this, duration: _animationDuration);
     isSidebarOpenedStreamController = PublishSubject<bool>();
@@ -51,9 +57,19 @@ class _SideBarState extends State<SideBar>
     super.dispose();
   }
 
+  String changeFlagUrl() {
+    _changeFlag = !_changeFlag;
+    if (!_changeFlag) {
+      return "assets/flags/cn.svg";
+    }
+    return "assets/flags/ca.svg";
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
+    var dimension = 50.0;
 
     return StreamBuilder<bool>(
       initialData: false,
@@ -70,6 +86,44 @@ class _SideBarState extends State<SideBar>
               Expanded(
                 child: Container(
                   color: kIconBackgroundColor,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 100,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("Testing");
+                          setState(() {
+                            _flagUrl = changeFlagUrl();
+                          });
+                        },
+                        child: ListTile(
+                          title: Text(
+                            'Hong Kong',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Tap to change country',
+                            style: TextStyle(
+                              color: Color(0xfff3fcf4),
+                              fontSize: 14,
+                            ),
+                          ),
+                          leading: Container(
+                            height: dimension,
+                            width: dimension,
+                            child: SvgPicture.asset(_flagUrl),
+                          ),
+                        ),
+                      ),
+                      MenuItem(icon: Icons.map, title: 'Testing'),
+                    ],
+                  ),
                 ),
               ),
               Align(
