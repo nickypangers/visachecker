@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:visa_checker/common/constants.dart';
-import 'package:visa_checker/common/tranisitons/reveal_route.dart';
+import 'package:visa_checker/common/transitions/reveal_route.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int defaultSelectedIndex;

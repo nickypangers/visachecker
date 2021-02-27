@@ -122,8 +122,8 @@ class _PopularLocationsState extends State<PopularLocations> {
         print(_selectedIndex);
       },
       children: [
-        buildPage(allList, color: Colors.red), // All Worlds
-        buildPage(afList, color: Colors.yellow), // Africa
+        // buildPage(allList, color: Colors.red), // All Worlds
+        // buildPage(afList, color: Colors.yellow), // Africa
         // buildPage(asList, color: Colors.green), // Asia
         // buildPage(euList, color: Colors.blue), // Europe
         // buildPage(naList, color: Colors.grey), // North America
@@ -144,8 +144,8 @@ class _PopularLocationsState extends State<PopularLocations> {
           itemBuilder: (context, index) {
             return Container(
               color: color,
-              child: Text(
-                  "$index - ${dataList[index].countryName} - ${dataList[index].threeLetterCountryCode}"),
+              // child: Text(
+              //     "$index - ${dataList[index].countryName} - ${dataList[index].threeLetterCountryCode}"),
             );
           },
         ),

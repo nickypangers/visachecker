@@ -6,7 +6,7 @@ import 'package:visa_checker/common/components/homepage_header.dart';
 import 'package:visa_checker/common/components/popular_locations.dart';
 import 'package:visa_checker/common/components/sidebar/sidebar.dart';
 import 'package:visa_checker/common/constants.dart';
-import 'package:visa_checker/common/tranisitons/reveal_route.dart';
+import 'package:visa_checker/common/transitions/reveal_route.dart';
 import 'package:visa_checker/screens/onBoardingScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,24 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      // bottomNavigationBar: BottomNavBar(
-      //   iconList: [
-      //     Icons.home,
-      //     Icons.card_travel,
-      //     Icons.navigation,
-      //     Icons.person,
-      //   ],
-      //   pageList: [
-      //     OnBoardingScreen(),
-      //     OnBoardingScreen(),
-      //     OnBoardingScreen(),
-      //     OnBoardingScreen(),
-      //   ],
-      //   onChange: (val) {
-      //     print(val);
-      //   },
-      //   defaultSelectedIndex: 0,
-      // ),
     );
   }
 

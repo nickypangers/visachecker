@@ -33,54 +33,97 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<bool> getAllCountryList() async {
-    afList = await getCountryList('Africa');
-    asList = await getCountryList('Asia');
-    euList = await getCountryList('Europe');
-    naList = await getCountryList('North America');
-    saList = await getCountryList('South America');
-    ocList = await getCountryList('Oceania');
+    // afList = await getCountryList('Africa');
+    // asList = await getCountryList('Asia');
+    // euList = await getCountryList('Europe');
+    // naList = await getCountryList('North America');
+    // saList = await getCountryList('South America');
+    // ocList = await getCountryList('Oceania');
 
-    allList = [
-      ...afList,
-      ...asList,
-      ...euList,
-      ...naList,
-      ...saList,
-      ...ocList
-    ];
-    print(allList.length);
+    // allList = [
+    //   ...afList,
+    //   ...asList,
+    //   ...euList,
+    //   ...naList,
+    //   ...saList,
+    //   ...ocList
+    // ];
+    // print(allList.length);
+
+    var countries = await getCountries();
+
+    print(countries.runtimeType);
+
+    countryList = await getCountryList(countries);
+
+    print(countryList.length);
 
     return true;
   }
 
-  Future<List<Country>> getCountryList(String continent) async {
-    var url =
-        "https://pkgstore.datahub.io/JohnSnowLabs/country-and-continent-codes-list/country-and-continent-codes-list-csv_json/data/c218eebbf2f8545f3db9051ac893d69c/country-and-continent-codes-list-csv_json.json";
+  Future<List<Country>> getCountryList(List<dynamic> countries) async {
+    String data = await DefaultAssetBundle.of(context)
+        .loadString("assets/json/countries.json");
+
+    var parsedJson = json.decode(data);
+
+    // print(parsedJson.toString());
+
+    List<Country> list = [];
+
+    parsedJson.forEach((item) {
+      Country country = Country.fromJson(item);
+
+      countries.forEach((countryCode) {
+        if (countryCode == country.countryCode) {
+          list.add(country);
+        }
+      });
+    });
+
+    print(list[0].countryCode);
+
+    return list;
+  }
+
+  Future<List<dynamic>> getCountries() async {
+    // var url =
+    //     "https://pkgstore.datahub.io/JohnSnowLabs/country-and-continent-codes-list/country-and-continent-codes-list-csv_json/data/c218eebbf2f8545f3db9051ac893d69c/country-and-continent-codes-list-csv_json.json";
+
+    // var response = await http.get(url);
+
+    // var parsedJson = json.decode(response.body);
+
+    // print(parsedJson.runtimeType);
+
+    // List<Country> data = [];
+
+    // parsedJson.forEach((item) {
+    //   Country country = Country.fromJson(item);
+
+    //   if (country.continentName == continent) {
+    //     countryList.forEach((k, v) {
+    //       if (k == country.twoLetterCountryCode) {
+    //         country.countryName = v;
+    //         print(
+    //             "Country: ${country.countryName} - ${country.twoLetterCountryCode}");
+    //         data.add(country);
+    //       }
+    //     });
+    //   }
+    // });
+
+    var url = "http://passportvisa-api.herokuapp.com/list/countries";
 
     var response = await http.get(url);
 
     var parsedJson = json.decode(response.body);
 
-    print(parsedJson.runtimeType);
+    CountryCodeList list = CountryCodeList.fromJson(parsedJson);
 
-    List<Country> data = [];
+    // print(list.countryCodeList.toString());
 
-    parsedJson.forEach((item) {
-      Country country = Country.fromJson(item);
-
-      if (country.continentName == continent) {
-        countryList.forEach((k, v) {
-          if (k == country.twoLetterCountryCode) {
-            country.countryName = v;
-            print(
-                "Country: ${country.countryName} - ${country.twoLetterCountryCode}");
-            data.add(country);
-          }
-        });
-      }
-    });
-
-    return data;
+    return list.countryCodeList;
   }
 
   @override

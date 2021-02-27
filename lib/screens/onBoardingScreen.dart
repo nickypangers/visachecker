@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:visa_checker/common/constants.dart';
-import 'package:visa_checker/common/tranisitons/reveal_route.dart';
-import 'package:visa_checker/screens/homeScreen.dart';
+import 'package:visa_checker/common/transitions/reveal_route.dart';
 import 'package:visa_checker/screens/homeScreen.dart';
 
 class OnBoardingScreen extends StatefulWidget {

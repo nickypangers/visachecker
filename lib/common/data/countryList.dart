@@ -1,4 +1,4 @@
-Map<String, String> countryList = {
+Map<String, String> countryMap = {
   "AD": "Andorra",
   "AE": "United Arab Emirates",
   "AF": "Afghanistan",
