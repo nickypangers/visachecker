@@ -100,17 +100,18 @@ class _SideBarState extends State<SideBar>
                       ),
                       GestureDetector(
                         onTap: () {
-                          print("Testing");
                           setState(() {
                             changeCountry();
                           });
+                          print(
+                              "new country: ${countryList[index].countryName}");
                         },
                         child: ListTile(
                           title: Text(
                             countryList[index].countryName,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 30,
+                              fontSize: 18,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
