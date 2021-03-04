@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:visa_checker/common/components/search/search.dart';
 import 'package:visa_checker/common/components/sidebar/menu_item.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
@@ -24,15 +26,14 @@ class _SideBarState extends State<SideBar>
 
   final double _tabWidth = 35.0;
 
-  int index = 0;
+  // int index = 0;
 
-  // bool _changeFlag = false;
-  // String _flagUrl;
+  Country _country;
 
   @override
   void initState() {
     super.initState();
-    // _flagUrl = "assets/flags/hk.svg";
+    _country = countryList[0];
     _animationController =
         AnimationController(vsync: this, duration: _animationDuration);
     isSidebarOpenedStreamController = PublishSubject<bool>();
@@ -61,16 +62,16 @@ class _SideBarState extends State<SideBar>
     super.dispose();
   }
 
-  String flagUrl(String countryCode) {
-    return "assets/flags/${countryCode.toLowerCase()}.svg";
-  }
+  // String flagUrl(String countryCode) {
+  //   return "assets/flags/${countryCode.toLowerCase()}.svg";
+  // }
 
-  changeCountry() {
-    index++;
-    if (index >= countryList.length) {
-      index = 0;
-    }
-  }
+  // changeCountry() {
+  //   index++;
+  //   if (index >= countryList.length) {
+  //     index = 0;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,16 +100,25 @@ class _SideBarState extends State<SideBar>
                         height: 100,
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          var result = await showSearch(
+                            context: context,
+                            delegate: Search(),
+                          );
+
+                          if (result == null) {
+                            return;
+                          }
+
                           setState(() {
-                            changeCountry();
+                            _country = result;
                           });
-                          print(
-                              "new country: ${countryList[index].countryName}");
+
+                          print(_country.countryName);
                         },
                         child: ListTile(
                           title: Text(
-                            countryList[index].countryName,
+                            _country.countryName,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -125,8 +135,7 @@ class _SideBarState extends State<SideBar>
                           leading: Container(
                             height: dimension,
                             width: dimension,
-                            child: SvgPicture.asset(
-                                flagUrl(countryList[index].countryCode)),
+                            child: SvgPicture.asset(_country.flagUrl),
                           ),
                         ),
                       ),
@@ -189,7 +198,6 @@ class CustomMenuClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
     return true;
   }
 }

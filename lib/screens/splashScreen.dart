@@ -133,11 +133,12 @@ class _SplashScreenState extends State<SplashScreen> {
         builder: (context, snapshot) {
           if (snapshot.data == true) {
             Timer(
-                Duration(seconds: 3),
-                () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OnBoardingScreen())));
+              Duration(seconds: 3),
+              () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+              ),
+            );
           }
           return Container(
             color: kIconBackgroundColor,

@@ -38,12 +38,14 @@
 class Country {
   String countryCode;
   String countryName;
+  String flagUrl;
 
-  Country({this.countryCode, this.countryName});
+  Country({this.countryCode, this.countryName, this.flagUrl});
 
   Country.fromJson(Map<String, dynamic> json) {
     countryCode = json['Code'];
     countryName = json['Name'];
+    flagUrl = "assets/flags/${countryCode.toLowerCase()}.svg";
   }
 }
 
