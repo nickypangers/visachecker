@@ -5,10 +5,12 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/globals/globals.dart' as global;
 
 import 'onBoardingScreen.dart';
 
@@ -57,6 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
     countryList = await getCountryList(countries);
 
     print(countryList.length);
+
+    Country().setCountry(countryList[0]);
 
     return true;
   }
@@ -113,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //   }
     // });
 
-    var url = "http://passportvisa-api.herokuapp.com/list/countries";
+    var url = "https://passportvisa-api.herokuapp.com/list/countries";
 
     var response = await http.get(url);
 

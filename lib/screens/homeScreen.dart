@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:visa_checker/common/components/bottom_nav_bar.dart';
 import 'package:visa_checker/common/components/homepage_header.dart';
 import 'package:visa_checker/common/components/popular_locations.dart';
 import 'package:visa_checker/common/components/sidebar/sidebar.dart';
 import 'package:visa_checker/common/constants.dart';
+import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/transitions/reveal_route.dart';
+import 'package:visa_checker/globals/globals.dart' as global;
 import 'package:visa_checker/screens/onBoardingScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,10 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: [
-            SideBar(),
-          ],
+        child: Consumer<Country>(
+          builder: (context, country, child) => Stack(
+            children: [
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text("${country.getCountryName}"),
+                ),
+              ),
+              SideBar(),
+            ],
+          ),
         ),
       ),
     );

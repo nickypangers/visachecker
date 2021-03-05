@@ -33,14 +33,30 @@
 //     data['Two_Letter_Country_Code'] = this.twoLetterCountryCode;
 //     return data;
 //   }
-// }
+// };
 
-class Country {
+import 'package:flutter/material.dart';
+
+class Country extends ChangeNotifier {
   String countryCode;
   String countryName;
   String flagUrl;
 
   Country({this.countryCode, this.countryName, this.flagUrl});
+
+  String get getCountryCode => countryCode;
+
+  String get getCountryName => countryName;
+
+  String get getFlagUrl => flagUrl;
+
+  setCountry(Country country) {
+    countryCode = country.countryCode;
+    countryName = country.countryName;
+    flagUrl = country.flagUrl;
+
+    notifyListeners();
+  }
 
   Country.fromJson(Map<String, dynamic> json) {
     countryCode = json['Code'];

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:visa_checker/common/components/search/search.dart';
 import 'package:visa_checker/common/components/sidebar/menu_item.dart';
 import 'package:visa_checker/common/constants.dart';
@@ -28,12 +29,9 @@ class _SideBarState extends State<SideBar>
 
   // int index = 0;
 
-  Country _country;
-
   @override
   void initState() {
     super.initState();
-    _country = countryList[0];
     _animationController =
         AnimationController(vsync: this, duration: _animationDuration);
     isSidebarOpenedStreamController = PublishSubject<bool>();
@@ -91,56 +89,56 @@ class _SideBarState extends State<SideBar>
           right: isSideBarOpenedAsync.data ? 0 : screenWidth - (_tabWidth + 10),
           child: Row(
             children: [
-              Expanded(
-                child: Container(
-                  color: kIconBackgroundColor,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          var result = await showSearch(
-                            context: context,
-                            delegate: Search(),
-                          );
+              Consumer<Country>(
+                builder: (context, country, child) => Expanded(
+                  child: Container(
+                    color: kIconBackgroundColor,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            var result = await showSearch(
+                              context: context,
+                              delegate: Search(),
+                            );
 
-                          if (result == null) {
-                            return;
-                          }
+                            if (result == null) {
+                              return;
+                            }
 
-                          setState(() {
-                            _country = result;
-                          });
+                            Country().setCountry(result);
 
-                          print(_country.countryName);
-                        },
-                        child: ListTile(
-                          title: Text(
-                            _country.countryName,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
+                            print(country.countryName);
+                          },
+                          child: ListTile(
+                            title: Text(
+                              "${country.getCountryName}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                          ),
-                          subtitle: Text(
-                            'Tap to change country',
-                            style: TextStyle(
-                              color: Color(0xfff3fcf4),
-                              fontSize: 14,
+                            subtitle: Text(
+                              'Tap to change country',
+                              style: TextStyle(
+                                color: Color(0xfff3fcf4),
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                          leading: Container(
-                            height: dimension,
-                            width: dimension,
-                            child: SvgPicture.asset(_country.flagUrl),
+                            leading: Container(
+                              height: dimension,
+                              width: dimension,
+                              child: SvgPicture.asset(country.flagUrl),
+                            ),
                           ),
                         ),
-                      ),
-                      MenuItem(icon: Icons.map, title: 'Testing'),
-                    ],
+                        MenuItem(icon: Icons.map, title: 'Testing'),
+                      ],
+                    ),
                   ),
                 ),
               ),
