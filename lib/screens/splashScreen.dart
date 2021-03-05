@@ -10,7 +10,8 @@ import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
-import 'package:visa_checker/globals/globals.dart' as global;
+import 'package:visa_checker/globals/globals.dart';
+import 'package:visa_checker/globals/globals.dart';
 
 import 'onBoardingScreen.dart';
 
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
   }
 
-  Future<bool> getAllCountryList() async {
+  Future<bool> getAllCountryList(CurrentCountry currentCountry) async {
     // afList = await getCountryList('Africa');
     // asList = await getCountryList('Asia');
     // euList = await getCountryList('Europe');
@@ -60,7 +61,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     print(countryList.length);
 
-    Country().setCountry(countryList[0]);
+    currentCountry.setCountry(countryList[0]);
+
+    print(currentCountry.getCountryName);
 
     return true;
   }
@@ -132,26 +135,28 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getAllCountryList(),
-        builder: (context, snapshot) {
-          if (snapshot.data == true) {
-            Timer(
-              Duration(seconds: 3),
-              () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+    return Consumer<CurrentCountry>(
+      builder: (context, currentCountry, child) => FutureBuilder(
+          future: getAllCountryList(currentCountry),
+          builder: (context, snapshot) {
+            if (snapshot.data == true) {
+              Timer(
+                Duration(seconds: 3),
+                () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+                ),
+              );
+            }
+            return Container(
+              color: kIconBackgroundColor,
+              child: Center(
+                child: SpinKitChasingDots(
+                  color: Colors.white,
+                ),
               ),
             );
-          }
-          return Container(
-            color: kIconBackgroundColor,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Colors.white,
-              ),
-            ),
-          );
-        });
+          }),
+    );
   }
 }

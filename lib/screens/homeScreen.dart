@@ -9,7 +9,7 @@ import 'package:visa_checker/common/components/sidebar/sidebar.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/transitions/reveal_route.dart';
-import 'package:visa_checker/globals/globals.dart' as global;
+import 'package:visa_checker/globals/globals.dart';
 import 'package:visa_checker/screens/onBoardingScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,13 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Consumer<Country>(
-          builder: (context, country, child) => Stack(
+        child: Consumer<CurrentCountry>(
+          builder: (context, currentCountry, child) => Stack(
             children: [
               SafeArea(
                 child: Align(
-                  alignment: Alignment.topRight,
-                  child: Text("${country.getCountryName}"),
+                  alignment: Alignment.center,
+                  child: Text("${currentCountry.getCountryName}"),
                 ),
               ),
               SideBar(),

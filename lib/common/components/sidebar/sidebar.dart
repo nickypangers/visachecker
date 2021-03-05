@@ -10,6 +10,7 @@ import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/globals/globals.dart';
 
 class SideBar extends StatefulWidget {
   @override
@@ -60,17 +61,6 @@ class _SideBarState extends State<SideBar>
     super.dispose();
   }
 
-  // String flagUrl(String countryCode) {
-  //   return "assets/flags/${countryCode.toLowerCase()}.svg";
-  // }
-
-  // changeCountry() {
-  //   index++;
-  //   if (index >= countryList.length) {
-  //     index = 0;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -89,8 +79,8 @@ class _SideBarState extends State<SideBar>
           right: isSideBarOpenedAsync.data ? 0 : screenWidth - (_tabWidth + 10),
           child: Row(
             children: [
-              Consumer<Country>(
-                builder: (context, country, child) => Expanded(
+              Consumer<CurrentCountry>(
+                builder: (context, currentCountry, child) => Expanded(
                   child: Container(
                     color: kIconBackgroundColor,
                     child: Column(
@@ -109,13 +99,13 @@ class _SideBarState extends State<SideBar>
                               return;
                             }
 
-                            Country().setCountry(result);
+                            currentCountry.setCountry(result);
 
-                            print(country.countryName);
+                            print(currentCountry.getCountryName);
                           },
                           child: ListTile(
                             title: Text(
-                              "${country.getCountryName}",
+                              "${currentCountry.getCountryName}",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -132,7 +122,8 @@ class _SideBarState extends State<SideBar>
                             leading: Container(
                               height: dimension,
                               width: dimension,
-                              child: SvgPicture.asset(country.flagUrl),
+                              child:
+                                  SvgPicture.asset(currentCountry.getFlagUrl),
                             ),
                           ),
                         ),
