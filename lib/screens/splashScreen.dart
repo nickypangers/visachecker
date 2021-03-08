@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,6 +13,7 @@ import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/globals/globals.dart';
 import 'package:visa_checker/globals/globals.dart';
+import 'package:visa_checker/screens/homeScreen.dart';
 
 import 'onBoardingScreen.dart';
 
@@ -21,9 +23,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  checkExistingCountry() async {
+    CurrentCountry currentCountry = Provider.of<CurrentCountry>(context);
+
+    if (currentCountry != null) {
+      MaterialPageRoute(builder: (context) => HomeScreen());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    checkExistingCountry();
     // getAllCountryList().then((_) {
     //   var totalCountries = afList.length +
     //       asList.length +
@@ -69,8 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<List<Country>> getCountryList(List<dynamic> countries) async {
-    String data = await DefaultAssetBundle.of(context)
-        .loadString("assets/json/countries.json");
+    String data = await rootBundle.loadString("assets/json/countries.json");
 
     var parsedJson = json.decode(data);
 
@@ -135,28 +145,28 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CurrentCountry>(
-      builder: (context, currentCountry, child) => FutureBuilder(
-          future: getAllCountryList(currentCountry),
-          builder: (context, snapshot) {
-            if (snapshot.data == true) {
-              Timer(
-                Duration(seconds: 3),
-                () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => OnBoardingScreen()),
-                ),
-              );
-            }
-            return Container(
-              color: kIconBackgroundColor,
-              child: Center(
-                child: SpinKitChasingDots(
-                  color: Colors.white,
-                ),
+    CurrentCountry currentCountry = Provider.of<CurrentCountry>(context);
+
+    return FutureBuilder(
+        future: getAllCountryList(currentCountry),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            Timer(
+              Duration(seconds: 3),
+              () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => OnBoardingScreen()),
               ),
             );
-          }),
-    );
+          }
+          return Container(
+            color: kIconBackgroundColor,
+            child: Center(
+              child: SpinKitChasingDots(
+                color: Colors.white,
+              ),
+            ),
+          );
+        });
   }
 }
