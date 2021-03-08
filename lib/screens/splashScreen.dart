@@ -23,18 +23,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  checkExistingCountry() async {
-    CurrentCountry currentCountry = Provider.of<CurrentCountry>(context);
-
-    if (currentCountry != null) {
-      MaterialPageRoute(builder: (context) => HomeScreen());
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    checkExistingCountry();
     // getAllCountryList().then((_) {
     //   var totalCountries = afList.length +
     //       asList.length +
@@ -46,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
   }
 
-  Future<bool> getAllCountryList(CurrentCountry currentCountry) async {
+  Future<Country> getAllCountryList() async {
     // afList = await getCountryList('Africa');
     // asList = await getCountryList('Asia');
     // euList = await getCountryList('Europe');
@@ -72,11 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     print(countryList.length);
 
-    currentCountry.setCountry(countryList[0]);
+    // currentCountry.setCountry(countryList[0]);
 
-    print(currentCountry.getCountryName);
-
-    return true;
+    return countryList[0];
+    // return true;
   }
 
   Future<List<Country>> getCountryList(List<dynamic> countries) async {
@@ -145,28 +135,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    CurrentCountry currentCountry = Provider.of<CurrentCountry>(context);
-
-    return FutureBuilder(
-        future: getAllCountryList(currentCountry),
-        builder: (context, snapshot) {
-          if (snapshot.data == true) {
-            Timer(
-              Duration(seconds: 3),
-              () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+    return Scaffold(
+      body: FutureBuilder(
+          future: getAllCountryList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data is Country) {
+              print("provider set");
+              // Country _country = Provider.of<Country>(context, listen: false);
+              Timer(Duration(seconds: 3), () {
+                Provider.of<Country>(context, listen: false).setCountry(snapshot.data);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+                );
+              });
+            }
+            return Container(
+              color: kIconBackgroundColor,
+              child: Center(
+                child: SpinKitChasingDots(
+                  color: Colors.white,
+                ),
               ),
             );
-          }
-          return Container(
-            color: kIconBackgroundColor,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Colors.white,
-              ),
-            ),
-          );
-        });
+          }),
+    );
   }
 }

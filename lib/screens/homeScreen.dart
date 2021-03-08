@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Consumer<CurrentCountry>(
+        child: Consumer<Country>(
           builder: (context, currentCountry, child) => Stack(
             children: [
               SafeArea(

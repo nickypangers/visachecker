@@ -79,7 +79,7 @@ class _SideBarState extends State<SideBar>
           right: isSideBarOpenedAsync.data ? 0 : screenWidth - (_tabWidth + 10),
           child: Row(
             children: [
-              Consumer<CurrentCountry>(
+              Consumer<Country>(
                 builder: (context, currentCountry, child) => Expanded(
                   child: Container(
                     color: kIconBackgroundColor,
