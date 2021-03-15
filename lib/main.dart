@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/screens/splashScreen.dart';
 
 import 'common/constants.dart';
@@ -9,8 +10,11 @@ import 'globals/globals.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider<Country>(
-      create: (_) => Country(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Country>(create: (_) => Country()),
+        ChangeNotifierProvider(create: (_) => NavigationState())
+      ],
       child: VisaChecker(),
     ),
   );

@@ -11,6 +11,7 @@ import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/globals/globals.dart';
 import 'package:visa_checker/globals/globals.dart';
 import 'package:visa_checker/screens/homeScreen.dart';
@@ -143,7 +144,10 @@ class _SplashScreenState extends State<SplashScreen> {
               print("provider set");
               // Country _country = Provider.of<Country>(context, listen: false);
               Timer(Duration(seconds: 3), () {
-                Provider.of<Country>(context, listen: false).setCountry(snapshot.data);
+                Provider.of<Country>(context, listen: false)
+                    .setCountry(snapshot.data);
+                Provider.of<NavigationState>(context, listen: false)
+                    .setNavigation(NavigationEvents.HomePageClickedEvent);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => OnBoardingScreen()),

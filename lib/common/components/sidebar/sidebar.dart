@@ -10,6 +10,7 @@ import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/globals/globals.dart';
 
 class SideBar extends StatefulWidget {
@@ -127,7 +128,15 @@ class _SideBarState extends State<SideBar>
                             ),
                           ),
                         ),
-                        MenuItem(icon: Icons.map, title: 'Testing'),
+                        MenuItem(
+                          icon: Icons.home,
+                          title: 'Home',
+                          clickedEvent: NavigationEvents.HomePageClickedEvent,
+                        ),
+                        MenuItem(
+                            icon: Icons.map,
+                            title: 'Map',
+                            clickedEvent: NavigationEvents.SearchClickedEvent),
                       ],
                     ),
                   ),
