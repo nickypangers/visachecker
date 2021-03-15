@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/models/navigation.dart';
@@ -6,8 +9,9 @@ class MenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final NavigationEvents clickedEvent;
+  final Function onPressed;
 
-  MenuItem({this.icon, this.title, this.clickedEvent});
+  MenuItem({this.icon, this.title, this.clickedEvent, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +19,8 @@ class MenuItem extends StatelessWidget {
       onTap: () {
         Provider.of<NavigationState>(context, listen: false)
             .setNavigation(this.clickedEvent);
+
+        this.onPressed();
       },
       child: Padding(
         padding: const EdgeInsets.all(16),

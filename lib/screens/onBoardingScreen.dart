@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/transitions/reveal_route.dart';
-import 'package:visa_checker/screens/homeScreen.dart';
+import 'package:visa_checker/screens/ContentScreen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -65,7 +65,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         Navigator.pushReplacement(
           context,
           RevealRoute(
-            page: HomeScreen(),
+            page: ContentScreen(),
             maxRadius: 800,
             centerAlignment: Alignment.center,
           ),

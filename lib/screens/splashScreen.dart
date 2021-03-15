@@ -14,7 +14,7 @@ import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/globals/globals.dart';
 import 'package:visa_checker/globals/globals.dart';
-import 'package:visa_checker/screens/homeScreen.dart';
+import 'package:visa_checker/screens/ContentScreen.dart';
 
 import 'onBoardingScreen.dart';
 

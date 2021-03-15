@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visa_checker/screens/homeScreen.dart';
 
 enum NavigationEvents {
   HomePageClickedEvent,
@@ -16,13 +17,8 @@ class NavigationState extends ChangeNotifier {
   Widget getCurrentNavigation() {
     switch (currentNavigationEvent) {
       case NavigationEvents.HomePageClickedEvent:
-        return Center(
-          child: Container(
-            child: Text('Home'),
-          ),
-        );
+        return HomeScreen();
         break;
-      // case NavigationEvents.SearchClickedEvent:
       default:
         return Center(
           child: Container(

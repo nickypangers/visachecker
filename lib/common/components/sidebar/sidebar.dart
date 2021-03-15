@@ -42,6 +42,7 @@ class _SideBarState extends State<SideBar>
   }
 
   void onIconPressed() {
+    print("icon pressed");
     final animationStatus = _animationController.status;
     final isAnimationCompleted = animationStatus == AnimationStatus.completed;
 
@@ -132,11 +133,14 @@ class _SideBarState extends State<SideBar>
                           icon: Icons.home,
                           title: 'Home',
                           clickedEvent: NavigationEvents.HomePageClickedEvent,
+                          onPressed: () => onIconPressed(),
                         ),
                         MenuItem(
-                            icon: Icons.map,
-                            title: 'Map',
-                            clickedEvent: NavigationEvents.SearchClickedEvent),
+                          icon: Icons.map,
+                          title: 'Map',
+                          clickedEvent: NavigationEvents.SearchClickedEvent,
+                          onPressed: () => onIconPressed(),
+                        ),
                       ],
                     ),
                   ),
