@@ -84,6 +84,7 @@ class _SideBarState extends State<SideBar>
               Consumer<Country>(
                 builder: (context, currentCountry, child) => Expanded(
                   child: Container(
+                    padding: EdgeInsets.only(right: 10.0),
                     color: kIconBackgroundColor,
                     child: Column(
                       children: [
@@ -100,9 +101,7 @@ class _SideBarState extends State<SideBar>
                             if (result == null) {
                               return;
                             }
-
                             currentCountry.setCountry(result);
-
                             print(currentCountry.getCountryName);
                           },
                           child: ListTile(

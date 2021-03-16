@@ -6,14 +6,14 @@ import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/screens/splashScreen.dart';
 
 import 'common/constants.dart';
-import 'globals/globals.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<Country>(create: (_) => Country()),
-        ChangeNotifierProvider(create: (_) => NavigationState())
+        ChangeNotifierProvider<NavigationState>(
+            create: (_) => NavigationState()),
       ],
       child: VisaChecker(),
     ),
@@ -23,10 +23,6 @@ void main() {
 class VisaChecker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarColor: Colors.transparent,
-    // ));
     return MaterialApp(
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),

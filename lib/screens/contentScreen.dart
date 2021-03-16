@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/components/sidebar/sidebar.dart';
 import 'package:visa_checker/common/models/country.dart';
@@ -12,9 +13,15 @@ class ContentScreen extends StatefulWidget {
 
 class _ContentScreenState extends State<ContentScreen> {
   @override
-  Widget build(BuildContext context) {
-    // var size = MediaQuery.of(context).size;
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -22,7 +29,12 @@ class _ContentScreenState extends State<ContentScreen> {
           builder: (context, currentCountry, child) => Stack(
             children: [
               Consumer<NavigationState>(builder: (context, navigation, child) {
-                return SafeArea(child: navigation.getCurrentNavigation());
+                return SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: navigation.getCurrentNavigation(),
+                  ),
+                );
               }),
               SideBar(),
             ],
