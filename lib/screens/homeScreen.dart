@@ -2,19 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/common_util.dart';
 import 'package:visa_checker/common/components/recommended_card.dart';
+import 'package:visa_checker/common/constants.dart';
+import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
   PageController _pageController = PageController();
-
-  List<Country> countryList = [
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-  ];
 
   String _getCurrentTime() {
     var now = DateTime.now();
@@ -41,16 +35,54 @@ class HomeScreen extends StatelessWidget {
       builder: (context, currentCountry, child) => Column(
         // mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildLocationPin(context, currentCountry),
-          _buildGreetings(context),
+          // _buildLocationPin(context, currentCountry),
           SizedBox(
-            height: 25,
+            height: 8,
+          ),
+          _buildTopRow(context),
+          SizedBox(
+            height: 0,
           ),
           _buildRecommendedList(
             context,
-            countryList: countryList,
+            countryList: [
+              countryList[0],
+              countryList[25],
+              countryList[58],
+              countryList[100],
+              countryList[185],
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTopRow(context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildGreetings(context),
+          _buildSearchIcon(context, onPressed: () {
+            print("testing");
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchIcon(context, {Function onPressed}) {
+    return FittedBox(
+      fit: BoxFit.fitHeight,
+      child: TextButton(
+        onPressed: onPressed,
+        child: Icon(
+          Icons.search,
+          size: 32,
+          color: Colors.grey,
+        ),
       ),
     );
   }
@@ -65,7 +97,7 @@ class HomeScreen extends StatelessWidget {
           child: Text(
             'Recommended',
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 22,
             ),
           ),
         ),
@@ -87,7 +119,7 @@ class HomeScreen extends StatelessWidget {
     var currentTime = _getCurrentTime();
     return Container(
       padding: EdgeInsets.only(left: 45.0),
-      height: 47,
+      height: 110,
       child: Row(
         children: [
           Text(
