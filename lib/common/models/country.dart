@@ -59,8 +59,8 @@ class Country extends ChangeNotifier {
   }
 
   Country.fromJson(Map<String, dynamic> json) {
-    countryCode = json['Code'];
-    countryName = json['Name'];
+    countryCode = json['ISO2'];
+    countryName = json['Country'];
     flagUrl = "assets/flags/${countryCode.toLowerCase()}.svg";
   }
 }

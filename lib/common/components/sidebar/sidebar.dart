@@ -103,6 +103,7 @@ class _SideBarState extends State<SideBar>
                             }
                             currentCountry.setCountry(result);
                             print(currentCountry.getCountryName);
+                            // onIconPressed();
                           },
                           child: ListTile(
                             title: Text(
