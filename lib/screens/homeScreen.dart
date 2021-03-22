@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/common_util.dart';
 import 'package:visa_checker/common/components/recommended_card.dart';
+import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
   PageController _pageController = PageController();
 
-  List<Country> countryList = [
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
-    Country(countryCode: 'HK', countryName: 'Hong Kong', flagUrl: '#'),
+  List<Country> list = [
+    countryList[0],
+    countryList[10],
+    countryList[50],
+    countryList[100],
+    countryList[150],
   ];
 
   String _getCurrentTime() {
@@ -61,19 +62,26 @@ class HomeScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Text(
-            'Recommended',
-            style: TextStyle(
-              fontSize: 26,
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Recommended',
+                style: TextStyle(
+                  fontSize: 26,
+                ),
+              ),
+              Text('View More'),
+            ],
           ),
         ),
         Container(
           height: height,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: countryList.length,
+            itemCount: list.length,
             itemBuilder: (context, index) => RecommendedCard(
               country: countryList[index],
             ),
@@ -89,6 +97,7 @@ class HomeScreen extends StatelessWidget {
       padding: EdgeInsets.only(left: 45.0),
       height: 47,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "${_getGreetings(currentTime)}",
@@ -96,7 +105,16 @@ class HomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 30,
             ),
-          )
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.black,
+                size: 34,
+              ),
+              onPressed: () {
+                print('hi');
+              }),
         ],
       ),
     );

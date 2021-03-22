@@ -81,9 +81,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     parsedJson.forEach((item) {
       Country country = Country.fromJson(item);
-
-      countries.forEach((countryCode) {
+      countries.forEach((countryCode) async {
         if (countryCode == country.countryCode) {
+          print(country.capital);
           list.add(country);
         }
       });
@@ -95,32 +95,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<List<dynamic>> getCountries() async {
-    // var url =
-    //     "https://pkgstore.datahub.io/JohnSnowLabs/country-and-continent-codes-list/country-and-continent-codes-list-csv_json/data/c218eebbf2f8545f3db9051ac893d69c/country-and-continent-codes-list-csv_json.json";
-
-    // var response = await http.get(url);
-
-    // var parsedJson = json.decode(response.body);
-
-    // print(parsedJson.runtimeType);
-
-    // List<Country> data = [];
-
-    // parsedJson.forEach((item) {
-    //   Country country = Country.fromJson(item);
-
-    //   if (country.continentName == continent) {
-    //     countryList.forEach((k, v) {
-    //       if (k == country.twoLetterCountryCode) {
-    //         country.countryName = v;
-    //         print(
-    //             "Country: ${country.countryName} - ${country.twoLetterCountryCode}");
-    //         data.add(country);
-    //       }
-    //     });
-    //   }
-    // });
-
     var url = "https://passportvisa-api.herokuapp.com/list/countries";
 
     var response = await http.get(url);

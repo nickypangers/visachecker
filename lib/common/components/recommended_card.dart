@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:visa_checker/common/api/google_places.dart';
 import 'package:visa_checker/common/models/country.dart';
+import 'package:visa_checker/keys/keys.dart';
 
 class RecommendedCard extends StatelessWidget {
   final Country country;
@@ -10,21 +12,26 @@ class RecommendedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.blue,
-      ),
-      width: 150,
-      margin: EdgeInsets.all(10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Column(
-          children: [
-            Image.network(
-                'https://www.smartcitiesworld.net/AcuCustom/Sitename/DAM/019/Sydney_Harbour_at_night_Adobe.jpg'),
-            Text("${country.countryName}"),
-          ],
+    return GestureDetector(
+      onTap: () {
+        print("hi");
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: Colors.blue,
+        ),
+        width: 150,
+        margin: EdgeInsets.all(10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Image.network(
+              "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${country.photo}&key=$googlePlacesKey",
+              height: 100,
+            ),
+          ),
         ),
       ),
     );
