@@ -11,7 +11,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
-import 'package:visa_checker/globals/globals.dart';
 
 class SideBar extends StatefulWidget {
   @override

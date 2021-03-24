@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:visa_checker/common/api/visa.dart';
 import 'package:visa_checker/common/common_util.dart';
 import 'package:visa_checker/common/components/recommended_card.dart';
 import 'package:visa_checker/common/constants.dart';
@@ -8,7 +9,15 @@ import 'package:visa_checker/common/models/country.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
-  PageController _pageController = PageController();
+  // PageController _pageController = PageController();
+
+  List<Country> list = [
+    countryList[0],
+    countryList[10],
+    countryList[50],
+    countryList[100],
+    countryList[150],
+  ];
 
   String _getCurrentTime() {
     var now = DateTime.now();
@@ -39,12 +48,10 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          _buildTopRow(context),
-          SizedBox(
-            height: 0,
-          ),
+          _buildGreetings(context),
           _buildRecommendedList(
             context,
+            currentCountry: currentCountry,
             countryList: [
               countryList[0],
               countryList[25],
@@ -53,21 +60,6 @@ class HomeScreen extends StatelessWidget {
               countryList[185],
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopRow(context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildGreetings(context),
-          _buildSearchIcon(context, onPressed: () {
-            print("testing");
-          }),
         ],
       ),
     );
@@ -88,26 +80,37 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRecommendedList(context,
-      {height = 150.0, List<Country> countryList}) {
+      {Country currentCountry, height = 150.0, List<Country> countryList}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Text(
-            'Recommended',
-            style: TextStyle(
-              fontSize: 22,
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Recommended',
+                style: TextStyle(
+                  fontSize: 26,
+                ),
+              ),
+              Text('View More'),
+            ],
           ),
         ),
         Container(
           height: height,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: countryList.length,
-            itemBuilder: (context, index) => RecommendedCard(
-              country: countryList[index],
+            itemCount: list.length,
+            itemBuilder: (context, index) => FutureBuilder(
+              future: getVisaStatus(currentCountry, list[index]),
+              builder: (context, snapshot) => RecommendedCard(
+                country: countryList[index],
+                visa: snapshot.data,
+              ),
             ),
           ),
         ),
@@ -121,6 +124,7 @@ class HomeScreen extends StatelessWidget {
       padding: EdgeInsets.only(left: 45.0),
       height: 110,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "${_getGreetings(currentTime)}",
@@ -128,7 +132,16 @@ class HomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 30,
             ),
-          )
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.black,
+                size: 34,
+              ),
+              onPressed: () {
+                print('hi');
+              }),
         ],
       ),
     );
