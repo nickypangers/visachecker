@@ -45,9 +45,9 @@ class HomeScreen extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // _buildLocationPin(context, currentCountry),
-          SizedBox(
-            height: 8,
-          ),
+          // SizedBox(
+          //   height: 8,
+          // ),
           _buildGreetings(context),
           _buildRecommendedList(
             context,
@@ -56,7 +56,10 @@ class HomeScreen extends StatelessWidget {
               countryList[0],
               countryList[25],
               countryList[58],
+              countryList[70],
+              countryList[98],
               countryList[100],
+              countryList[128],
               countryList[185],
             ],
           ),
@@ -84,37 +87,46 @@ class HomeScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Recommended',
-                style: TextStyle(
-                  fontSize: 26,
-                ),
-              ),
-              Text('View More'),
-            ],
-          ),
-        ),
+        _buildCategoryHeader(context, title: 'Recommended', onClick: () {
+          print('hi');
+        }),
         Container(
           height: height,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: list.length,
-            itemBuilder: (context, index) => FutureBuilder(
-              future: getVisaStatus(currentCountry, list[index]),
-              builder: (context, snapshot) => RecommendedCard(
-                country: countryList[index],
-                visa: snapshot.data,
-              ),
+            itemBuilder: (context, index) => RecommendedCard(
+              country: countryList[index],
+              visa: "Visa Free",
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Padding _buildCategoryHeader(context, {String title, Function onClick}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '$title',
+            style: TextStyle(
+              fontSize: 26,
+            ),
+          ),
+          GestureDetector(
+            onTap: onClick,
+            child: Text(
+              'View More',
+              style: kViewMoreTextStyle,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

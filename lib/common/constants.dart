@@ -41,3 +41,5 @@ const TextStyle kHomeCircleTextStyle = TextStyle(
 const TextStyle kHomeCircleTitleTextStyle = TextStyle(
   color: Colors.white,
 );
+
+const TextStyle kViewMoreTextStyle = TextStyle(color: Colors.blue);

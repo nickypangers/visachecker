@@ -4,6 +4,7 @@ import 'package:visa_checker/common/api/google_places.dart';
 import 'package:visa_checker/common/api/visa.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/keys/keys.dart';
+import 'package:visa_checker/main.dart';
 
 class RecommendedCard extends StatelessWidget {
   final Country country;
@@ -21,7 +22,7 @@ class RecommendedCard extends StatelessWidget {
     return Consumer<Country>(
       builder: (context, currentCountry, child) => GestureDetector(
         onTap: () {
-          print("hi");
+          print("${country.getCountryName} - $visa");
         },
         child: Container(
           margin: EdgeInsets.all(10),
@@ -35,12 +36,6 @@ class RecommendedCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                // child: Image.network(
-                //   "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${country.photo}&key=$googlePlacesKey",
-                //   width: 150,
-                //   height: 150,
-                //   fit: BoxFit.cover,
-                // ),
                 child: Image.asset(
                   "assets/images/${country.countryCode}.jpg",
                   width: 150,
@@ -83,7 +78,10 @@ class RecommendedCard extends StatelessWidget {
       return Container(
         height: height,
         width: 85,
-        color: Colors.grey[200],
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
       );
     }
     return Container(
