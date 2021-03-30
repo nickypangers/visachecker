@@ -9,8 +9,11 @@ import 'package:visa_checker/common/components/sidebar/menu_item.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:visa_checker/common/data/countryData.dart';
+import 'package:visa_checker/common/methods/shared_preferences.dart';
+import 'package:visa_checker/common/methods/visa.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
+import 'package:visa_checker/common/models/visa.dart';
 
 class SideBar extends StatefulWidget {
   @override
@@ -101,6 +104,11 @@ class _SideBarState extends State<SideBar>
                               return;
                             }
                             currentCountry.setCountry(result);
+                            setSelectedCountry(result);
+                            VisaListResult visaListResult =
+                                await getVisaListResult(result);
+                            Provider.of<VisaList>(context, listen: false)
+                                .setVisaList(visaListResult);
                             print(currentCountry.getCountryName);
                             // onIconPressed();
                           },

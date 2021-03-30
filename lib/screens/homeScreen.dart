@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:visa_checker/common/api/visa.dart';
+import 'package:visa_checker/common/methods/visa.dart';
 import 'package:visa_checker/common/common_util.dart';
 import 'package:visa_checker/common/components/recommended_card.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:intl/intl.dart';
+import 'package:visa_checker/common/models/visa.dart';
 
 class HomeScreen extends StatelessWidget {
   // PageController _pageController = PageController();
@@ -40,6 +41,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var visaList = Provider.of<VisaList>(context);
+    // print('vf ${visaList.vf.length} ${visaList.vf[0].toString()}');
     return Consumer<Country>(
       builder: (context, currentCountry, child) => Column(
         // mainAxisAlignment: MainAxisAlignment.start,
@@ -51,16 +54,12 @@ class HomeScreen extends StatelessWidget {
           _buildGreetings(context),
           _buildRecommendedList(
             context,
-            currentCountry: currentCountry,
-            countryList: [
-              countryList[0],
-              countryList[25],
-              countryList[58],
-              countryList[70],
-              countryList[98],
-              countryList[100],
-              countryList[128],
-              countryList[185],
+            list: [
+              visaList.vf[0],
+              visaList.vf[1],
+              visaList.vf[2],
+              visaList.vf[3],
+              visaList.vf[4],
             ],
           ),
         ],
@@ -82,12 +81,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecommendedList(context,
-      {Country currentCountry, height = 150.0, List<Country> countryList}) {
+  Widget _buildRecommendedList(context, {height = 150.0, List<Country> list}) {
+    print(list.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildCategoryHeader(context, title: 'Recommended', onClick: () {
+        _buildCategoryHeader(context, title: 'Visa-Free Ideas', onClick: () {
           print('hi');
         }),
         Container(
@@ -96,7 +95,7 @@ class HomeScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: list.length,
             itemBuilder: (context, index) => RecommendedCard(
-              country: countryList[index],
+              country: list[index],
               visa: "Visa Free",
             ),
           ),
@@ -110,7 +109,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        // crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
             '$title',

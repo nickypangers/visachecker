@@ -36,6 +36,16 @@ class Country extends ChangeNotifier {
     capital = json['Capital'];
     photo = json['Photo'];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "ISO2": this.countryCode,
+      "Country": this.countryName,
+      "Capital": this.capital,
+      "Photo": this.photo,
+      "FlagUrl": this.flagUrl,
+    };
+  }
 }
 
 class CountryCodeList {

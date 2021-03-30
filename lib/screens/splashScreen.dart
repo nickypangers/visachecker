@@ -7,11 +7,14 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:visa_checker/common/methods/shared_preferences.dart';
+import 'package:visa_checker/common/methods/visa.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
 import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
+import 'package:visa_checker/common/models/visa.dart';
 import 'package:visa_checker/screens/ContentScreen.dart';
 
 import 'onBoardingScreen.dart';
@@ -27,62 +30,25 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  Future<Country> getAllCountryList() async {
-    var countries = await getCountries();
+  Future<Country> _initSelectedCountry() async {
+    countryList = await getCountryList();
 
-    print(countries.runtimeType);
+    Country country = await getSelectedCountry();
 
-    countryList = await getCountryList(countries);
+    var visaListResult = await getVisaListResult(country);
 
-    print(countryList.length);
+    // print("visa list result: ${visaListResult.vf}");
 
-    return countryList[0];
-    // return true;
-  }
+    Provider.of<VisaList>(context, listen: false).setVisaList(visaListResult);
 
-  Future<List<Country>> getCountryList(List<dynamic> countries) async {
-    String data = await rootBundle.loadString("assets/json/countries.json");
-
-    var parsedJson = json.decode(data);
-
-    // print(parsedJson.toString());
-
-    List<Country> list = [];
-
-    parsedJson.forEach((item) {
-      Country country = Country.fromJson(item);
-      countries.forEach((countryCode) async {
-        if (countryCode == country.countryCode) {
-          print(country.capital);
-          list.add(country);
-        }
-      });
-    });
-
-    print(list[0].countryCode);
-
-    return list;
-  }
-
-  Future<List<dynamic>> getCountries() async {
-    var url = "https://passportvisa-api.herokuapp.com/list/countries";
-
-    var response = await http.get(url);
-
-    var parsedJson = json.decode(response.body);
-
-    CountryCodeList list = CountryCodeList.fromJson(parsedJson);
-
-    // print(list.countryCodeList.toString());
-
-    return list.countryCodeList;
+    return country;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: getAllCountryList(),
+          future: _initSelectedCountry(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data is Country) {
               print("provider set");

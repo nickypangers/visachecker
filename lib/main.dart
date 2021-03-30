@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
+import 'package:visa_checker/common/models/visa.dart';
 import 'package:visa_checker/screens/splashScreen.dart';
 
 import 'common/constants.dart';
@@ -14,6 +15,7 @@ void main() {
         ChangeNotifierProvider<Country>(create: (_) => Country()),
         ChangeNotifierProvider<NavigationState>(
             create: (_) => NavigationState()),
+        ChangeNotifierProvider<VisaList>(create: (_) => VisaList()),
       ],
       child: VisaChecker(),
     ),

@@ -23,6 +23,7 @@ environment:
 
 dependencies:
   provider: ^5.0.0
+  shared_preferences: ^2.0.5
   rxdart: ^0.25.0
   intl: ^0.17.0
   google_fonts: ^1.1.1
