@@ -49,17 +49,26 @@ class RecommendedCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: height,
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Text(
-                        "${country.countryName}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                  // Container(
+                  //   height: height,
+                  //   child: FittedBox(
+                  //     fit: BoxFit.cover,
+                  //     child: Text(
+                  //       "${country.countryName}",
+                  //       overflow: TextOverflow.ellipsis,
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Text(
+                    "${country.countryName}",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   _buildVisaResult(height, visa),

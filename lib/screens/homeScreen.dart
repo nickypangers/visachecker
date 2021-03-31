@@ -12,14 +12,6 @@ import 'package:visa_checker/common/models/visa.dart';
 class HomeScreen extends StatelessWidget {
   // PageController _pageController = PageController();
 
-  List<Country> list = [
-    countryList[0],
-    countryList[10],
-    countryList[50],
-    countryList[100],
-    countryList[150],
-  ];
-
   String _getCurrentTime() {
     var now = DateTime.now();
 
@@ -54,17 +46,23 @@ class HomeScreen extends StatelessWidget {
           _buildGreetings(context),
           _buildRecommendedList(
             context,
-            list: [
-              visaList.vf[0],
-              visaList.vf[1],
-              visaList.vf[2],
-              visaList.vf[3],
-              visaList.vf[4],
-            ],
+            list: _getVisaFreeIdeaList(visaList.vf),
           ),
         ],
       ),
     );
+  }
+
+  List<Country> _getVisaFreeIdeaList(List<Country> dataList) {
+    List<Country> list = [];
+
+    var limit = (dataList.length > 5) ? 5 : dataList.length;
+
+    for (var i = 0; i < limit; i++) {
+      list.add(dataList[i]);
+    }
+
+    return list;
   }
 
   Widget _buildSearchIcon(context, {Function onPressed}) {
@@ -82,7 +80,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRecommendedList(context, {height = 150.0, List<Country> list}) {
-    print(list.toString());
+    // print(list.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
