@@ -22,7 +22,12 @@ class RecommendedCard extends StatelessWidget {
     print(country);
     return GestureDetector(
       onTap: () {
-        print("${country.getCountryName} - $visa");
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => Center(
+            child: Text("${country.countryName}"),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.all(10),
@@ -30,7 +35,6 @@ class RecommendedCard extends StatelessWidget {
         width: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: Colors.blue,
         ),
         child: Stack(
           children: [
@@ -41,6 +45,8 @@ class RecommendedCard extends StatelessWidget {
                 width: 150,
                 height: 150,
                 fit: BoxFit.cover,
+                color: Color.fromRGBO(255, 255, 255, 0.95),
+                colorBlendMode: BlendMode.modulate,
               ),
             ),
             Padding(
@@ -49,20 +55,6 @@ class RecommendedCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   height: height,
-                  //   child: FittedBox(
-                  //     fit: BoxFit.cover,
-                  //     child: Text(
-                  //       "${country.countryName}",
-                  //       overflow: TextOverflow.ellipsis,
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Text(
                     "${country.countryName}",
                     overflow: TextOverflow.ellipsis,

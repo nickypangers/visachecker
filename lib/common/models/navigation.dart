@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:visa_checker/screens/homeScreen.dart';
+import 'package:visa_checker/screens/mapScreen.dart';
 
 enum NavigationEvents {
   HomePageClickedEvent,
   SearchClickedEvent,
+  MapClickedEvent
 }
 
 class NavigationState extends ChangeNotifier {
@@ -19,12 +21,9 @@ class NavigationState extends ChangeNotifier {
       case NavigationEvents.HomePageClickedEvent:
         return HomeScreen();
         break;
+      // case NavigationEvents.MapClickedEvent:
       default:
-        return Center(
-          child: Container(
-            child: Text('Testing'),
-          ),
-        );
+        return MapScreen();
         break;
     }
   }

@@ -145,7 +145,7 @@ class _SideBarState extends State<SideBar>
                         MenuItem(
                           icon: Icons.map,
                           title: 'Map',
-                          clickedEvent: NavigationEvents.SearchClickedEvent,
+                          clickedEvent: NavigationEvents.MapClickedEvent,
                           onPressed: () => onIconPressed(),
                         ),
                       ],
