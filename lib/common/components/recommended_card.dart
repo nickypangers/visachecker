@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:visa_checker/common/methods/google_places.dart';
-import 'package:visa_checker/common/methods/visa.dart';
+import 'package:visa_checker/common/components/bottom_modal_sheet.dart';
 import 'package:visa_checker/common/models/country.dart';
-import 'package:visa_checker/keys/keys.dart';
-import 'package:visa_checker/main.dart';
 
 class RecommendedCard extends StatelessWidget {
   final Country country;
@@ -15,7 +11,7 @@ class RecommendedCard extends StatelessWidget {
     this.visa,
   });
 
-  var height = 20.0;
+  final height = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +20,8 @@ class RecommendedCard extends StatelessWidget {
       onTap: () {
         showModalBottomSheet(
           context: context,
-          builder: (context) => Center(
-            child: Text("${country.countryName}"),
+          builder: (context) => BottomModalSheet(
+            country: country,
           ),
         );
       },

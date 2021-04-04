@@ -3,15 +3,25 @@ import 'package:flutter/material.dart';
 class Country extends ChangeNotifier {
   String countryCode;
   String countryName;
+  String region;
   String flagUrl;
   String capital;
   String photo;
 
-  Country({this.countryCode, this.countryName, this.flagUrl});
+  Country({
+    this.countryCode,
+    this.countryName,
+    this.region,
+    this.flagUrl,
+    this.capital,
+    this.photo,
+  });
 
   String get getCountryCode => countryCode;
 
   String get getCountryName => countryName;
+
+  String get getRegion => region;
 
   String get getFlagUrl => flagUrl;
 
@@ -23,6 +33,7 @@ class Country extends ChangeNotifier {
     countryCode = country.countryCode;
     countryName = country.countryName;
     flagUrl = country.flagUrl;
+    region = country.region;
     capital = country.capital;
     photo = country.photo;
 

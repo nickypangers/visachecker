@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:visa_checker/common/components/continent_button.dart';
 import 'package:visa_checker/common/methods/visa.dart';
 import 'package:visa_checker/common/common_util.dart';
 import 'package:visa_checker/common/components/recommended_card.dart';
@@ -37,19 +38,41 @@ class HomeScreen extends StatelessWidget {
     // print('vf ${visaList.vf.length} ${visaList.vf[0].toString()}');
     return Consumer<Country>(
       builder: (context, currentCountry, child) => Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // _buildLocationPin(context, currentCountry),
-          // SizedBox(
-          //   height: 8,
-          // ),
-          _buildGreetings(context),
-          _buildRecommendedList(
-            context,
-            list: _getVisaFreeIdeaList(visaList.vf),
-          ),
-        ],
+        children: _buildMain(context, visaList),
       ),
+    );
+  }
+
+  List<Widget> _buildMain(BuildContext context, VisaList visaList) {
+    return [
+      _buildGreetings(context),
+      _buildRecommendedList(
+        context,
+        list: _getVisaFreeIdeaList(visaList.vf),
+      ),
+      _buildContinentSection(context),
+    ];
+  }
+
+  Widget _buildContinentSection(context) {
+    return Column(
+      children: [
+        _buildCategoryHeader(context, title: 'By Continent'),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            ContinentButton(continent: Continent.asia, color: Colors.yellow),
+            ContinentButton(continent: Continent.africa, color: Colors.orange),
+            ContinentButton(continent: Continent.europe, color: Colors.blue),
+            ContinentButton(continent: Continent.oceania, color: Colors.red),
+            ContinentButton(
+                continent: Continent.southAmerica, color: Colors.purple),
+            ContinentButton(
+                continent: Continent.northAmerica, color: Colors.green),
+          ],
+        ),
+      ],
     );
   }
 
@@ -65,26 +88,13 @@ class HomeScreen extends StatelessWidget {
     return list;
   }
 
-  Widget _buildSearchIcon(context, {Function onPressed}) {
-    return FittedBox(
-      fit: BoxFit.fitHeight,
-      child: TextButton(
-        onPressed: onPressed,
-        child: Icon(
-          Icons.search,
-          size: 32,
-          color: Colors.grey,
-        ),
-      ),
-    );
-  }
-
   Widget _buildRecommendedList(context, {height = 150.0, List<Country> list}) {
     // print(list.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildCategoryHeader(context, title: 'Visa-Free Ideas', onClick: () {
+        _buildCategoryHeader(context,
+            title: 'Visa-Free Ideas', showViewMore: true, onClick: () {
           print('hi');
         }),
         Container(
@@ -102,7 +112,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Padding _buildCategoryHeader(context, {String title, Function onClick}) {
+  Padding _buildCategoryHeader(context,
+      {String title, bool showViewMore = false, Function onClick}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
@@ -115,13 +126,15 @@ class HomeScreen extends StatelessWidget {
               fontSize: 26,
             ),
           ),
-          GestureDetector(
-            onTap: onClick,
-            child: Text(
-              'View More',
-              style: kViewMoreTextStyle,
-            ),
-          ),
+          showViewMore
+              ? GestureDetector(
+                  onTap: onClick,
+                  child: Text(
+                    'View More',
+                    style: kViewMoreTextStyle,
+                  ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );
@@ -131,27 +144,14 @@ class HomeScreen extends StatelessWidget {
     var currentTime = _getCurrentTime();
     return Container(
       padding: EdgeInsets.only(left: 45.0),
+      alignment: Alignment.centerLeft,
       height: 110,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "${_getGreetings(currentTime)}",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.black,
-                size: 34,
-              ),
-              onPressed: () {
-                print('hi');
-              }),
-        ],
+      child: Text(
+        "${_getGreetings(currentTime)}",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+        ),
       ),
     );
   }

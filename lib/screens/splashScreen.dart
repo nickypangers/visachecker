@@ -1,8 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,11 +7,9 @@ import 'package:visa_checker/common/methods/shared_preferences.dart';
 import 'package:visa_checker/common/methods/visa.dart';
 import 'package:visa_checker/common/constants.dart';
 import 'package:visa_checker/common/data/countryData.dart';
-import 'package:visa_checker/common/data/countryList.dart';
 import 'package:visa_checker/common/models/country.dart';
 import 'package:visa_checker/common/models/navigation.dart';
 import 'package:visa_checker/common/models/visa.dart';
-import 'package:visa_checker/screens/ContentScreen.dart';
 
 import 'onBoardingScreen.dart';
 

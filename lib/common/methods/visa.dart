@@ -12,7 +12,7 @@ Future<String> getVisaStatus(
   var url =
       "https://passportvisa-api.herokuapp.com/api/${passportCountry.countryCode}/${destinationCountry.countryCode}";
 
-  var response = await http.get(url);
+  var response = await http.get(Uri.parse(url));
 
   var parsedJson = json.decode(response.body);
 
@@ -25,7 +25,7 @@ Future<VisaListResult> getVisaListResult(Country country) async {
   var url =
       "https://passportvisa-api.herokuapp.com/list/api/${country.countryCode}";
 
-  var response = await http.get(url);
+  var response = await http.get(Uri.parse(url));
 
   var parsedJson = json.decode(response.body);
 

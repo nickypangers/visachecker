@@ -8,7 +8,7 @@ import 'package:visa_checker/common/models/restcountries.dart';
 Future<String> getCapital(Country country) async {
   var url = "https://restcountries.eu/rest/v2/name/${country.countryName}";
 
-  var response = await http.get(url);
+  var response = await http.get(Uri.parse(url));
 
   var parsedJson = json.decode(response.body);
 
