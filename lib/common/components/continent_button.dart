@@ -27,24 +27,31 @@ class ContinentButton extends StatelessWidget {
         return 'Oceania';
       case Continent.southAmerica:
         return 'South America';
-      case Continent.northAmerica:
+      // case Continent.northAmerica:
+      default:
         return 'North America';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      width: 150,
-      // height: 50,
-      decoration: BoxDecoration(
-        // border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: color,
-      ),
-      child: Text(
-        _getContinentTitle(continent),
+    return GestureDetector(
+      onTap: () {
+        print(_getContinentTitle(continent));
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 150,
+        // height: 50,
+        decoration: BoxDecoration(
+          // border: Border.all(color: Colors.black),
+
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: color,
+        ),
+        child: Text(
+          _getContinentTitle(continent),
+        ),
       ),
     );
   }

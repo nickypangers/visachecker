@@ -58,6 +58,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         _buildCategoryHeader(context, title: 'By Continent'),
+        SizedBox(
+          height: 10,
+        ),
         Wrap(
           spacing: 10,
           runSpacing: 10,
