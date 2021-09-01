@@ -13,6 +13,7 @@ class BottomModalSheet extends StatelessWidget {
       children: [
         SvgPicture.asset(country.getFlagUrl),
         Text("${country.getCountryName}"),
+        Text("${country.region}"),
       ],
     );
   }

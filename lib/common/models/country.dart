@@ -7,6 +7,7 @@ class Country extends ChangeNotifier {
   String flagUrl;
   String capital;
   String photo;
+  // String continent;
 
   Country({
     this.countryCode,
@@ -15,6 +16,7 @@ class Country extends ChangeNotifier {
     this.flagUrl,
     this.capital,
     this.photo,
+    // this.continent,
   });
 
   String get getCountryCode => countryCode;
@@ -28,6 +30,8 @@ class Country extends ChangeNotifier {
   String get getCapital => capital;
 
   String get getPhoto => photo;
+
+  // String get getContinent => continent;
 
   setCountry(Country country) {
     countryCode = country.countryCode;
@@ -57,6 +61,9 @@ class Country extends ChangeNotifier {
       "FlagUrl": this.flagUrl,
     };
   }
+
+  String toString() =>
+      "countryCode=$countryCode countryName=$countryName flagUrl=$flagUrl region=$region capital=$capital photo=$photo";
 }
 
 class CountryCodeList {
