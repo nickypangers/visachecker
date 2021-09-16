@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:visa_checker/screens/homeScreen.dart';
-import 'package:visa_checker/screens/mapScreen.dart';
+import 'package:visachecker/common/screens/home_screen.dart';
+import 'package:visachecker/common/screens/map_screen.dart';
 
 enum NavigationEvents {
-  HomePageClickedEvent,
-  SearchClickedEvent,
-  MapClickedEvent
+  homePageClickedEvent,
+  searchClickedEvent,
+  mapClickedEvent
 }
 
 class NavigationState extends ChangeNotifier {
-  NavigationEvents currentNavigationEvent;
+  late NavigationEvents currentNavigationEvent;
 
   setNavigation(NavigationEvents state) {
     currentNavigationEvent = state;
@@ -18,13 +18,11 @@ class NavigationState extends ChangeNotifier {
 
   Widget getCurrentNavigation() {
     switch (currentNavigationEvent) {
-      case NavigationEvents.HomePageClickedEvent:
-        return HomeScreen();
-        break;
+      case NavigationEvents.homePageClickedEvent:
+        return const HomeScreen();
       // case NavigationEvents.MapClickedEvent:
       default:
-        return MapScreen();
-        break;
+        return const MapScreen();
     }
   }
 }

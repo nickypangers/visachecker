@@ -1,97 +1,100 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:visa_checker/common/components/bottom_modal_sheet.dart';
-import 'package:visa_checker/common/models/country.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/country_list.dart';
 
 class RecommendedCard extends StatelessWidget {
-  final Country country;
+  final String code;
   final String visa;
 
-  RecommendedCard({
-    this.country,
-    this.visa,
-  });
+  const RecommendedCard({
+    Key? key,
+    required this.code,
+    required this.visa,
+  }) : super(key: key);
 
   final height = 20.0;
-
   @override
   Widget build(BuildContext context) {
-    print(country);
+    Country country =
+        Provider.of<CountryList>(context, listen: false).getCountryByCode(code);
+
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => BottomModalSheet(
-            country: country,
-          ),
-        );
+        // showModalBottomSheet(
+        //   context: context,
+        //   builder: (context) => BottomModalSheet(
+        //     country: country,
+        //   ),
+        // );
+        debugPrint(country.getCountryName);
       },
       child: Container(
-        margin: EdgeInsets.all(10),
-        height: 150,
-        width: 150,
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.all(10),
+        // height: 150,
+        width: 100,
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                "assets/images/${country.countryCode}.jpg",
-                width: 150,
-                height: 150,
-                fit: BoxFit.cover,
-                color: Color.fromRGBO(255, 255, 255, 0.95),
-                colorBlendMode: BlendMode.modulate,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 5.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${country.countryName}",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  _buildVisaResult(height, visa),
-                ],
-              ),
-            ),
+            _buildFlag(),
+            _buildCountryName(country.getCountryName!),
           ],
         ),
       ),
     );
   }
 
-  _buildVisaResult(double height, String visa) {
-    if (visa == null) {
-      return Container(
-        height: height,
-        width: 85,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-      );
-    }
-    return Container(
-      height: height,
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: Text(
-          "$visa",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+  Widget _buildFlag() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: SvgPicture.asset(
+        "assets/flags/${code.toLowerCase()}.svg",
+        width: 100,
+        height: 100,
+        fit: BoxFit.contain,
+        color: const Color.fromRGBO(255, 255, 255, 0.95),
+        colorBlendMode: BlendMode.modulate,
+      ),
+    );
+  }
+
+  Widget _buildCountryName(String name) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: Text(
+            name,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
         ),
       ),
     );
   }
+
+  // _buildVisaResult(double height, String visa) {
+  //   return SizedBox(
+  //     height: height,
+  //     child: FittedBox(
+  //       fit: BoxFit.fitHeight,
+  //       child: Text(
+  //         visa,
+  //         style: const TextStyle(
+  //           color: Colors.white,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

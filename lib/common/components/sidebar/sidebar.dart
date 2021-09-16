@@ -4,32 +4,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:visa_checker/common/components/search/search.dart';
-import 'package:visa_checker/common/components/sidebar/menu_item.dart';
-import 'package:visa_checker/common/constants.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:visa_checker/common/data/countryData.dart';
-import 'package:visa_checker/common/methods/shared_preferences.dart';
-import 'package:visa_checker/common/methods/visa.dart';
-import 'package:visa_checker/common/models/country.dart';
-import 'package:visa_checker/common/models/navigation.dart';
-import 'package:visa_checker/common/models/visa.dart';
+import 'package:visachecker/common/components/search/search.dart';
+import 'package:visachecker/common/components/sidebar/menu_item.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/navigation.dart';
+import 'package:visachecker/common/utils/constants.dart';
 
 class SideBar extends StatefulWidget {
+  const SideBar({Key? key}) : super(key: key);
+
   @override
   _SideBarState createState() => _SideBarState();
 }
 
 class _SideBarState extends State<SideBar>
     with SingleTickerProviderStateMixin<SideBar> {
-  AnimationController _animationController;
-  StreamController<bool> isSidebarOpenedStreamController;
-  Stream<bool> isSidebarOpenedStream;
-  StreamSink<bool> isSidebarOpenedSink;
+  late AnimationController _animationController;
+  late StreamController<bool> isSidebarOpenedStreamController;
+  late Stream<bool> isSidebarOpenedStream;
+  late StreamSink<bool> isSidebarOpenedSink;
   // final bool isSidebarOpened = false;
   final _animationDuration = const Duration(milliseconds: 500);
 
-  final double _tabWidth = 35.0;
+  // final double _tabWidth = 35.0;
 
   // int index = 0;
 
@@ -44,7 +42,6 @@ class _SideBarState extends State<SideBar>
   }
 
   void onIconPressed() {
-    print("icon pressed");
     final animationStatus = _animationController.status;
     final isAnimationCompleted = animationStatus == AnimationStatus.completed;
 
@@ -79,18 +76,20 @@ class _SideBarState extends State<SideBar>
           duration: _animationDuration,
           top: 0,
           bottom: 0,
-          left: isSideBarOpenedAsync.data ? 0 : -screenWidth,
-          right: isSideBarOpenedAsync.data ? 0 : screenWidth - (_tabWidth + 10),
+          left: isSideBarOpenedAsync.data! ? 0 : -screenWidth,
+          right: isSideBarOpenedAsync.data!
+              ? 0
+              : screenWidth - (kTabWidth + kSidebarMargin),
           child: Row(
             children: [
               Consumer<Country>(
                 builder: (context, currentCountry, child) => Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(right: 10.0),
+                    padding: const EdgeInsets.only(right: 10.0),
                     color: kIconBackgroundColor,
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 100,
                         ),
                         GestureDetector(
@@ -103,49 +102,49 @@ class _SideBarState extends State<SideBar>
                             if (result == null) {
                               return;
                             }
-                            currentCountry.setCountry(result);
-                            setSelectedCountry(result);
-                            VisaListResult visaListResult =
-                                await getVisaListResult(result);
-                            Provider.of<VisaList>(context, listen: false)
-                                .setVisaList(visaListResult);
-                            print(currentCountry.getCountryName);
+                            currentCountry.setCountry(context, result);
+                            // setSelectedCountry(result);
+                            // CountryCategoryList countryCategoryList =
+                            //     await getVisaListResult(result);
+                            // Provider.of<VisaList>(context, listen: false)
+                            //     .setVisaList(visaListResult);
+                            // print(currentCountry.getCountryName);
                             // onIconPressed();
                           },
                           child: ListTile(
                             title: Text(
                               "${currentCountry.getCountryName}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-                            subtitle: Text(
+                            subtitle: const Text(
                               'Tap to change country',
                               style: TextStyle(
                                 color: Color(0xfff3fcf4),
                                 fontSize: 14,
                               ),
                             ),
-                            leading: Container(
+                            leading: SizedBox(
                               height: dimension,
                               width: dimension,
-                              child:
-                                  SvgPicture.asset(currentCountry.getFlagUrl),
+                              child: SvgPicture.asset(
+                                  "assets/flags/${currentCountry.getCountryCode!.toLowerCase()}.svg"),
                             ),
                           ),
                         ),
                         MenuItem(
                           icon: Icons.home,
                           title: 'Home',
-                          clickedEvent: NavigationEvents.HomePageClickedEvent,
+                          clickedEvent: NavigationEvents.homePageClickedEvent,
                           onPressed: () => onIconPressed(),
                         ),
                         MenuItem(
                           icon: Icons.map,
                           title: 'Map',
-                          clickedEvent: NavigationEvents.MapClickedEvent,
+                          clickedEvent: NavigationEvents.mapClickedEvent,
                           onPressed: () => onIconPressed(),
                         ),
                       ],
@@ -154,7 +153,7 @@ class _SideBarState extends State<SideBar>
                 ),
               ),
               Align(
-                alignment: Alignment(0, -0.9),
+                alignment: const Alignment(0, -0.9),
                 child: GestureDetector(
                   onTap: () {
                     onIconPressed();
@@ -162,7 +161,7 @@ class _SideBarState extends State<SideBar>
                   child: ClipPath(
                     clipper: CustomMenuClipper(),
                     child: Container(
-                      width: _tabWidth,
+                      width: kTabWidth,
                       height: 110,
                       color: kIconBackgroundColor,
                       alignment: Alignment.centerLeft,

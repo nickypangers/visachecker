@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:visa_checker/common/components/search/search_result_tile.dart';
-import 'package:visa_checker/common/data/countryData.dart';
-import 'package:visa_checker/common/models/country.dart';
+import 'package:provider/provider.dart';
+import 'package:visachecker/common/components/search/search_result_tile.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/country_list.dart';
 
 class Search extends SearchDelegate<Country> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = "";
         },
@@ -24,15 +25,20 @@ class Search extends SearchDelegate<Country> {
         progress: transitionAnimation,
       ),
       onPressed: () {
-        close(context, null);
+        close(
+            context,
+            Provider.of<CountryList>(context, listen: false)
+                .getCountryList![0]);
       },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestionList = countryList
-        .where((p) => p.countryName.toLowerCase().contains(query.toLowerCase()))
+    final suggestionList = Provider.of<CountryList>(context, listen: false)
+        .getCountryList!
+        .where((p) =>
+            p.getCountryName!.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
     return ListView.builder(
@@ -48,8 +54,10 @@ class Search extends SearchDelegate<Country> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = countryList
-        .where((p) => p.countryName.toLowerCase().contains(query.toLowerCase()))
+    final suggestionList = Provider.of<CountryList>(context, listen: false)
+        .getCountryList!
+        .where(
+            (p) => p.getCountryName!.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
     return ListView.builder(

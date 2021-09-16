@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'circular_reveal_clipper.dart';
 
 class RevealRoute extends PageRouteBuilder {
-  final Widget page;
-  final AlignmentGeometry centerAlignment;
-  final Offset centerOffset;
+  final Widget? page;
+  final AlignmentGeometry? centerAlignment;
+  final Offset? centerOffset;
   final double minRadius;
-  final double maxRadius;
+  final double? maxRadius;
 
   /// Reveals the next item pushed to the navigation using circle shape.
   ///
@@ -33,7 +33,7 @@ class RevealRoute extends PageRouteBuilder {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) {
-            return page;
+            return page as Widget;
           },
         );
 
@@ -47,7 +47,7 @@ class RevealRoute extends PageRouteBuilder {
     return ClipPath(
       clipper: CircularRevealClipper(
         fraction: animation.value,
-        centerAlignment: centerAlignment,
+        centerAlignment: centerAlignment as Alignment,
         centerOffset: centerOffset,
         minRadius: minRadius,
         maxRadius: maxRadius,

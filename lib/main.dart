@@ -1,28 +1,26 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:visa_checker/common/models/country.dart';
-import 'package:visa_checker/common/models/navigation.dart';
-import 'package:visa_checker/common/models/visa.dart';
-import 'package:visa_checker/screens/splashScreen.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/country_list.dart';
+import 'package:visachecker/common/models/navigation.dart';
+import 'package:visachecker/common/models/visa.dart';
+import 'package:visachecker/common/screens/splash_screen.dart';
 
-import 'common/constants.dart';
+import 'common/utils/constants.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<Country>(create: (_) => Country()),
-        ChangeNotifierProvider<NavigationState>(
-            create: (_) => NavigationState()),
-        ChangeNotifierProvider<VisaList>(create: (_) => VisaList()),
-      ],
-      child: VisaChecker(),
-    ),
-  );
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<CountryList>(create: (_) => CountryList()),
+    ChangeNotifierProvider<Country>(create: (_) => Country()),
+    ChangeNotifierProvider<CountryCategoryList>(
+        create: (_) => CountryCategoryList()),
+    ChangeNotifierProvider<NavigationState>(create: (_) => NavigationState()),
+  ], child: const VisaChecker()));
 }
 
 class VisaChecker extends StatelessWidget {
+  const VisaChecker({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +29,7 @@ class VisaChecker extends StatelessWidget {
         scaffoldBackgroundColor: kScaffoldColor,
         primaryColor: kPrimaryColor,
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }

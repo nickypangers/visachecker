@@ -1,77 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/common/models/visa.dart';
+import 'package:visachecker/manager/request_manager.dart';
 
 class Country extends ChangeNotifier {
-  String countryCode;
-  String countryName;
-  String region;
-  String flagUrl;
-  String capital;
-  String photo;
-  // String continent;
+  String? name;
+  String? code;
 
-  Country({
-    this.countryCode,
-    this.countryName,
-    this.region,
-    this.flagUrl,
-    this.capital,
-    this.photo,
-    // this.continent,
-  });
+  Country({this.name, this.code});
 
-  String get getCountryCode => countryCode;
+  String? get getCountryName => name;
+  String? get getCountryCode => code;
 
-  String get getCountryName => countryName;
+  setCountry(BuildContext context, Country country) async {
+    name = country.name;
+    code = country.code;
 
-  String get getRegion => region;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    bool status = await preferences.setString("country", code!);
+    if (!status) {
+      debugPrint("unable to save country on set.");
+    }
 
-  String get getFlagUrl => flagUrl;
+    CountryCategoryList countryCategoryList =
+        await RequestManager().getCountryVisaResult(code!);
 
-  String get getCapital => capital;
-
-  String get getPhoto => photo;
-
-  // String get getContinent => continent;
-
-  setCountry(Country country) {
-    countryCode = country.countryCode;
-    countryName = country.countryName;
-    flagUrl = country.flagUrl;
-    region = country.region;
-    capital = country.capital;
-    photo = country.photo;
+    Provider.of<CountryCategoryList>(context, listen: false)
+        .setCountryCategoryList(countryCategoryList);
 
     notifyListeners();
   }
 
   Country.fromJson(Map<String, dynamic> json) {
-    countryCode = json['ISO2'];
-    countryName = json['Country'];
-    flagUrl = "assets/flags/${countryCode.toLowerCase()}.svg";
-    capital = json['Capital'];
-    photo = json['Photo'];
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "ISO2": this.countryCode,
-      "Country": this.countryName,
-      "Capital": this.capital,
-      "Photo": this.photo,
-      "FlagUrl": this.flagUrl,
-    };
-  }
-
-  String toString() =>
-      "countryCode=$countryCode countryName=$countryName flagUrl=$flagUrl region=$region capital=$capital photo=$photo";
-}
-
-class CountryCodeList {
-  List<dynamic> countryCodeList;
-
-  CountryCodeList({this.countryCodeList});
-
-  CountryCodeList.fromJson(Map<String, dynamic> json) {
-    countryCodeList = json['countries'];
+    name = json['name'];
+    code = json['code'];
   }
 }

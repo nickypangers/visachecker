@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+// API
+const kUrl = "http://passport-visa-api-dev.herokuapp.com/";
+
+// Sidebar
+const kTabWidth = 35.0;
+
+const kSidebarMargin = 10.0;
+
 // Color Scheme
 const Color kIconBackgroundColor = Color(0xFF00d46d);
 
