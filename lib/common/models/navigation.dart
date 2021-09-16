@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
+import 'package:visachecker/common/screens/list_screen.dart';
 import 'package:visachecker/common/screens/map_screen.dart';
 
 enum NavigationEvents {
   homePageClickedEvent,
   searchClickedEvent,
-  mapClickedEvent
+  mapClickedEvent,
+  listClickedEvent
 }
 
 class NavigationState extends ChangeNotifier {
@@ -20,9 +22,10 @@ class NavigationState extends ChangeNotifier {
     switch (currentNavigationEvent) {
       case NavigationEvents.homePageClickedEvent:
         return const HomeScreen();
-      // case NavigationEvents.MapClickedEvent:
-      default:
+      case NavigationEvents.mapClickedEvent:
         return const MapScreen();
+      default:
+        return ListScreen();
     }
   }
 }

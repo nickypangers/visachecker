@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:visachecker/common/components/recommended_card.dart';
@@ -42,18 +43,38 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildMain(BuildContext context, Country currentCountry) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildGreetings(context),
-        Text(currentCountry.getCountryName!),
-        _buildRecommendedList(context,
-            height: 170.0,
-            list: Provider.of<CountryCategoryList>(context)
-                .getcountryCategoryListVf
-                .data!),
-        _buildMapButton(context),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context, currentCountry),
+          _buildRecommendedList(context,
+              height: 170.0,
+              list: Provider.of<CountryCategoryList>(context)
+                  .getcountryCategoryListVf
+                  .data!),
+          _buildMapButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, Country currentCountry) {
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: _buildGreetings(context),
+          ),
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: SvgPicture.asset(
+                "assets/flags/${currentCountry.code!.toLowerCase()}.svg"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -134,7 +155,7 @@ class HomeScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Provider.of<NavigationState>(context, listen: false)
-            .setNavigation(NavigationEvents.mapClickedEvent);
+            .setNavigation(NavigationEvents.listClickedEvent);
       },
       child: Container(
         width: double.infinity,
