@@ -33,4 +33,12 @@ class RequestManager {
     var parsedJson = json.decode(response.body);
     return CountryCategoryList.fromJson(parsedJson);
   }
+
+  Future<VisaInfo> getVisaInfo(String passport, destination) async {
+    Uri uri = Uri.parse(getEndpoint("api/$passport/$destination"));
+
+    var response = await http.get(uri);
+    var parsedJson = json.decode(response.body);
+    return VisaInfo.fromJson(parsedJson);
+  }
 }

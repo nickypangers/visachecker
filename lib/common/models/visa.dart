@@ -57,3 +57,51 @@ class CountryVisaInfo extends ChangeNotifier {
 
   CountryVisaInfo({this.vf, this.voa, this.vr, this.cb, this.na});
 }
+
+class VisaInfo {
+  String? passport;
+  String? destination;
+  String? dur;
+  String? status;
+  String? category;
+  Error? error;
+
+  VisaInfo(
+      {this.passport,
+      this.destination,
+      this.dur,
+      this.status,
+      this.category,
+      this.error});
+
+  VisaInfo.fromJson(Map<String, dynamic> json) {
+    passport = json['passport'];
+    destination = json['destination'];
+    dur = json['dur'];
+    status = json['status'];
+    category = json['category'];
+    error = Error.fromJson(json['error']);
+  }
+
+  @override
+  String toString() {
+    return "passport=$passport destination=$destination dur=$dur status=$status category=$category error=$error";
+  }
+}
+
+class Error {
+  bool? status;
+  String? error;
+
+  Error({this.status, this.error});
+
+  Error.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    error = json['error'];
+  }
+
+  @override
+  String toString() {
+    return "status=$status error=$error";
+  }
+}

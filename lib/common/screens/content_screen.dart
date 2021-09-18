@@ -42,7 +42,7 @@ class _ContentScreenState extends State<ContentScreen> {
                   width: size.width,
                   child: Consumer<NavigationState>(
                     builder: (context, navigation, child) =>
-                        navigation.getCurrentNavigation(),
+                        navigation.getCurrentNavigation(context),
                   ),
                 ),
                 const SideBar(),
