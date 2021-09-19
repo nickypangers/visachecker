@@ -41,4 +41,12 @@ class RequestManager {
     var parsedJson = json.decode(response.body);
     return VisaInfo.fromJson(parsedJson);
   }
+
+  Future<VisaData> getVisaData() async {
+    Uri uri = Uri.parse(getEndpoint("raw"));
+
+    var response = await http.get(uri);
+    var parsedJson = json.decode(response.body);
+    return VisaData.fromJson(parsedJson);
+  }
 }

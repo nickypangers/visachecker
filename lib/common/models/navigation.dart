@@ -28,9 +28,7 @@ class NavigationState extends ChangeNotifier {
         return const MapScreen();
       default:
         // return const HomeScreen();
-        return ListScreen(
-            countryCategory: Provider.of<CountryCategoryList>(context)
-                .getcountryCategoryListVf);
+        return ListScreen();
     }
   }
 }

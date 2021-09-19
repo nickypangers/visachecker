@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
+import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/screens/onboarding_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 import 'package:visachecker/manager/request_manager.dart';
@@ -41,6 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
   // }
 
   Future<bool> _initData(BuildContext context) async {
+    VisaData visaData = await RequestManager().getVisaData();
+    Provider.of<VisaData>(context, listen: false).setData(visaData);
+
     CountryList countryList = await RequestManager().getCountryList();
     Provider.of<CountryList>(context, listen: false)
         .setCountryList(countryList);

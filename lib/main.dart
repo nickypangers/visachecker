@@ -16,6 +16,7 @@ void main() {
     ChangeNotifierProvider<CountryCategoryList>(
         create: (_) => CountryCategoryList()),
     ChangeNotifierProvider<NavigationState>(create: (_) => NavigationState()),
+    ChangeNotifierProvider<VisaData>(create: (_) => VisaData()),
   ], child: const VisaChecker()));
 }
 

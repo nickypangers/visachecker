@@ -4,37 +4,17 @@ import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/utils/constants.dart';
-import 'package:visachecker/manager/request_manager.dart';
 
 class ListScreen extends StatefulWidget {
-  final CountryCategory countryCategory;
-
-  ListScreen({required this.countryCategory});
-
   @override
   _ListScreenState createState() => _ListScreenState();
 }
 
 class _ListScreenState extends State<ListScreen> {
-  List<VisaInfo> _visaInfoList = [];
-
-  _initVisaInfoList() {
-    String passportCode =
-        Provider.of<Country>(context, listen: false).getCountryCode!;
-    this.widget.countryCategory.data!.forEach((destinationCode) async {
-      VisaInfo visaInfo =
-          await RequestManager().getVisaInfo(passportCode, destinationCode);
-      debugPrint(visaInfo.toString());
-      setState(() {
-        _visaInfoList.add(visaInfo);
-      });
-    });
-  }
+  // Iterable<Destination> destination =
 
   @override
   void initState() {
-    debugPrint(this.widget.countryCategory.toString());
-    _initVisaInfoList();
     super.initState();
   }
 
@@ -55,7 +35,7 @@ class _ListScreenState extends State<ListScreen> {
                   label: Text("Visa Status"),
                 ),
               ],
-              rows: _buildDataRows(),
+              rows: _buildDataRows(context),
             ),
           ),
         ),
@@ -63,12 +43,37 @@ class _ListScreenState extends State<ListScreen> {
     );
   }
 
-  List<DataRow> _buildDataRows() {
+  MaterialColor getColor(String category) {
+    switch (category) {
+      case "VR":
+        return Colors.red;
+      case "VOA":
+        return Colors.amber;
+      case "VF":
+        return Colors.green;
+      case "CB":
+        return Colors.red;
+      case "NA":
+        return Colors.red;
+      default:
+        return Colors.red;
+    }
+  }
+
+  List<DataRow> _buildDataRows(BuildContext context) {
+    String currentCountryCode =
+        Provider.of<Country>(context, listen: false).getCountryCode!;
+
+    List<Destination> destinationList =
+        Provider.of<VisaData>(context, listen: false)
+            .data![currentCountryCode]!
+            .destinations!;
+
     List<DataRow> dataRowList = [];
 
-    _visaInfoList.forEach((element) {
+    destinationList.forEach((element) {
       Country country = Provider.of<CountryList>(context, listen: false)
-          .getCountryByCode(element.destination!);
+          .getCountryByCode(element.code!);
       dataRowList.add(
         DataRow(
           cells: [
@@ -81,9 +86,9 @@ class _ListScreenState extends State<ListScreen> {
                 child: Container(
                   height: double.infinity,
                   width: double.infinity,
-                  color: Colors.amber,
+                  color: getColor(element.category!),
                   child: Center(
-                    child: Text(element.destination!),
+                    child: Text(element.status!),
                   ),
                 ),
               ),

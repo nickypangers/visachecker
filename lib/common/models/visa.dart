@@ -58,6 +58,67 @@ class CountryVisaInfo extends ChangeNotifier {
   CountryVisaInfo({this.vf, this.voa, this.vr, this.cb, this.na});
 }
 
+class VisaData extends ChangeNotifier {
+  Map<String, Destinations>? data;
+
+  VisaData({this.data});
+
+  setData(VisaData visaData) {
+    data = visaData.data;
+    notifyListeners();
+  }
+
+  VisaData.fromJson(Map<String, dynamic> json) {
+    data = new Map<String, Destinations>();
+    json['data'].forEach((key, value) {
+      data![key] = Destinations.fromJson(value);
+    });
+  }
+}
+
+class Destinations {
+  List<Destination>? destinations;
+
+  Destinations({this.destinations});
+
+  Iterable<Destination> filteredDestinations(String category) {
+    return destinations!.where((element) => element.category == category);
+  }
+
+  Destinations.fromJson(Map<String, dynamic> json) {
+    destinations = [];
+    json['destination'].forEach((v) {
+      destinations!.add(Destination.fromJson(v));
+    });
+  }
+}
+
+class Destination {
+  String? code;
+  String? category;
+  String? dur;
+  String? status;
+
+  Destination({
+    this.code,
+    this.category,
+    this.dur,
+    this.status,
+  });
+
+  Destination.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    category = json['category'];
+    dur = json['dur'];
+    status = json['text'];
+  }
+
+  @override
+  String toString() {
+    return "code=$code category=$category dur=$dur status=$status";
+  }
+}
+
 class VisaInfo {
   String? passport;
   String? destination;
