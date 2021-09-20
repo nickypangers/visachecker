@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                   .getcountryCategoryListVf
                   .data!),
           _buildSeeAllCountriesButton(context),
-          _buildCategoryLengthRow(context),
+          _buildCategoryLengthList(context),
         ],
       ),
     );
@@ -178,17 +178,48 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryLengthRow(BuildContext context) {
-    return Row(
-      children: [
-        _buildCategoryLengthCard(context),
-      ],
+  Widget _buildCategoryLengthList(BuildContext context) {
+    CountryCategoryList countryCategoryList =
+        Provider.of<CountryCategoryList>(context, listen: false)
+            .getCountryCategoryList;
+    return SizedBox(
+      height: 100,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildCategoryLengthCard(context,
+              countryCategoryList.getcountryCategoryListVf, kVisaFreeColor),
+          _buildCategoryLengthCard(
+              context,
+              countryCategoryList.getcountryCategoryListVoa,
+              kVisaOnArrivalColor),
+          _buildCategoryLengthCard(context,
+              countryCategoryList.getcountryCategoryListVr, kVisaRequiredColor),
+          _buildCategoryLengthCard(context,
+              countryCategoryList.getcountryCategoryListCb, kCovidBanColor),
+          _buildCategoryLengthCard(context,
+              countryCategoryList.getcountryCategoryListNa, kNoAdmissionColor),
+        ],
+      ),
     );
   }
 
-  Widget _buildCategoryLengthCard(BuildContext context) {
-    return Container(
-      child: Text("hi"),
+  Widget _buildCategoryLengthCard(
+      BuildContext context, CountryCategory category, Color color) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 100,
+        width: 100,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Text("${category.length}"),
+      ),
     );
   }
 }

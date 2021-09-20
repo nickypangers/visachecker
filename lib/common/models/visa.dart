@@ -29,6 +29,8 @@ class CountryCategoryList extends ChangeNotifier {
   CountryCategory get getcountryCategoryListVr => vr!;
   CountryCategory get getcountryCategoryListCb => cb!;
   CountryCategory get getcountryCategoryListNa => na!;
+  CountryCategoryList get getCountryCategoryList =>
+      CountryCategoryList(vf: vf, voa: voa, vr: vr, cb: cb, na: na);
 
   setCountryCategoryList(CountryCategoryList countryCategoryList) {
     vf = countryCategoryList.vf;

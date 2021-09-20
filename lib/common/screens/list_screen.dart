@@ -43,20 +43,20 @@ class _ListScreenState extends State<ListScreen> {
     );
   }
 
-  MaterialColor getColor(String category) {
+  Color getColor(String category) {
     switch (category) {
       case "VR":
-        return Colors.red;
+        return kVisaRequiredColor;
       case "VOA":
-        return Colors.amber;
+        return kVisaOnArrivalColor;
       case "VF":
-        return Colors.green;
+        return kVisaFreeColor;
       case "CB":
-        return Colors.red;
+        return kCovidBanColor;
       case "NA":
-        return Colors.red;
+        return kNoAdmissionColor;
       default:
-        return Colors.red;
+        return kNoAdmissionColor;
     }
   }
 
@@ -79,9 +79,7 @@ class _ListScreenState extends State<ListScreen> {
           cells: [
             DataCell(
               Container(
-                width: 100,
-                child: Text(country.getCountryName!,
-                    overflow: TextOverflow.ellipsis),
+                child: Text(country.getCountryName!),
               ),
             ),
             DataCell(

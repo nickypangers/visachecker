@@ -24,6 +24,16 @@ const Color kPrimaryColor = Color(0xfffffaf2);
 
 const Color kSidebarPrimaryColor = Color(0xFF262AAA);
 
+const Color kVisaFreeColor = Color(0xFF00d46ds);
+
+const Color kVisaOnArrivalColor = Color(0xFFffcc14);
+
+const Color kVisaRequiredColor = Color(0xFFff4314);
+
+const Color kCovidBanColor = Color(0xFFff4314);
+
+const Color kNoAdmissionColor = Color(0xFFff4314);
+
 // Text Scheme
 const TextStyle kOnBoardingButtonTextStyle = TextStyle(
   fontSize: 14,
