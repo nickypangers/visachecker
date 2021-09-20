@@ -53,7 +53,8 @@ class HomeScreen extends StatelessWidget {
               list: Provider.of<CountryCategoryList>(context)
                   .getcountryCategoryListVf
                   .data!),
-          _buildMapButton(context),
+          _buildSeeAllCountriesButton(context),
+          _buildCategoryLengthRow(context),
         ],
       ),
     );
@@ -151,23 +152,43 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMapButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Provider.of<NavigationState>(context, listen: false)
-            .setNavigation(NavigationEvents.listClickedEvent);
-      },
-      child: Container(
-        width: double.infinity,
-        height: 150,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: Text("Maps"),
+  Widget _buildSeeAllCountriesButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<NavigationState>(context, listen: false)
+              .setNavigation(NavigationEvents.listClickedEvent);
+        },
+        child: Container(
+          width: double.infinity,
+          height: 150,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Text("Browse All Countries",
+                style: TextStyle(
+                  fontSize: 24,
+                )),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoryLengthRow(BuildContext context) {
+    return Row(
+      children: [
+        _buildCategoryLengthCard(context),
+      ],
+    );
+  }
+
+  Widget _buildCategoryLengthCard(BuildContext context) {
+    return Container(
+      child: Text("hi"),
     );
   }
 }

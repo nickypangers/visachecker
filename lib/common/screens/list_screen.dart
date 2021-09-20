@@ -78,11 +78,18 @@ class _ListScreenState extends State<ListScreen> {
         DataRow(
           cells: [
             DataCell(
-              Text(country.getCountryName!),
+              Container(
+                width: 100,
+                child: Text(country.getCountryName!,
+                    overflow: TextOverflow.ellipsis),
+              ),
             ),
             DataCell(
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 10,
+                ),
                 child: Container(
                   height: double.infinity,
                   width: double.infinity,
