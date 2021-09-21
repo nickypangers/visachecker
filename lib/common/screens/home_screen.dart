@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:visachecker/common/components/recommended_card.dart';
@@ -53,7 +54,7 @@ class HomeScreen extends StatelessWidget {
               list: Provider.of<CountryCategoryList>(context)
                   .getcountryCategoryListVf
                   .data!),
-          _buildSeeAllCountriesButton(context),
+          // _buildSeeAllCountriesButton(context),
           _buildCategoryLengthList(context),
         ],
       ),
@@ -85,7 +86,10 @@ class HomeScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildCategoryHeader(context,
-            title: "Visa-Free Locations", showViewMore: true),
+            title: "Visa-Free Locations", showViewMore: true, onClick: () {
+          Provider.of<NavigationState>(context, listen: false)
+              .setNavigation(NavigationEvents.listClickedEvent);
+        }),
         SizedBox(
           height: height,
           child: ListView.builder(
@@ -164,7 +168,7 @@ class HomeScreen extends StatelessWidget {
           width: double.infinity,
           height: 150,
           decoration: BoxDecoration(
-            color: Colors.green,
+            color: kVisaFreeColor,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
@@ -183,42 +187,90 @@ class HomeScreen extends StatelessWidget {
         Provider.of<CountryCategoryList>(context, listen: false)
             .getCountryCategoryList;
     return SizedBox(
-      height: 100,
+      height: 150,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCategoryLengthCard(context,
-              countryCategoryList.getcountryCategoryListVf, kVisaFreeColor),
           _buildCategoryLengthCard(
-              context,
-              countryCategoryList.getcountryCategoryListVoa,
-              kVisaOnArrivalColor),
-          _buildCategoryLengthCard(context,
-              countryCategoryList.getcountryCategoryListVr, kVisaRequiredColor),
-          _buildCategoryLengthCard(context,
-              countryCategoryList.getcountryCategoryListCb, kCovidBanColor),
-          _buildCategoryLengthCard(context,
-              countryCategoryList.getcountryCategoryListNa, kNoAdmissionColor),
+            context,
+            category: countryCategoryList.getcountryCategoryListVf,
+            color: kVisaFreeColor,
+            title: kVisaFreeString,
+            iconData: kVisaFreeIconData,
+          ),
+          _buildCategoryLengthCard(
+            context,
+            category: countryCategoryList.getcountryCategoryListVoa,
+            color: kVisaOnArrivalColor,
+            title: kVisaOnArrivalString,
+            iconData: kVisaOnArrivalIconData,
+          ),
+          _buildCategoryLengthCard(
+            context,
+            category: countryCategoryList.getcountryCategoryListVr,
+            color: kVisaRequiredColor,
+            title: kVisaRequiredString,
+            iconData: kVisaRequiredIconData,
+          ),
+          _buildCategoryLengthCard(
+            context,
+            category: countryCategoryList.getcountryCategoryListCb,
+            color: kCovidBanColor,
+            title: kCovidBanString,
+            iconData: kCovidBanIconData,
+          ),
+          _buildCategoryLengthCard(
+            context,
+            category: countryCategoryList.getcountryCategoryListNa,
+            color: kNoAdmissionColor,
+            title: kNoAdmissionString,
+            iconData: kNoAdmissionIconData,
+          ),
         ],
       ),
     );
   }
 
   Widget _buildCategoryLengthCard(
-      BuildContext context, CountryCategory category, Color color) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 100,
-        width: 100,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
+    BuildContext context, {
+    required CountryCategory category,
+    required Color color,
+    required String title,
+    IconData iconData = FontAwesomeIcons.check,
+  }) {
+    return Container(
+      constraints: BoxConstraints(
+        minWidth: 180,
+      ),
+      margin: const EdgeInsets.all(8),
+      // width: 100,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
         ),
-        child: Text("${category.length}"),
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          FaIcon(iconData),
+          Expanded(child: Container()),
+          Container(
+            // width: double.infinity,
+            child: Text(
+              "${category.length}",
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

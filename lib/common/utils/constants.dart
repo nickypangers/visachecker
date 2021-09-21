@@ -1,4 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// String
+
+const kVisaFreeString = "Visa Free";
+const kVisaOnArrivalString = "Visa On Arrival";
+const kVisaRequiredString = "Visa Required";
+const kCovidBanString = "Covid Ban";
+const kNoAdmissionString = "No Admission";
+
+// IconData
+
+const kVisaFreeIconData = FontAwesomeIcons.check;
+const kVisaOnArrivalIconData = FontAwesomeIcons.minus;
+const kVisaRequiredIconData = FontAwesomeIcons.times;
+const kCovidBanIconData = FontAwesomeIcons.times;
+const kNoAdmissionIconData = FontAwesomeIcons.times;
 
 // API
 const kUrl = "http://passport-visa-api-dev.herokuapp.com/";
@@ -24,7 +41,7 @@ const Color kPrimaryColor = Color(0xfffffaf2);
 
 const Color kSidebarPrimaryColor = Color(0xFF262AAA);
 
-const Color kVisaFreeColor = Color(0xFF00d46ds);
+const Color kVisaFreeColor = Color(0xFF00d46d);
 
 const Color kVisaOnArrivalColor = Color(0xFFffcc14);
 

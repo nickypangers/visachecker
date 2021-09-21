@@ -41,6 +41,16 @@ class _SideBarState extends State<SideBar>
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
   }
 
+  void onSwipeRight() {
+    isSidebarOpenedSink.add(true);
+    _animationController.forward();
+  }
+
+  void onSwipeLeft() {
+    isSidebarOpenedSink.add(false);
+    _animationController.reverse();
+  }
+
   void onIconPressed() {
     final animationStatus = _animationController.status;
     final isAnimationCompleted = animationStatus == AnimationStatus.completed;
@@ -80,108 +90,121 @@ class _SideBarState extends State<SideBar>
           right: isSideBarOpenedAsync.data!
               ? 0
               : screenWidth - (kTabWidth + kSidebarMargin),
-          child: Row(
-            children: [
-              Consumer<Country>(
-                builder: (context, currentCountry, child) => Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    color: kIconBackgroundColor,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            var result = await showSearch(
-                              context: context,
-                              delegate: Search(),
-                            );
+          child: GestureDetector(
+            onPanUpdate: (details) {
+              if (details.delta.dx > 10) {
+                debugPrint("swipe open sidebar");
+                onSwipeRight();
+                return;
+              }
+              if (details.delta.dx < -10) {
+                debugPrint("swipe close sidebar");
+                onSwipeLeft();
+              }
+            },
+            child: Row(
+              children: [
+                Consumer<Country>(
+                  builder: (context, currentCountry, child) => Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      color: kIconBackgroundColor,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              var result = await showSearch(
+                                context: context,
+                                delegate: Search(),
+                              );
 
-                            if (result == null) {
-                              return;
-                            }
-                            currentCountry.setCountry(context, result);
-                            // setSelectedCountry(result);
-                            // CountryCategoryList countryCategoryList =
-                            //     await getVisaListResult(result);
-                            // Provider.of<VisaList>(context, listen: false)
-                            //     .setVisaList(visaListResult);
-                            // print(currentCountry.getCountryName);
-                            // onIconPressed();
-                          },
-                          child: ListTile(
-                            title: Text(
-                              "${currentCountry.getCountryName}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
+                              if (result == null) {
+                                return;
+                              }
+                              currentCountry.setCountry(context, result);
+                              // setSelectedCountry(result);
+                              // CountryCategoryList countryCategoryList =
+                              //     await getVisaListResult(result);
+                              // Provider.of<VisaList>(context, listen: false)
+                              //     .setVisaList(visaListResult);
+                              // print(currentCountry.getCountryName);
+                              // onIconPressed();
+                            },
+                            child: ListTile(
+                              title: Text(
+                                "${currentCountry.getCountryName}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
                               ),
-                            ),
-                            subtitle: const Text(
-                              'Tap to change country',
-                              style: TextStyle(
-                                color: Color(0xfff3fcf4),
-                                fontSize: 14,
+                              subtitle: const Text(
+                                'Tap to change country',
+                                style: TextStyle(
+                                  color: Color(0xfff3fcf4),
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            leading: SizedBox(
-                              height: dimension,
-                              width: dimension,
-                              child: SvgPicture.asset(
-                                  "assets/flags/${currentCountry.getCountryCode!.toLowerCase()}.svg"),
+                              leading: SizedBox(
+                                height: dimension,
+                                width: dimension,
+                                child: SvgPicture.asset(
+                                    "assets/flags/${currentCountry.getCountryCode!.toLowerCase()}.svg"),
+                              ),
                             ),
                           ),
-                        ),
-                        MenuItem(
-                          icon: Icons.home,
-                          title: 'Home',
-                          clickedEvent: NavigationEvents.homePageClickedEvent,
-                          onPressed: () => onIconPressed(),
-                        ),
-                        // MenuItem(
-                        //   icon: Icons.map,
-                        //   title: 'Map',
-                        //   clickedEvent: NavigationEvents.mapClickedEvent,
-                        //   onPressed: () => onIconPressed(),
-                        // ),
-                        MenuItem(
-                          icon: Icons.list,
-                          title: 'List',
-                          clickedEvent: NavigationEvents.listClickedEvent,
-                          onPressed: () => onIconPressed(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: const Alignment(0, -0.9),
-                child: GestureDetector(
-                  onTap: () {
-                    onIconPressed();
-                  },
-                  child: ClipPath(
-                    clipper: CustomMenuClipper(),
-                    child: Container(
-                      width: kTabWidth,
-                      height: 110,
-                      color: kIconBackgroundColor,
-                      alignment: Alignment.centerLeft,
-                      child: AnimatedIcon(
-                        progress: _animationController.view,
-                        icon: AnimatedIcons.menu_close,
-                        color: kBackgroundColor,
-                        size: 25,
+                          MenuItem(
+                            icon: Icons.home,
+                            title: 'Home',
+                            clickedEvent: NavigationEvents.homePageClickedEvent,
+                            onPressed: () => onIconPressed(),
+                          ),
+                          // MenuItem(
+                          //   icon: Icons.map,
+                          //   title: 'Map',
+                          //   clickedEvent: NavigationEvents.mapClickedEvent,
+                          //   onPressed: () => onIconPressed(),
+                          // ),
+                          MenuItem(
+                            icon: Icons.list,
+                            title: 'List',
+                            clickedEvent: NavigationEvents.listClickedEvent,
+                            onPressed: () => onIconPressed(),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Align(
+                  alignment: const Alignment(0, -0.9),
+                  child: GestureDetector(
+                    onTap: () {
+                      onIconPressed();
+                    },
+                    child: ClipPath(
+                      clipper: CustomMenuClipper(),
+                      child: Container(
+                        width: kTabWidth,
+                        height: 110,
+                        color: kIconBackgroundColor,
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedIcon(
+                          progress: _animationController.view,
+                          icon: AnimatedIcons.menu_close,
+                          color: kBackgroundColor,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
