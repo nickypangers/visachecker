@@ -186,49 +186,88 @@ class HomeScreen extends StatelessWidget {
     CountryCategoryList countryCategoryList =
         Provider.of<CountryCategoryList>(context, listen: false)
             .getCountryCategoryList;
-    return SizedBox(
-      height: 150,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _buildCategoryLengthCard(
-            context,
-            category: countryCategoryList.getcountryCategoryListVf,
-            color: kVisaFreeColor,
-            title: kVisaFreeString,
-            iconData: kVisaFreeIconData,
-          ),
-          _buildCategoryLengthCard(
-            context,
-            category: countryCategoryList.getcountryCategoryListVoa,
-            color: kVisaOnArrivalColor,
-            title: kVisaOnArrivalString,
-            iconData: kVisaOnArrivalIconData,
-          ),
-          _buildCategoryLengthCard(
-            context,
-            category: countryCategoryList.getcountryCategoryListVr,
-            color: kVisaRequiredColor,
-            title: kVisaRequiredString,
-            iconData: kVisaRequiredIconData,
-          ),
-          _buildCategoryLengthCard(
-            context,
-            category: countryCategoryList.getcountryCategoryListCb,
-            color: kCovidBanColor,
-            title: kCovidBanString,
-            iconData: kCovidBanIconData,
-          ),
-          _buildCategoryLengthCard(
-            context,
-            category: countryCategoryList.getcountryCategoryListNa,
-            color: kNoAdmissionColor,
-            title: kNoAdmissionString,
-            iconData: kNoAdmissionIconData,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        _buildCategoryLengthCard(
+          context,
+          category: countryCategoryList.getcountryCategoryListVf,
+          color: kVisaFreeColor,
+          title: kVisaFreeString,
+          iconData: kVisaFreeIconData,
+        ),
+        _buildCategoryLengthCard(
+          context,
+          category: countryCategoryList.getcountryCategoryListVoa,
+          color: kVisaOnArrivalColor,
+          title: kVisaOnArrivalString,
+          iconData: kVisaOnArrivalIconData,
+        ),
+        _buildCategoryLengthCard(
+          context,
+          category: countryCategoryList.getcountryCategoryListVr,
+          color: kVisaRequiredColor,
+          title: kVisaRequiredString,
+          iconData: kVisaRequiredIconData,
+        ),
+        _buildCategoryLengthCard(
+          context,
+          category: countryCategoryList.getcountryCategoryListCb,
+          color: kCovidBanColor,
+          title: kCovidBanString,
+          iconData: kCovidBanIconData,
+        ),
+        _buildCategoryLengthCard(
+          context,
+          category: countryCategoryList.getcountryCategoryListNa,
+          color: kNoAdmissionColor,
+          title: kNoAdmissionString,
+          iconData: kNoAdmissionIconData,
+        ),
+      ],
     );
+    // return SizedBox(
+    //   height: 150,
+    //   child: ListView(
+    //     scrollDirection: Axis.horizontal,
+    //     children: [
+    //       _buildCategoryLengthCard(
+    //         context,
+    //         category: countryCategoryList.getcountryCategoryListVf,
+    //         color: kVisaFreeColor,
+    //         title: kVisaFreeString,
+    //         iconData: kVisaFreeIconData,
+    //       ),
+    //       _buildCategoryLengthCard(
+    //         context,
+    //         category: countryCategoryList.getcountryCategoryListVoa,
+    //         color: kVisaOnArrivalColor,
+    //         title: kVisaOnArrivalString,
+    //         iconData: kVisaOnArrivalIconData,
+    //       ),
+    //       _buildCategoryLengthCard(
+    //         context,
+    //         category: countryCategoryList.getcountryCategoryListVr,
+    //         color: kVisaRequiredColor,
+    //         title: kVisaRequiredString,
+    //         iconData: kVisaRequiredIconData,
+    //       ),
+    //       _buildCategoryLengthCard(
+    //         context,
+    //         category: countryCategoryList.getcountryCategoryListCb,
+    //         color: kCovidBanColor,
+    //         title: kCovidBanString,
+    //         iconData: kCovidBanIconData,
+    //       ),
+    //       _buildCategoryLengthCard(
+    //         context,
+    //         category: countryCategoryList.getcountryCategoryListNa,
+    //         color: kNoAdmissionColor,
+    //         title: kNoAdmissionString,
+    //         iconData: kNoAdmissionIconData,
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _buildCategoryLengthCard(
@@ -239,39 +278,48 @@ class HomeScreen extends StatelessWidget {
     IconData iconData = FontAwesomeIcons.check,
   }) {
     return Container(
-      constraints: BoxConstraints(
-        minWidth: 180,
-      ),
-      margin: const EdgeInsets.all(8),
-      // width: 100,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          FaIcon(iconData),
-          Expanded(child: Container()),
-          Container(
-            // width: double.infinity,
-            child: Text(
-              "${category.length}",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ],
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: ListTile(
+        leading: FaIcon(iconData),
+        title: Text(title),
+        trailing: Text("${category.length}"),
+        tileColor: color,
       ),
     );
+    // return Container(
+    //   constraints: BoxConstraints(
+    //     minWidth: 180,
+    //   ),
+    //   margin: const EdgeInsets.all(8),
+    //   // width: 100,
+    //   padding: const EdgeInsets.all(20),
+    //   decoration: BoxDecoration(
+    //     color: color,
+    //     borderRadius: BorderRadius.all(
+    //       Radius.circular(20),
+    //     ),
+    //   ),
+    //   child: Column(
+    //     children: [
+    //       Text(
+    //         title,
+    //         style: TextStyle(
+    //           fontSize: 20,
+    //         ),
+    //       ),
+    //       FaIcon(iconData),
+    //       Expanded(child: Container()),
+    //       Container(
+    //         // width: double.infinity,
+    //         child: Text(
+    //           "${category.length}",
+    //           style: TextStyle(
+    //             fontSize: 18,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }
