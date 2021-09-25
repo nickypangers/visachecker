@@ -146,7 +146,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: kTabWidth),
       height: 110,
       child: Text(
-        _getGreetings(currentTime),
+        "${_getGreetings(currentTime)}",
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
@@ -156,31 +156,31 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSeeAllCountriesButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: GestureDetector(
-        onTap: () {
-          Provider.of<NavigationState>(context, listen: false)
-              .setNavigation(NavigationEvents.listClickedEvent);
-        },
-        child: Container(
-          width: double.infinity,
-          height: 150,
-          decoration: BoxDecoration(
-            color: kVisaFreeColor,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Text("Browse All Countries",
-                style: TextStyle(
-                  fontSize: 24,
-                )),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildSeeAllCountriesButton(BuildContext context) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 20),
+  //     child: GestureDetector(
+  //       onTap: () {
+  //         Provider.of<NavigationState>(context, listen: false)
+  //             .setNavigation(NavigationEvents.listClickedEvent);
+  //       },
+  //       child: Container(
+  //         width: double.infinity,
+  //         height: 150,
+  //         decoration: BoxDecoration(
+  //           color: kVisaFreeColor,
+  //           borderRadius: BorderRadius.circular(20),
+  //         ),
+  //         child: Center(
+  //           child: Text("Browse All Countries",
+  //               style: TextStyle(
+  //                 fontSize: 24,
+  //               )),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildCategoryLengthList(BuildContext context) {
     CountryCategoryList countryCategoryList =

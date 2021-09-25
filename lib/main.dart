@@ -6,6 +6,7 @@ import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/screens/splash_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common/utils/constants.dart';
 
@@ -25,6 +26,8 @@ class VisaChecker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: kScaffoldColor,

@@ -171,7 +171,7 @@ class _SideBarState extends State<SideBar>
                           // ),
                           MenuItem(
                             icon: Icons.list,
-                            title: 'List',
+                            title: 'All Countries',
                             clickedEvent: NavigationEvents.listClickedEvent,
                             onPressed: () => onIconPressed(),
                           ),
