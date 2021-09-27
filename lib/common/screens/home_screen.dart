@@ -8,6 +8,7 @@ import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/navigation.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/utils/constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -192,35 +193,43 @@ class HomeScreen extends StatelessWidget {
           context,
           category: countryCategoryList.getcountryCategoryListVf,
           color: kVisaFreeColor,
-          title: kVisaFreeString,
+          // title: kVisaFreeString,
+          title: AppLocalizations.of(context)?.visaFree ?? kVisaFreeString,
           iconData: kVisaFreeIconData,
         ),
         _buildCategoryLengthCard(
           context,
           category: countryCategoryList.getcountryCategoryListVoa,
           color: kVisaOnArrivalColor,
-          title: kVisaOnArrivalString,
+          // title: kVisaOnArrivalString,
+          title: AppLocalizations.of(context)?.visaOnArrival ??
+              kVisaOnArrivalString,
           iconData: kVisaOnArrivalIconData,
         ),
         _buildCategoryLengthCard(
           context,
           category: countryCategoryList.getcountryCategoryListVr,
           color: kVisaRequiredColor,
-          title: kVisaRequiredString,
+          title:
+              AppLocalizations.of(context)?.visaRequired ?? kVisaRequiredString,
+          // title: kVisaRequiredString,
           iconData: kVisaRequiredIconData,
         ),
         _buildCategoryLengthCard(
           context,
           category: countryCategoryList.getcountryCategoryListCb,
           color: kCovidBanColor,
-          title: kCovidBanString,
+          title: AppLocalizations.of(context)?.covidBan ?? kCovidBanString,
+          // title: kCovidBanString,
           iconData: kCovidBanIconData,
         ),
         _buildCategoryLengthCard(
           context,
           category: countryCategoryList.getcountryCategoryListNa,
           color: kNoAdmissionColor,
-          title: kNoAdmissionString,
+          title:
+              AppLocalizations.of(context)?.noAdmission ?? kNoAdmissionString,
+          // title: kNoAdmissionString,
           iconData: kNoAdmissionIconData,
         ),
       ],
