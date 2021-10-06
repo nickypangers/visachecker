@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visachecker/common/models/visa.dart';
+import 'package:visachecker/common/screens/filtered_list_screen.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
 import 'package:visachecker/common/screens/list_screen.dart';
 import 'package:visachecker/common/screens/map_screen.dart';
+import 'package:visachecker/common/utils/constants.dart';
 
 enum NavigationEvents {
   homePageClickedEvent,
   searchClickedEvent,
   mapClickedEvent,
-  listClickedEvent
+  listClickedEvent,
+  visaFreeListClickedEvent,
+  visaOnArrivaListClickedEvent,
+  visaRequiredListClickedEvent,
+  covidBanListClickedEvent,
+  noAdmissionListClickedEvent,
 }
 
 class NavigationState extends ChangeNotifier {
@@ -26,6 +33,16 @@ class NavigationState extends ChangeNotifier {
         return const HomeScreen();
       case NavigationEvents.mapClickedEvent:
         return const MapScreen();
+      case NavigationEvents.visaFreeListClickedEvent:
+        return FilteredListScreen(category: kVisaFree);
+      case NavigationEvents.visaOnArrivaListClickedEvent:
+        return FilteredListScreen(category: kVisaOnArrival);
+      case NavigationEvents.visaRequiredListClickedEvent:
+        return FilteredListScreen(category: kVisaRequired);
+      case NavigationEvents.covidBanListClickedEvent:
+        return FilteredListScreen(category: kCovidBan);
+      case NavigationEvents.noAdmissionListClickedEvent:
+        return FilteredListScreen(category: kNoAdmission);
       default:
         // return const HomeScreen();
         return ListScreen();

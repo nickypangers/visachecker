@@ -70,6 +70,15 @@ class VisaData extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Destination> getData(String countryCode) {
+    return data![countryCode]!.destinations!;
+  }
+
+  List<Destination> getFilteredList(String countryCode, category) {
+    var fullList = getData(countryCode);
+    return fullList.where((element) => element.category == category).toList();
+  }
+
   VisaData.fromJson(Map<String, dynamic> json) {
     data = new Map<String, Destinations>();
     json['data'].forEach((key, value) {

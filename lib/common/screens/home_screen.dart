@@ -95,7 +95,7 @@ class HomeScreen extends StatelessWidget {
           height: height,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: list.length,
+            itemCount: list.length > 5 ? 5 : list.length,
             itemBuilder: (context, index) => RecommendedCard(
               code: list[index],
               visa: "Visa Free",
@@ -157,32 +157,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildSeeAllCountriesButton(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(bottom: 20),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<NavigationState>(context, listen: false)
-  //             .setNavigation(NavigationEvents.listClickedEvent);
-  //       },
-  //       child: Container(
-  //         width: double.infinity,
-  //         height: 150,
-  //         decoration: BoxDecoration(
-  //           color: kVisaFreeColor,
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Center(
-  //           child: Text("Browse All Countries",
-  //               style: TextStyle(
-  //                 fontSize: 24,
-  //               )),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildCategoryLengthList(BuildContext context) {
     CountryCategoryList countryCategoryList =
         Provider.of<CountryCategoryList>(context, listen: false)
@@ -196,6 +170,7 @@ class HomeScreen extends StatelessWidget {
           // title: kVisaFreeString,
           title: AppLocalizations.of(context)?.visaFree ?? kVisaFreeString,
           iconData: kVisaFreeIconData,
+          navigationEvents: NavigationEvents.visaFreeListClickedEvent,
         ),
         _buildCategoryLengthCard(
           context,
@@ -205,6 +180,7 @@ class HomeScreen extends StatelessWidget {
           title: AppLocalizations.of(context)?.visaOnArrival ??
               kVisaOnArrivalString,
           iconData: kVisaOnArrivalIconData,
+          navigationEvents: NavigationEvents.visaOnArrivaListClickedEvent,
         ),
         _buildCategoryLengthCard(
           context,
@@ -214,6 +190,7 @@ class HomeScreen extends StatelessWidget {
               AppLocalizations.of(context)?.visaRequired ?? kVisaRequiredString,
           // title: kVisaRequiredString,
           iconData: kVisaRequiredIconData,
+          navigationEvents: NavigationEvents.visaRequiredListClickedEvent,
         ),
         _buildCategoryLengthCard(
           context,
@@ -222,6 +199,7 @@ class HomeScreen extends StatelessWidget {
           title: AppLocalizations.of(context)?.covidBan ?? kCovidBanString,
           // title: kCovidBanString,
           iconData: kCovidBanIconData,
+          navigationEvents: NavigationEvents.covidBanListClickedEvent,
         ),
         _buildCategoryLengthCard(
           context,
@@ -231,52 +209,10 @@ class HomeScreen extends StatelessWidget {
               AppLocalizations.of(context)?.noAdmission ?? kNoAdmissionString,
           // title: kNoAdmissionString,
           iconData: kNoAdmissionIconData,
+          navigationEvents: NavigationEvents.noAdmissionListClickedEvent,
         ),
       ],
     );
-    // return SizedBox(
-    //   height: 150,
-    //   child: ListView(
-    //     scrollDirection: Axis.horizontal,
-    //     children: [
-    //       _buildCategoryLengthCard(
-    //         context,
-    //         category: countryCategoryList.getcountryCategoryListVf,
-    //         color: kVisaFreeColor,
-    //         title: kVisaFreeString,
-    //         iconData: kVisaFreeIconData,
-    //       ),
-    //       _buildCategoryLengthCard(
-    //         context,
-    //         category: countryCategoryList.getcountryCategoryListVoa,
-    //         color: kVisaOnArrivalColor,
-    //         title: kVisaOnArrivalString,
-    //         iconData: kVisaOnArrivalIconData,
-    //       ),
-    //       _buildCategoryLengthCard(
-    //         context,
-    //         category: countryCategoryList.getcountryCategoryListVr,
-    //         color: kVisaRequiredColor,
-    //         title: kVisaRequiredString,
-    //         iconData: kVisaRequiredIconData,
-    //       ),
-    //       _buildCategoryLengthCard(
-    //         context,
-    //         category: countryCategoryList.getcountryCategoryListCb,
-    //         color: kCovidBanColor,
-    //         title: kCovidBanString,
-    //         iconData: kCovidBanIconData,
-    //       ),
-    //       _buildCategoryLengthCard(
-    //         context,
-    //         category: countryCategoryList.getcountryCategoryListNa,
-    //         color: kNoAdmissionColor,
-    //         title: kNoAdmissionString,
-    //         iconData: kNoAdmissionIconData,
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
   Widget _buildCategoryLengthCard(
@@ -284,51 +220,23 @@ class HomeScreen extends StatelessWidget {
     required CountryCategory category,
     required Color color,
     required String title,
+    required NavigationEvents navigationEvents,
     IconData iconData = FontAwesomeIcons.check,
   }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: ListTile(
-        leading: FaIcon(iconData),
-        title: Text(title),
-        trailing: Text("${category.length}"),
-        tileColor: color,
+    return GestureDetector(
+      onTap: () {
+        Provider.of<NavigationState>(context, listen: false)
+            .setNavigation(navigationEvents);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        child: ListTile(
+          leading: FaIcon(iconData),
+          title: Text(title),
+          trailing: Text("${category.length}"),
+          tileColor: color,
+        ),
       ),
     );
-    // return Container(
-    //   constraints: BoxConstraints(
-    //     minWidth: 180,
-    //   ),
-    //   margin: const EdgeInsets.all(8),
-    //   // width: 100,
-    //   padding: const EdgeInsets.all(20),
-    //   decoration: BoxDecoration(
-    //     color: color,
-    //     borderRadius: BorderRadius.all(
-    //       Radius.circular(20),
-    //     ),
-    //   ),
-    //   child: Column(
-    //     children: [
-    //       Text(
-    //         title,
-    //         style: TextStyle(
-    //           fontSize: 20,
-    //         ),
-    //       ),
-    //       FaIcon(iconData),
-    //       Expanded(child: Container()),
-    //       Container(
-    //         // width: double.infinity,
-    //         child: Text(
-    //           "${category.length}",
-    //           style: TextStyle(
-    //             fontSize: 18,
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

@@ -3,6 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // String
 
+const kVisaFree = "VF";
+const kVisaOnArrival = "VOA";
+const kVisaRequired = "VR";
+const kCovidBan = "CB";
+const kNoAdmission = "NA";
+
 const kVisaFreeString = "Visa Free";
 const kVisaOnArrivalString = "Visa On Arrival";
 const kVisaRequiredString = "Visa Required";

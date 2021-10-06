@@ -5,14 +5,16 @@ import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/utils/constants.dart';
 
-class ListScreen extends StatefulWidget {
+class FilteredListScreen extends StatefulWidget {
+  final String category;
+
+  FilteredListScreen({required this.category});
+
   @override
-  _ListScreenState createState() => _ListScreenState();
+  _FilteredListScreenState createState() => _FilteredListScreenState();
 }
 
-class _ListScreenState extends State<ListScreen> {
-  // Iterable<Destination> destination =
-
+class _FilteredListScreenState extends State<FilteredListScreen> {
   @override
   void initState() {
     super.initState();
@@ -66,10 +68,7 @@ class _ListScreenState extends State<ListScreen> {
 
     List<Destination> destinationList =
         Provider.of<VisaData>(context, listen: false)
-            .getData(currentCountryCode);
-    // Provider.of<VisaData>(context, listen: false)
-    //     .data![currentCountryCode]!
-    //     .destinations!;
+            .getFilteredList(currentCountryCode, widget.category);
 
     List<DataRow> dataRowList = [];
 
