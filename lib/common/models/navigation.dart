@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/screens/filtered_list_screen.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
 import 'package:visachecker/common/screens/list_screen.dart';
