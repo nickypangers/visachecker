@@ -53,8 +53,9 @@ class HomeScreen extends StatelessWidget {
           _buildRecommendedList(context,
               height: 170.0,
               list: Provider.of<CountryCategoryList>(context)
-                  .getcountryCategoryListVf
-                  .data!),
+                      .getcountryCategoryListVf
+                      .data ??
+                  []),
           // _buildSeeAllCountriesButton(context),
           _buildCategoryLengthList(context),
         ],
