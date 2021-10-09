@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:visachecker/common/components/list/ListHeader.dart';
+import 'package:visachecker/common/components/list/ListRow.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/visa.dart';
@@ -11,8 +13,6 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  // Iterable<Destination> destination =
-
   @override
   void initState() {
     super.initState();
@@ -20,23 +20,11 @@ class _ListScreenState extends State<ListScreen> {
 
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+      child: Container(
+        padding: const EdgeInsets.only(left: kSidebarMargin + kTabWidth + 5),
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: kSidebarMargin + kTabWidth + 10, right: 10),
-            child: DataTable(
-              columns: [
-                DataColumn(
-                  label: Text("Country Name"),
-                ),
-                DataColumn(
-                  label: Text("Visa Status"),
-                ),
-              ],
-              rows: _buildDataRows(context),
-            ),
+          child: Column(
+            children: _buildDataRows(context),
           ),
         ),
       ),
@@ -60,51 +48,27 @@ class _ListScreenState extends State<ListScreen> {
     }
   }
 
-  List<DataRow> _buildDataRows(BuildContext context) {
+  List<Widget> _buildDataRows(BuildContext context) {
+    List<Widget> widgetList = [];
+
+    widgetList.add(
+      ListHeader(leftTitle: "Country Name", rightTitle: "Status"),
+    );
+
     String currentCountryCode =
         Provider.of<Country>(context, listen: false).getCountryCode!;
 
     List<Destination> destinationList =
         Provider.of<VisaData>(context, listen: false)
             .getData(currentCountryCode);
-    // Provider.of<VisaData>(context, listen: false)
-    //     .data![currentCountryCode]!
-    //     .destinations!;
-
-    List<DataRow> dataRowList = [];
 
     destinationList.forEach((element) {
       Country country = Provider.of<CountryList>(context, listen: false)
           .getCountryByCode(element.code!);
-      dataRowList.add(
-        DataRow(
-          cells: [
-            DataCell(
-              Container(
-                child: Text(country.getCountryName!),
-              ),
-            ),
-            DataCell(
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3,
-                  horizontal: 10,
-                ),
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: getColor(element.category!),
-                  child: Center(
-                    child: Text(element.status!),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+      widgetList.add(
+          ListRow(countryName: country.getCountryName!, destination: element));
     });
 
-    return dataRowList;
+    return widgetList;
   }
 }

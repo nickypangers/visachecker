@@ -84,3 +84,7 @@ const TextStyle kHomeCircleTitleTextStyle = TextStyle(
 );
 
 const TextStyle kViewMoreTextStyle = TextStyle(color: Colors.blue);
+
+// Font Size
+
+const double kHeading1 = 25;
