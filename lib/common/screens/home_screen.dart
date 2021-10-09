@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildCategoryHeader(context,
-            title: "Visa-Free Locations", showViewMore: true, onClick: () {
+            title: "Top 5 Visa-Free", showViewMore: true, onClick: () {
           Provider.of<NavigationState>(context, listen: false)
               .setNavigation(NavigationEvents.listClickedEvent);
         }),

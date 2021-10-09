@@ -3,6 +3,7 @@ import 'package:visachecker/common/screens/filtered_list_screen.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
 import 'package:visachecker/common/screens/list_screen.dart';
 import 'package:visachecker/common/screens/map_screen.dart';
+import 'package:visachecker/common/screens/search_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 
 enum NavigationEvents {
@@ -29,8 +30,8 @@ class NavigationState extends ChangeNotifier {
     switch (currentNavigationEvent) {
       case NavigationEvents.homePageClickedEvent:
         return const HomeScreen();
-      case NavigationEvents.mapClickedEvent:
-        return const MapScreen();
+      case NavigationEvents.listClickedEvent:
+        return ListScreen();
       case NavigationEvents.visaFreeListClickedEvent:
         return FilteredListScreen(category: kVisaFree);
       case NavigationEvents.visaOnArrivaListClickedEvent:
@@ -41,9 +42,11 @@ class NavigationState extends ChangeNotifier {
         return FilteredListScreen(category: kCovidBan);
       case NavigationEvents.noAdmissionListClickedEvent:
         return FilteredListScreen(category: kNoAdmission);
+      case NavigationEvents.searchClickedEvent:
+        return const SearchScreen();
       default:
         // return const HomeScreen();
-        return ListScreen();
+        return const HomeScreen();
     }
   }
 }

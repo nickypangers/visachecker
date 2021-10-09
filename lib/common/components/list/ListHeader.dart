@@ -34,11 +34,12 @@ class ListHeader extends StatelessWidget {
               flex: 5,
               child: Container(
                 child: Center(
-                    child: Text(
-                  rightTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                )),
+                  child: Text(
+                    rightTitle,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
           ],

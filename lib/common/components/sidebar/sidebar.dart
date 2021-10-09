@@ -163,12 +163,12 @@ class _SideBarState extends State<SideBar>
                             clickedEvent: NavigationEvents.homePageClickedEvent,
                             onPressed: () => onIconPressed(),
                           ),
-                          // MenuItem(
-                          //   icon: Icons.map,
-                          //   title: 'Map',
-                          //   clickedEvent: NavigationEvents.mapClickedEvent,
-                          //   onPressed: () => onIconPressed(),
-                          // ),
+                          MenuItem(
+                            icon: Icons.search,
+                            title: "Search",
+                            clickedEvent: NavigationEvents.searchClickedEvent,
+                            onPressed: () => onIconPressed(),
+                          ),
                           MenuItem(
                             icon: Icons.list,
                             title: 'All Countries',
