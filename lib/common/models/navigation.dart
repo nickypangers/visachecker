@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:visachecker/common/screens/filtered_list_screen.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
 import 'package:visachecker/common/screens/list_screen.dart';
-import 'package:visachecker/common/screens/map_screen.dart';
 import 'package:visachecker/common/screens/search_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 

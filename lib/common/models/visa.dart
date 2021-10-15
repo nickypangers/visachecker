@@ -24,13 +24,24 @@ class CountryCategoryList extends ChangeNotifier {
 
   CountryCategoryList({this.vf, this.voa, this.vr, this.cb, this.na});
 
-  CountryCategory get getcountryCategoryListVf => vf!;
-  CountryCategory get getcountryCategoryListVoa => voa!;
-  CountryCategory get getcountryCategoryListVr => vr!;
-  CountryCategory get getcountryCategoryListCb => cb!;
-  CountryCategory get getcountryCategoryListNa => na!;
+  CountryCategory get getcountryCategoryListVf =>
+      vf ?? CountryCategory(data: [], length: 0);
+  CountryCategory get getcountryCategoryListVoa =>
+      voa ?? CountryCategory(data: [], length: 0);
+  CountryCategory get getcountryCategoryListVr =>
+      vr ?? CountryCategory(data: [], length: 0);
+  CountryCategory get getcountryCategoryListCb =>
+      cb ?? CountryCategory(data: [], length: 0);
+  CountryCategory get getcountryCategoryListNa =>
+      na ?? CountryCategory(data: [], length: 0);
   CountryCategoryList get getCountryCategoryList =>
       CountryCategoryList(vf: vf, voa: voa, vr: vr, cb: cb, na: na);
+
+  int get getCountryCategoryListVfLength => vf == null ? 0 : vf!.length;
+  int get getCountryCategoryListVoaLength => voa == null ? 0 : voa!.length;
+  int get getCountryCategoryListVrLength => vr == null ? 0 : vr!.length;
+  int get getCountryCategoryListCbLength => cb == null ? 0 : cb!.length;
+  int get getCountryCategoryListNaLength => na == null ? 0 : na!.length;
 
   setCountryCategoryList(CountryCategoryList countryCategoryList) {
     vf = countryCategoryList.vf;
