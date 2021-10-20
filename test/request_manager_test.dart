@@ -35,6 +35,10 @@ void main() {
       expect(visaData.data?.length, equals(199));
     });
 
-    test(".getVisaInfo(passport, destination)", () async {});
+    test(".getVisaInfo(\"HK\", \"GB\") returns non empty string", () async {
+      final requestManager = RequestManager();
+      VisaInfo visaInfo = await requestManager.getVisaInfo("HK", "GB");
+      expect(visaInfo.getStatus, isNot(equals("")));
+    });
   });
 }

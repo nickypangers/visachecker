@@ -157,6 +157,12 @@ class VisaInfo {
       this.category,
       this.error});
 
+  String get getStatus => status ?? "";
+  String get getPassport => passport ?? "";
+  String get getDestination => destination ?? "";
+  String get getDur => dur ?? "";
+  String get getCategory => category ?? "";
+
   VisaInfo.fromJson(Map<String, dynamic> json) {
     passport = json['passport'];
     destination = json['destination'];
