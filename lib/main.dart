@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
+import 'package:visachecker/common/models/search.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/screens/splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,6 +19,9 @@ void main() {
         create: (_) => CountryCategoryList()),
     ChangeNotifierProvider<NavigationState>(create: (_) => NavigationState()),
     ChangeNotifierProvider<VisaData>(create: (_) => VisaData()),
+    ChangeNotifierProvider<Search>(
+      create: (_) => Search(),
+    )
   ], child: const VisaChecker()));
 }
 

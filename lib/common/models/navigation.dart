@@ -42,7 +42,7 @@ class NavigationState extends ChangeNotifier {
       case NavigationEvents.noAdmissionListClickedEvent:
         return FilteredListScreen(category: kNoAdmission);
       case NavigationEvents.searchClickedEvent:
-        return const SearchScreen();
+        return SearchScreen();
       default:
         // return const HomeScreen();
         return const HomeScreen();

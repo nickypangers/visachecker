@@ -3,27 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
+import 'package:visachecker/common/models/search.dart';
 import 'package:visachecker/common/utils/constants.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final Country? passportCountry;
+  final Country? destinationContry;
+  SearchScreen({Key? key, this.passportCountry, this.destinationContry})
+      : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late Country passportCountry;
+  Country? passportCountry;
   Country? destinationCountry;
   List<Country>? countryList;
 
   @override
   void initState() {
     super.initState();
-    passportCountry = Provider.of<Country>(context, listen: false).getCountry;
-    print(passportCountry.code);
     countryList =
         Provider.of<CountryList>(context, listen: false).getCountryList;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    passportCountry =
+        Provider.of<Search>(context, listen: true).passportCountry;
+
+    destinationCountry =
+        Provider.of<Search>(context, listen: true).destinationCountry;
+    if (this.widget.passportCountry != null) {
+      Provider.of<Search>(context)
+          .setPassportCountry(this.widget.passportCountry);
+    } else {
+      var currentCountry =
+          Provider.of<Country>(context, listen: false).getCountry;
+      Provider.of<Search>(context).setPassportCountry(currentCountry);
+    }
+
+    if (this.widget.destinationContry != null) {
+      Provider.of<Search>(context)
+          .setPassportCountry(this.widget.destinationContry);
+    }
   }
 
   @override
@@ -41,44 +66,39 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         child: Column(
           children: [
-            DropdownSearch<Country>(
-              mode: Mode.BOTTOM_SHEET,
-              items: countryList,
-              dropdownSearchDecoration: InputDecoration(
-                labelText: "Passport",
-              ),
-              itemAsString: (country) => country!.getCountryName ?? "",
-              selectedItem: passportCountry,
-              // popupItemDisabled: ,
-              onChanged: (country) {
-                setState(() {
-                  passportCountry = country!;
-                  print(passportCountry.name);
-                });
-              },
-              // selectedItems: ["Brazil"],
+            buildCountryListDropdownSearch(
+              label: "Passport",
+              country: passportCountry,
             ),
             const SizedBox(
               height: 10,
             ),
-            DropdownSearch<Country>(
-              mode: Mode.BOTTOM_SHEET,
-              items: countryList,
-              dropdownSearchDecoration: InputDecoration(
-                labelText: "Destination",
-              ),
-              itemAsString: (country) => country!.getCountryName ?? "",
-              selectedItem: destinationCountry,
-              onChanged: (country) {
-                setState(() {
-                  destinationCountry = country!;
-                  print(destinationCountry!.name);
-                });
-              },
+            buildCountryListDropdownSearch(
+              label: "Destination",
+              country: destinationCountry,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildCountryListDropdownSearch({
+    required String label,
+    required Country? country,
+  }) {
+    return DropdownSearch<Country>(
+      mode: Mode.BOTTOM_SHEET,
+      items: countryList,
+      dropdownSearchDecoration: InputDecoration(labelText: label),
+      itemAsString: (country) => country!.getCountryName ?? "",
+      selectedItem: country,
+      onChanged: (onChangedCountry) {
+        setState(() {
+          country = onChangedCountry!;
+          print(country!.code);
+        });
+      },
     );
   }
 }
