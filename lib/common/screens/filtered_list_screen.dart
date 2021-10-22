@@ -73,6 +73,12 @@ class _FilteredListScreenState extends State<FilteredListScreen> {
   List<Widget> _buildDataRows(BuildContext context) {
     List<Widget> widgetList = [];
 
+    widgetList.add(Text(
+      "Press country to view more",
+      textAlign: TextAlign.center,
+      style: kListInfoTextStyle,
+    ));
+
     widgetList.add(
       ListHeader(leftTitle: "Country Name", rightTitle: "Status"),
     );

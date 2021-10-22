@@ -77,7 +77,8 @@ class _SearchScreenState extends State<SearchScreen> {
         if (duration == "") {
           duration = "Not provided";
         }
-        return Text("Duration: $duration", style: kSearchResultDurationStyle);
+        return Text("Duration: $duration",
+            style: kSearchResultDurationTextStyle);
     }
   }
 
@@ -87,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
     children.add(
       Text(
         visaInfo.getStatus,
-        style: kSearchResultStatusStyle,
+        style: kSearchResultStatusTextStyle,
       ),
     );
 

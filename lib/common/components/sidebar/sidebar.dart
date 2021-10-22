@@ -168,6 +168,12 @@ class _SideBarState extends State<SideBar>
                             clickedEvent: NavigationEvents.listClickedEvent,
                             onPressed: () => onIconPressed(),
                           ),
+                          MenuItem(
+                            icon: Icons.info,
+                            title: 'About',
+                            clickedEvent: NavigationEvents.aboutClickedEvent,
+                            onPressed: () => onIconPressed(),
+                          ),
                         ],
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visachecker/common/screens/about_screeen.dart';
 import 'package:visachecker/common/screens/filtered_list_screen.dart';
 import 'package:visachecker/common/screens/home_screen.dart';
 import 'package:visachecker/common/screens/list_screen.dart';
@@ -17,6 +18,7 @@ enum NavigationEvents {
   visaRequiredListClickedEvent,
   covidBanListClickedEvent,
   noAdmissionListClickedEvent,
+  aboutClickedEvent,
 }
 
 class NavigationState extends ChangeNotifier {
@@ -55,6 +57,8 @@ class NavigationState extends ChangeNotifier {
         return SearchScreen(
             passportCountry: _passportCountry,
             destinationCountry: _destinationCountry);
+      case NavigationEvents.aboutClickedEvent:
+        return AboutScreen();
       default:
         // return const HomeScreen();
         return const HomeScreen();

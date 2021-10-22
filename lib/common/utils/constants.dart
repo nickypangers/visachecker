@@ -31,6 +31,8 @@ const kTabWidth = 35.0;
 
 const kSidebarMargin = 10.0;
 
+const kTotalLeftMargin = kTabWidth + kSidebarMargin + 5;
+
 // Color Scheme
 const Color kIconBackgroundColor = Color(0xFF00d46d);
 
@@ -85,9 +87,21 @@ const TextStyle kHomeCircleTitleTextStyle = TextStyle(
 
 const TextStyle kViewMoreTextStyle = TextStyle(color: Colors.blue);
 
-const TextStyle kSearchResultStatusStyle = TextStyle(fontSize: 20);
-const TextStyle kSearchResultDurationStyle = TextStyle(fontSize: 16);
+const TextStyle kSearchResultStatusTextStyle = TextStyle(fontSize: 20);
+const TextStyle kSearchResultDurationTextStyle = TextStyle(fontSize: 16);
+
+const TextStyle kListInfoTextStyle = TextStyle(fontWeight: FontWeight.w600);
+
+const TextStyle kAboutAppTitleTextStyle =
+    TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
+const TextStyle kAboutAppInfoTextStyle = TextStyle(fontSize: 20);
+const TextStyle kAboutPersonalTextStyle = TextStyle(fontSize: 16);
+const TextStyle kAboutLinkTextStyle = TextStyle(
+    color: Colors.blue, decoration: TextDecoration.underline, fontSize: 16);
 
 // Font Size
 
 const double kHeading1 = 25;
+
+// Image Path
+const String kIconPath = "assets/launcher/Icon-144.png";
