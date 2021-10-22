@@ -15,6 +15,10 @@ class Country extends ChangeNotifier {
 
   Country get getCountry => Country(name: name, code: code);
 
+  String toString() {
+    return "name:$name code:$code";
+  }
+
   setCountry(BuildContext context, Country country) async {
     name = country.name;
     code = country.code;

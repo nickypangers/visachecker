@@ -90,7 +90,7 @@ class HomeScreen extends StatelessWidget {
         _buildCategoryHeader(context,
             title: "Top 5 Visa-Free", showViewMore: true, onClick: () {
           Provider.of<NavigationState>(context, listen: false)
-              .setNavigation(NavigationEvents.listClickedEvent);
+              .setNavigation(NavigationEvents.visaFreeListClickedEvent);
         }),
         SizedBox(
           height: height,
@@ -128,10 +128,10 @@ class HomeScreen extends StatelessWidget {
               ? GestureDetector(
                   onTap: onClick ??
                       () {
-                        debugPrint("hi");
+                        debugPrint("clicked view visa-free");
                       },
                   child: const Text(
-                    'View More',
+                    'View Visa-Free',
                     style: kViewMoreTextStyle,
                   ),
                 )

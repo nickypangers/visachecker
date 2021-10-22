@@ -5,6 +5,8 @@ import 'package:visachecker/common/screens/list_screen.dart';
 import 'package:visachecker/common/screens/search_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 
+import 'country.dart';
+
 enum NavigationEvents {
   homePageClickedEvent,
   searchClickedEvent,
@@ -19,6 +21,14 @@ enum NavigationEvents {
 
 class NavigationState extends ChangeNotifier {
   late NavigationEvents currentNavigationEvent;
+  static Country? _passportCountry;
+  static Country? _destinationCountry;
+
+  setSearchNavigation({Country? passportCountry, Country? destinationCountry}) {
+    _passportCountry = passportCountry;
+    _destinationCountry = destinationCountry;
+    setNavigation(NavigationEvents.searchClickedEvent);
+  }
 
   setNavigation(NavigationEvents state) {
     currentNavigationEvent = state;
@@ -42,7 +52,9 @@ class NavigationState extends ChangeNotifier {
       case NavigationEvents.noAdmissionListClickedEvent:
         return FilteredListScreen(category: kNoAdmission);
       case NavigationEvents.searchClickedEvent:
-        return SearchScreen();
+        return SearchScreen(
+            passportCountry: _passportCountry,
+            destinationCountry: _destinationCountry);
       default:
         // return const HomeScreen();
         return const HomeScreen();

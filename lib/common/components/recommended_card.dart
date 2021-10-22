@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
+import 'package:visachecker/common/models/navigation.dart';
 
 class RecommendedCard extends StatelessWidget {
   final String code;
@@ -23,12 +24,8 @@ class RecommendedCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // showModalBottomSheet(
-        //   context: context,
-        //   builder: (context) => BottomModalSheet(
-        //     country: country,
-        //   ),
-        // );
+        Provider.of<NavigationState>(context, listen: false)
+            .setSearchNavigation(destinationCountry: country);
         debugPrint(country.getCountryName);
       },
       child: Container(

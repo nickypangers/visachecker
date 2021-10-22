@@ -125,13 +125,6 @@ class _SideBarState extends State<SideBar>
                                 return;
                               }
                               currentCountry.setCountry(context, result);
-                              // setSelectedCountry(result);
-                              // CountryCategoryList countryCategoryList =
-                              //     await getVisaListResult(result);
-                              // Provider.of<VisaList>(context, listen: false)
-                              //     .setVisaList(visaListResult);
-                              // print(currentCountry.getCountryName);
-                              // onIconPressed();
                             },
                             child: ListTile(
                               title: Text(

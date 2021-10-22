@@ -20,8 +20,13 @@ class MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<NavigationState>(context, listen: false)
-            .setNavigation(clickedEvent);
+        if (clickedEvent == NavigationEvents.searchClickedEvent) {
+          Provider.of<NavigationState>(context, listen: false)
+              .setSearchNavigation();
+        } else {
+          Provider.of<NavigationState>(context, listen: false)
+              .setNavigation(clickedEvent);
+        }
 
         onPressed();
       },

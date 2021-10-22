@@ -142,20 +142,20 @@ class Destination {
 }
 
 class VisaInfo {
-  String? passport;
-  String? destination;
-  String? dur;
-  String? status;
-  String? category;
-  Error? error;
+  static String? passport;
+  static String? destination;
+  static String? dur;
+  static String? status;
+  static String? category;
+  static Error? error;
 
-  VisaInfo(
-      {this.passport,
-      this.destination,
-      this.dur,
-      this.status,
-      this.category,
-      this.error});
+  // VisaInfo(
+  //     {this.passport,
+  //     this.destination,
+  //     this.dur,
+  //     this.status,
+  //     this.category,
+  //     this.error});
 
   String get getStatus => status ?? "";
   String get getPassport => passport ?? "";

@@ -85,6 +85,9 @@ const TextStyle kHomeCircleTitleTextStyle = TextStyle(
 
 const TextStyle kViewMoreTextStyle = TextStyle(color: Colors.blue);
 
+const TextStyle kSearchResultStatusStyle = TextStyle(fontSize: 20);
+const TextStyle kSearchResultDurationStyle = TextStyle(fontSize: 16);
+
 // Font Size
 
 const double kHeading1 = 25;

@@ -8,13 +8,25 @@ class Search extends ChangeNotifier {
   Country? get passportCountry => _passportCountry;
   Country? get destinationCountry => _destinationCountry;
 
+  bool hasNull() {
+    if (_passportCountry == null || _destinationCountry == null) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  String toString() {
+    return "passportCountry:$_passportCountry destinationCountry:$_destinationCountry";
+  }
+
   void setPassportCountry(Country? country) {
     _passportCountry = country;
     notifyListeners();
   }
 
   void setDestinationCountry(Country? country) {
-    _passportCountry = country;
+    _destinationCountry = country;
     notifyListeners();
   }
 }

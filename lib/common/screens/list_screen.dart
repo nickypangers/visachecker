@@ -31,23 +31,6 @@ class _ListScreenState extends State<ListScreen> {
     );
   }
 
-  Color getColor(String category) {
-    switch (category) {
-      case kVisaRequired:
-        return kVisaRequiredColor;
-      case kVisaOnArrival:
-        return kVisaOnArrivalColor;
-      case kVisaFree:
-        return kVisaFreeColor;
-      case kCovidBan:
-        return kCovidBanColor;
-      case kNoAdmission:
-        return kNoAdmissionColor;
-      default:
-        return kNoAdmissionColor;
-    }
-  }
-
   List<Widget> _buildDataRows(BuildContext context) {
     List<Widget> widgetList = [];
 

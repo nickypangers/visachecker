@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:visachecker/common/helpers/colours.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/country_list.dart';
+import 'package:visachecker/common/models/navigation.dart';
 import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/utils/constants.dart';
 
@@ -13,53 +18,44 @@ class ListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Country country = Provider.of<CountryList>(context, listen: false)
+        .getCountryByCode(destination.code!);
     return Container(
       decoration: BoxDecoration(border: Border(bottom: BorderSide())),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 9,
-                  // horizontal: 8,
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<NavigationState>(context, listen: false)
+              .setSearchNavigation(destinationCountry: country);
+        },
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 9,
+                    // horizontal: 8,
+                  ),
+                  child: Text(countryName),
                 ),
-                child: Text(countryName),
               ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Container(
-                height: double.infinity,
-                color: getColor(destination.category!),
-                child: Center(
-                    child: Text(
-                  destination.status!,
-                  textAlign: TextAlign.center,
-                )),
+              Expanded(
+                flex: 5,
+                child: Container(
+                  height: double.infinity,
+                  color: getColor(destination.category!),
+                  child: Center(
+                      child: Text(
+                    destination.status!,
+                    textAlign: TextAlign.center,
+                  )),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Color getColor(String category) {
-    switch (category) {
-      case kVisaRequired:
-        return kVisaRequiredColor;
-      case kVisaOnArrival:
-        return kVisaOnArrivalColor;
-      case kVisaFree:
-        return kVisaFreeColor;
-      case kCovidBan:
-        return kCovidBanColor;
-      case kNoAdmission:
-        return kNoAdmissionColor;
-      default:
-        return kNoAdmissionColor;
-    }
   }
 }
