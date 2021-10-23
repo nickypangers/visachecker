@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/common/screens/content_screen.dart';
 import 'package:visachecker/common/transitions/reveal_route.dart';
 // import 'package:visa_checker/common/constants.dart';
@@ -76,7 +77,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return IntroductionScreen(
       pages: getPages(context),
       globalBackgroundColor: kIconBackgroundColor,
-      onDone: () {
+      onDone: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool("isReturning", true);
         Navigator.pushReplacement(
           context,
           RevealRoute(

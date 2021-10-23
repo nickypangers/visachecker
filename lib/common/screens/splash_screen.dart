@@ -8,6 +8,7 @@ import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
 import 'package:visachecker/common/models/visa.dart';
+import 'package:visachecker/common/screens/content_screen.dart';
 import 'package:visachecker/common/screens/onboarding_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 import 'package:visachecker/manager/request_manager.dart';
@@ -58,7 +59,26 @@ class _SplashScreenState extends State<SplashScreen> {
         ? countryList.getCountryByCode(code)
         : countryList.getCountryList![0];
     Provider.of<Country>(context, listen: false).setCountry(context, country);
+
+    Future.delayed(Duration(seconds: 3), () async {
+      if (await _isReturningUser()) {
+        Provider.of<NavigationState>(context, listen: false)
+            .setNavigation(NavigationEvents.homePageClickedEvent);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ContentScreen()),
+        );
+        return true;
+      }
+    });
+
     return true;
+  }
+
+  Future<bool> _isReturningUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isReturning = prefs.getBool("isReturning") ?? false;
+    return isReturning;
   }
 
   @override
