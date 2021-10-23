@@ -60,19 +60,9 @@ class _SplashScreenState extends State<SplashScreen> {
         : countryList.getCountryList![0];
     Provider.of<Country>(context, listen: false).setCountry(context, country);
 
-    Future.delayed(Duration(seconds: 3), () async {
-      if (await _isReturningUser()) {
-        Provider.of<NavigationState>(context, listen: false)
-            .setNavigation(NavigationEvents.homePageClickedEvent);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ContentScreen()),
-        );
-        return true;
-      }
-    });
+    bool isReturnUser = await _isReturningUser();
 
-    return true;
+    return isReturnUser;
   }
 
   Future<bool> _isReturningUser() async {
@@ -87,16 +77,29 @@ class _SplashScreenState extends State<SplashScreen> {
       body: FutureBuilder(
           future: _initData(context),
           builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data == true) {
-              Timer(const Duration(seconds: 3), () {
-                Provider.of<NavigationState>(context, listen: false)
-                    .setNavigation(NavigationEvents.homePageClickedEvent);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const OnBoardingScreen()),
-                );
-              });
+            if (snapshot.hasData) {
+              if (snapshot.data == true) {
+                Timer(const Duration(seconds: 3), () {
+                  Provider.of<NavigationState>(context, listen: false)
+                      .setNavigation(NavigationEvents.homePageClickedEvent);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ContentScreen()),
+                  );
+                });
+              } else {
+                Timer(const Duration(seconds: 3), () {
+                  Provider.of<NavigationState>(context, listen: false)
+                      .setNavigation(NavigationEvents.homePageClickedEvent);
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const OnBoardingScreen()),
+                  );
+                });
+              }
             }
             return Container(
               color: kIconBackgroundColor,
@@ -107,6 +110,26 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             );
           }),
+      //   if (snapshot.hasData && snapshot.data == true) {
+      //     Timer(const Duration(seconds: 3), () {
+      //       Provider.of<NavigationState>(context, listen: false)
+      //           .setNavigation(NavigationEvents.homePageClickedEvent);
+      //       Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => const OnBoardingScreen()),
+      //       );
+      //     });
+      //   }
+      //   return Container(
+      //     color: kIconBackgroundColor,
+      //     child: const Center(
+      //       child: SpinKitChasingDots(
+      //         color: Colors.white,
+      //       ),
+      //     ),
+      //   );
+      // }),
     );
   }
 }
