@@ -25,10 +25,7 @@ class Search extends SearchDelegate<Country> {
         progress: transitionAnimation,
       ),
       onPressed: () {
-        close(
-            context,
-            Provider.of<CountryList>(context, listen: false)
-                .getCountryList![0]);
+        close(context, Provider.of<Country>(context, listen: false).getCountry);
       },
     );
   }
@@ -56,8 +53,8 @@ class Search extends SearchDelegate<Country> {
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = Provider.of<CountryList>(context, listen: false)
         .getCountryList!
-        .where(
-            (p) => p.getCountryName!.toLowerCase().contains(query.toLowerCase()))
+        .where((p) =>
+            p.getCountryName!.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
     return ListView.builder(
