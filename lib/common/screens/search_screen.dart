@@ -74,9 +74,10 @@ class _SearchScreenState extends State<SearchScreen> {
         return SizedBox.shrink();
       default:
         String duration = visaInfo.getDur + " days";
-        if (duration == "") {
+        if (visaInfo.getDur == "") {
           duration = "Not provided";
         }
+        debugPrint(duration);
         return Text("Duration: $duration",
             style: kSearchResultDurationTextStyle);
     }
