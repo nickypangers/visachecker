@@ -1,13 +1,43 @@
-import 'package:admob_flutter/admob_flutter.dart';
-import 'package:flutter/material.dart';
-import 'screens/splash.dart';
+import "package:flutter/material.dart";
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:visachecker/common/models/country.dart';
+import 'package:visachecker/common/models/country_list.dart';
+import 'package:visachecker/common/models/navigation.dart';
+import 'package:visachecker/common/models/search.dart';
+import 'package:visachecker/common/models/visa.dart';
+import 'package:visachecker/common/screens/splash_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'common/utils/constants.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
-  runApp(MaterialApp(
-    theme: ThemeData(fontFamily: 'Montserrat'),
-    debugShowCheckedModeBanner: false,
-    home: SplashScreen(),
-  ));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<CountryList>(create: (_) => CountryList()),
+    ChangeNotifierProvider<Country>(create: (_) => Country()),
+    ChangeNotifierProvider<CountryCategoryList>(
+        create: (_) => CountryCategoryList()),
+    ChangeNotifierProvider<NavigationState>(create: (_) => NavigationState()),
+    ChangeNotifierProvider<VisaData>(create: (_) => VisaData()),
+    ChangeNotifierProvider<Search>(
+      create: (_) => Search(),
+    )
+  ], child: const VisaChecker()));
+}
+
+class VisaChecker extends StatelessWidget {
+  const VisaChecker({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        scaffoldBackgroundColor: kScaffoldColor,
+        primaryColor: kPrimaryColor,
+      ),
+      home: const SplashScreen(),
+    );
+  }
 }
