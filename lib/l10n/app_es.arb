@@ -1,0 +1,16 @@
+{
+  "allInOne": "Todo En Uno",
+  "allInOneText": "Incluye información meteorológica más reciente, tipos de cambio de divisas y más.",
+  "covidBan": "Prohibición de Covid",
+  "destination": "destino",
+  "done": "Seguir",
+  "forTravellersByTravellers": "Para viajeros, Por viajeros",
+  "forTravellersByTravellersText": "Creado por un equipo de ávidos viajeros.",
+  "latestInformation": "La Información Más Reciente",
+  "latestInformationText": "Información de visado correcta para planificar viajes sin estrés.",
+  "noAdmission": "No Admisión",
+  "passport": "Pasaporte",
+  "visaFree": "Visado Not Necessitar",
+  "visaOnArrival": "Visado En Llegar",
+  "visaRequired": "Visado Necessitar"
+}
