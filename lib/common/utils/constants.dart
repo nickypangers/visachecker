@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Environment
+
+enum Environment {
+  local,
+  development,
+  production,
+}
+
+const kEnvironment = Environment.local;
+
 // String
 
 const kVisaFree = "VF";
@@ -24,7 +34,9 @@ const kCovidBanIconData = FontAwesomeIcons.times;
 const kNoAdmissionIconData = FontAwesomeIcons.times;
 
 // API
-const kUrl = "http://passport-visa-api-dev.herokuapp.com/";
+// const kUrl = isDev
+//     ? "http://passport-visa-api-dev.herokuapp.com/"
+//     : "http://passportvisa-api.herokuapp.com/";
 
 // Sidebar
 const kTabWidth = 35.0;

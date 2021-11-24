@@ -5,7 +5,6 @@ import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
 import 'package:visachecker/common/models/visa.dart';
-import 'package:visachecker/common/utils/constants.dart';
 
 class ListRow extends StatelessWidget {
   // const ListRow({Key? key}) : super(key: key);

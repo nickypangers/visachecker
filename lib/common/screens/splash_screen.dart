@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:visachecker/manager/app_manager.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
@@ -12,8 +13,7 @@ import 'package:visachecker/common/screens/content_screen.dart';
 import 'package:visachecker/common/screens/onboarding_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 import 'package:visachecker/manager/request_manager.dart';
-
-// import 'onBoardingScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -28,21 +28,40 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  // Future<Country> _initSelectedCountry() async {
-  //   countryList = await getCountryList();
-
-  //   Country country = await getSelectedCountry();
-
-  //   var visaListResult = await getVisaListResult(country);
-
-  //   // print("visa list result: ${visaListResult.vf}");
-
-  //   Provider.of<VisaList>(context, listen: false).setVisaList(visaListResult);
-
-  //   return country;
-  // }
-
   Future<bool> _initData(BuildContext context) async {
+    debugPrint("Environment: $kEnvironment");
+    debugPrint("Endpoint: ${RequestManager().getEndpoint("")}");
+
+    bool isLatestVersion = await AppManager().isLatestVersion();
+    debugPrint("Is Latest Version: $isLatestVersion");
+
+    if (!isLatestVersion) {
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Update Available"),
+              content: Text("Please update to the latest version"),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text("Update"),
+                  onPressed: () async {
+                    // Navigator.of(context).pop();
+                    if (!await launch(AppManager().getAppUrl()))
+                      throw 'Could not launch';
+                  },
+                ),
+                ElevatedButton(
+                  child: Text("Later"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+
     VisaData visaData = await RequestManager().getVisaData();
     Provider.of<VisaData>(context, listen: false).setData(visaData);
 
@@ -110,26 +129,6 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             );
           }),
-      //   if (snapshot.hasData && snapshot.data == true) {
-      //     Timer(const Duration(seconds: 3), () {
-      //       Provider.of<NavigationState>(context, listen: false)
-      //           .setNavigation(NavigationEvents.homePageClickedEvent);
-      //       Navigator.pushReplacement(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => const OnBoardingScreen()),
-      //       );
-      //     });
-      //   }
-      //   return Container(
-      //     color: kIconBackgroundColor,
-      //     child: const Center(
-      //       child: SpinKitChasingDots(
-      //         color: Colors.white,
-      //       ),
-      //     ),
-      //   );
-      // }),
     );
   }
 }
