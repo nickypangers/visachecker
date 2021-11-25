@@ -19,7 +19,7 @@ class RequestManager {
       case Environment.production:
         return 'https://passportvisa-api.herokuapp.com/$suffix';
       case Environment.development:
-        return 'https://passport-visa-api.herokuapp.com/$suffix';
+        return 'https://passport-visa-api-dev.herokuapp.com/$suffix';
       case Environment.local:
         return 'http://192.168.50.79:3001/$suffix';
     }

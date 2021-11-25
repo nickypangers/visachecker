@@ -9,7 +9,7 @@ enum Environment {
   production,
 }
 
-const kEnvironment = Environment.local;
+const kEnvironment = Environment.production;
 
 // String
 
