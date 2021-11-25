@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visachecker/manager/app_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visachecker/common/models/country.dart';
 import 'package:visachecker/common/models/country_list.dart';
 import 'package:visachecker/common/models/navigation.dart';
@@ -13,7 +14,6 @@ import 'package:visachecker/common/screens/content_screen.dart';
 import 'package:visachecker/common/screens/onboarding_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
 import 'package:visachecker/manager/request_manager.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -29,37 +29,31 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<bool> _initData(BuildContext context) async {
-    debugPrint("Environment: $kEnvironment");
-    debugPrint("Endpoint: ${RequestManager().getEndpoint("")}");
-
-    bool isLatestVersion = await AppManager().isLatestVersion();
-    debugPrint("Is Latest Version: $isLatestVersion");
-
-    if (!isLatestVersion) {
+    bool isAppLatest = await AppManager().isAppLatest();
+    if (!isAppLatest) {
       await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Update Available"),
-              content: Text("Please update to the latest version"),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: Text("Update"),
-                  onPressed: () async {
-                    // Navigator.of(context).pop();
-                    if (!await launch(AppManager().getAppUrl()))
-                      throw 'Could not launch';
-                  },
-                ),
-                ElevatedButton(
-                  child: Text("Later"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Update Available"),
+          content:
+              Text("Please update the app to experience the latest features"),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text("Update"),
+              onPressed: () async {
+                String url = AppManager().getAppStoreLink();
+                if (!await launch(url)) throw 'Could not launch $url';
+              },
+            ),
+            ElevatedButton(
+              child: Text("Later"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
     }
 
     VisaData visaData = await RequestManager().getVisaData();
