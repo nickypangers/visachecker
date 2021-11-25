@@ -11,6 +11,7 @@ import 'package:visachecker/common/models/visa.dart';
 import 'package:visachecker/common/screens/content_screen.dart';
 import 'package:visachecker/common/screens/onboarding_screen.dart';
 import 'package:visachecker/common/utils/constants.dart';
+import 'package:visachecker/manager/app_manager.dart';
 import 'package:visachecker/manager/request_manager.dart';
 
 // import 'onBoardingScreen.dart';
@@ -43,6 +44,31 @@ class _SplashScreenState extends State<SplashScreen> {
   // }
 
   Future<bool> _initData(BuildContext context) async {
+    bool isAppLatest = await AppManager().isAppLatest();
+    if (!isAppLatest) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Update Available"),
+          content: Text("Please update the app to continue"),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text("Update"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text("Later"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     VisaData visaData = await RequestManager().getVisaData();
     Provider.of<VisaData>(context, listen: false).setData(visaData);
 
