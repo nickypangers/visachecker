@@ -40,5 +40,12 @@ void main() {
       VisaInfo visaInfo = await requestManager.getVisaInfo("HK", "GB");
       expect(visaInfo.getStatus, isNot(equals("")));
     });
+
+    test(".getLatestAppVersion returns non empty string", () async {
+      final requestManager = RequestManager();
+      String latestAppVersion = await requestManager.getLatestAppVersion();
+      print(latestAppVersion);
+      expect(latestAppVersion, isNot(equals("")));
+    });
   });
 }

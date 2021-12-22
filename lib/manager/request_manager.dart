@@ -15,7 +15,16 @@ class RequestManager {
   }
 
   String getEndpoint(String suffix) {
-    return kUrl + suffix;
+    switch (kEnvironment) {
+      case Environment.production:
+        return 'https://passportvisa-api.herokuapp.com/$suffix';
+      case Environment.development:
+        return 'https://passport-visa-api-dev.herokuapp.com/$suffix';
+      case Environment.local:
+        return 'http://192.168.50.79:3001/$suffix';
+    }
+
+    // return kUrl + suffix;
   }
 
   Future<CountryList> getCountryList() async {
@@ -46,7 +55,16 @@ class RequestManager {
     Uri uri = Uri.parse(getEndpoint("raw"));
 
     var response = await http.get(uri);
+    print(response);
     var parsedJson = json.decode(response.body);
     return VisaData.fromJson(parsedJson);
+  }
+
+  Future<String> getLatestAppVersion() async {
+    Uri uri = Uri.parse(getEndpoint("appversion"));
+
+    var response = await http.get(uri);
+    var parsedJson = json.decode(response.body);
+    return parsedJson['app_version'];
   }
 }
